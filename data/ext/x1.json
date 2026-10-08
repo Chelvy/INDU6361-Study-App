@@ -1,0 +1,1895 @@
+[
+ {
+  "id": "x1-mid-facet-delete",
+  "topic": "t206b",
+  "type": "tf",
+  "q": "Let $P=\\{x\\in\\mathbb{R}^7 : Ax=b,\\ f^\\top x\\ge d\\}$ with $\\operatorname{rank}(A)=3$, and suppose that the inequality $f^\\top x\\ge d$ defines a face of $P$ of dimension 3. <b>Claim:</b> the inequality $f^\\top x\\ge d$ can be deleted from the description without changing $P$.",
+  "answer": false,
+  "difficulty": 2,
+  "explain": "The equations leave at most $7-3=4$ dimensions. A proper face of dimension 3 means $\\dim P=4$, so the face is a facet (dimension $\\dim P-1$), and a facet-defining inequality is never redundant: deleting it would leave the whole 4-dimensional affine set $\\{x:Ax=b\\}$, which is strictly larger than $P$. (If the face were all of $P$, the inequality would be an implicit equation not implied by $Ax=b$, and it could not be dropped either.)",
+  "source": {
+   "label": "MIT OCW 15.083J / 6.859J Integer Programming and Combinatorial Optimization (Fall 2009) — Midterm Exam, with solutions",
+   "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/cc12e865acfebe95d04e9214e6e73b6d_MIT15_083JF09_midterm_sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-mid-cover-facet",
+  "topic": "t206b",
+  "type": "tf",
+  "q": "Knapsack polytope $P=\\operatorname{conv}\\{x\\in\\{0,1\\}^n : \\sum_i w_i x_i\\le b\\}$ with $0 \\lt w_i\\le b$ for all $i$. Let $C$ be a minimal cover ($\\sum_{i\\in C}w_i \\gt b$, and removing any one item of $C$ makes the rest fit) which also satisfies $$\\sum_{i\\in C} w_i+\\max_{j\\notin C} w_j-\\max_{i\\in C} w_i\\le b .$$ <b>Claim:</b> the cover inequality $\\sum_{i\\in C}x_i\\le |C|-1$ defines a facet of $P$.",
+  "answer": true,
+  "difficulty": 3,
+  "explain": "$P$ is full-dimensional because every unit vector is feasible. The $|C|$ points &quot;all of $C$ except item $i$&quot; are feasible (minimality) and satisfy the inequality with equality. The extra condition says that replacing the heaviest item of $C$ by any outside item $k$ is still feasible, which gives $n-|C|$ further points on the face, each the only one with $x_k=1$. These $n$ points are linearly independent, so the face has dimension $n-1$: a facet. Equivalently, any equation $hx=d$ satisfied by the whole face must have equal $h_i$ on $C$ and $h_k=0$ outside $C$, i.e. it is a multiple of the cover inequality. (The assumption $w_i\\le b$ only serves to make $P$ full-dimensional.)",
+  "source": {
+   "label": "MIT OCW 15.083J / 6.859J Integer Programming and Combinatorial Optimization (Fall 2009) — Midterm Exam, with solutions",
+   "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/cc12e865acfebe95d04e9214e6e73b6d_MIT15_083JF09_midterm_sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-mid-binary-nonlinear",
+  "topic": "t101",
+  "type": "tf",
+  "q": "Consider $\\min \\sum_j f_0(x_j)$ subject to $\\sum_i f_j(x_i)\\le b_j$ for $j=1,\\dots,m$ and $x\\in\\{0,1\\}^n$, where $f_0,f_1,\\dots,f_m$ are arbitrary nonlinear functions of one variable. <b>Claim:</b> this problem can be rewritten exactly as a <i>linear</i> 0-1 program in the same variables.",
+  "answer": true,
+  "difficulty": 1,
+  "explain": "A binary variable only takes the values 0 and 1, and on $\\{0,1\\}$ every function coincides with the affine function through its two values: $f(x)=f(0)+\\big(f(1)-f(0)\\big)\\,x$. Replacing each $f_j(x_i)$ in this way gives a linear objective and linear constraints (the constants $f_j(0)$ move to the right-hand side).",
+  "source": {
+   "label": "MIT OCW 15.083J / 6.859J Integer Programming and Combinatorial Optimization (Fall 2009) — Midterm Exam, with solutions",
+   "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/cc12e865acfebe95d04e9214e6e73b6d_MIT15_083JF09_midterm_sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-mid-robust-separation",
+  "topic": "t202",
+  "type": "mcq",
+  "q": "A linear program has one constraint for every scenario vector: $$\\max\\ c^\\top x\\quad\\text{s.t.}\\quad a^\\top x\\le b\\ \\ \\text{for all } a\\in\\{0,1\\}^n \\text{ with } w^\\top a\\le B,\\qquad x\\ge 0,$$ where $w\\ge0$ is an integer vector. The exponentially many constraints are generated on demand. Given a candidate point $x^*\\ge0$, which problem must be solved to find a most violated constraint (the separation problem)?",
+  "options": [
+   "A 0-1 knapsack problem: $\\max\\{\\sum_j x^*_j a_j : w^\\top a\\le B,\\ a\\in\\{0,1\\}^n\\}$; $x^*$ is infeasible exactly when the optimal value exceeds $b$",
+   "A minimum $s$–$t$ cut problem with capacities $x^*_j$",
+   "A shortest-path problem with arc lengths $w_j$",
+   "An assignment problem with costs $x^*_j w_j$"
+  ],
+  "answer": 0,
+  "difficulty": 2,
+  "explain": "The most violated constraint is the scenario $a$ that maximises the left-hand side $\\sum_j x^*_j a_j$ over the scenario set: a 0-1 knapsack with profits $x^*_j$, weights $w_j$ and capacity $B$. Since separation and optimisation are polynomially equivalent, the source concludes that the robust LP is NP-hard in general. In the special case $w=(1,\\dots,1)$ separation is easy (take the $\\lfloor B\\rfloor$ largest components of $x^*$) and the LP becomes polynomially solvable.",
+  "source": {
+   "label": "MIT OCW 15.083J / 6.859J Integer Programming and Combinatorial Optimization (Fall 2009) — Midterm Exam, with solutions",
+   "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/cc12e865acfebe95d04e9214e6e73b6d_MIT15_083JF09_midterm_sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-mid-tsp-cutset-subtour",
+  "topic": "t201",
+  "type": "short",
+  "q": "Symmetric TSP on a complete graph $G=(V,E)$ with edge variables $0\\le x_e\\le1$ and degree equations $x(\\delta(v))=2$ for every node $v$. Formulation 1 adds the cutset constraints $x(\\delta(S))\\ge2$; Formulation 2 adds the subtour constraints $x(E(S))\\le|S|-1$; in both cases for all $S$ with $\\emptyset\\ne S\\subsetneq V$. Show that the two LP relaxations are the same polyhedron, so that their bounds $Z_1$ and $Z_2$ coincide.",
+  "model": "Add the degree equations of the nodes of $S$. An edge with both ends in $S$ is counted twice and an edge of the cut $\\delta(S)$ once, hence $$2\\,x(E(S))+x(\\delta(S))=2|S| .$$ Therefore $x(E(S))\\le|S|-1\\iff2|S|-x(\\delta(S))\\le2|S|-2\\iff x(\\delta(S))\\ge2$. For every $S$ the subtour constraint is equivalent to the cutset constraint of the same set once the degree equations hold, so the two feasible regions are identical and $Z_1=Z_2$.",
+  "rubric": [
+   "Sums the degree equations over the nodes of $S$ to obtain $2x(E(S))+x(\\delta(S))=2|S|$",
+   "Deduces $x(E(S))\\le|S|-1\\iff x(\\delta(S))\\ge2$ for each $S$",
+   "Concludes that the two relaxations are the same polyhedron, hence give the same bound"
+  ],
+  "difficulty": 2,
+  "explain": "The equivalence relies on the degree equations. This common polyhedron is still not the convex hull of the tours, which is not known explicitly.",
+  "source": {
+   "label": "MIT OCW 15.083J / 6.859J Integer Programming and Combinatorial Optimization (Fall 2009) — Midterm Exam, with solutions",
+   "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/cc12e865acfebe95d04e9214e6e73b6d_MIT15_083JF09_midterm_sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-mid-lagrangian-order",
+  "topic": "t401",
+  "type": "mcq",
+  "q": "For a minimisation integer program let $Z_{IP}$ be the optimal value, $Z_{LP}$ the value of the LP relaxation, and $Z_D$ the value of the Lagrangian dual obtained by dualising some of the constraints (for the TSP, e.g., the degree constraints of all nodes except node 1). Which statement always holds?",
+  "options": [
+   "$Z_D\\le Z_{LP}\\le Z_{IP}$",
+   "$Z_{LP}\\le Z_D\\le Z_{IP}$, with $Z_D=Z_{LP}$ when the constraints that are kept describe an integral polyhedron",
+   "$Z_{LP}\\le Z_{IP}\\le Z_D$",
+   "$Z_D=Z_{IP}$ whenever the constraints that are kept describe an integral polyhedron"
+  ],
+  "answer": 1,
+  "difficulty": 2,
+  "explain": "The Lagrangian dual optimises over the dualised constraints intersected with the <i>convex hull</i> of the integer points of the kept constraints. That set lies between the integer hull and the LP relaxation, so $Z_{LP}\\le Z_D\\le Z_{IP}$. If the kept set is already integral, its hull is its LP relaxation and nothing is gained: $Z_D=Z_{LP}$. In the source's TSP question this yields $Z_1=Z_2=Z_{D2}\\le Z_{D1}\\le Z_{IP}$ (1 = cutset, 2 = subtour formulation): with the subtour formulation the kept set is integral, with the cutset formulation it need not be, so its Lagrangian bound can be strictly better.",
+  "source": {
+   "label": "MIT OCW 15.083J / 6.859J Integer Programming and Combinatorial Optimization (Fall 2009) — Midterm Exam, with solutions",
+   "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/cc12e865acfebe95d04e9214e6e73b6d_MIT15_083JF09_midterm_sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-fin-pseudopoly",
+  "topic": "t002",
+  "type": "tf",
+  "q": "<b>Claim:</b> the decision version of the 0-1 knapsack problem is NP-complete and knapsack has a pseudo-polynomial dynamic program; since every problem in NP reduces to knapsack in polynomial time, every problem in NP has a pseudo-polynomial algorithm.",
+  "answer": false,
+  "difficulty": 2,
+  "explain": "A polynomial reduction may create knapsack instances whose <i>numbers</i> are exponentially large in the size of the original instance, and a pseudo-polynomial running time is polynomial only in the magnitude of the numbers. So the argument breaks down: strongly NP-hard problems (TSP, 3-partition, ...) have no pseudo-polynomial algorithm unless P = NP. The source's exam marks &quot;a pseudo-polynomial algorithm for one NP-complete problem gives one for all of NP&quot; as false.",
+  "source": {
+   "label": "MIT OCW 15.083J / 6.859J (Fall 2009) — Final Exam and Final Exam Solutions",
+   "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/8516510b21065391c45b723f82bb2394_MIT15_083JF09_final_sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-fin-halfspace-hull",
+  "topic": "t204",
+  "type": "tf",
+  "q": "Let $H=\\{x\\in\\mathbb{R}^n : c^\\top x\\le\\delta\\}$ where $c$ is a nonzero integer vector and $\\delta$ is rational. <b>Claim:</b> the integer hull of $H$ is always $H_I=\\{x : c^\\top x\\le\\lfloor\\delta\\rfloor\\}$.",
+  "answer": false,
+  "difficulty": 2,
+  "explain": "Rounding the right-hand side is exact only when the entries of $c$ have greatest common divisor 1. Counter-example in one variable: $H=\\{x:2x\\le3\\}$ has integer hull $\\{x\\le1\\}$, but $2x\\le\\lfloor3\\rfloor=3$ is still $x\\le1.5$. In general one first divides by $g=\\gcd(c_1,\\dots,c_n)$: $H_I=\\{x:(c/g)^\\top x\\le\\lfloor\\delta/g\\rfloor\\}$.",
+  "source": {
+   "label": "MIT OCW 15.083J / 6.859J (Fall 2009) — Final Exam and Final Exam Solutions",
+   "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/8516510b21065391c45b723f82bb2394_MIT15_083JF09_final_sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-fin-rounding-lambda",
+  "topic": "t204",
+  "type": "short",
+  "q": "Let $X=\\{x\\in\\{0,1\\}^n : \\sum_i a_i x_i\\le b\\}$ with nonnegative integers $a_i$ and $b$, and let $\\lambda$ be a positive integer. Prove that $$\\sum_i \\lfloor a_i/\\lambda\\rfloor\\, x_i\\le\\lfloor b/\\lambda\\rfloor$$ is valid for $\\operatorname{conv}(X)$.",
+  "model": "Divide the knapsack constraint by $\\lambda \\gt 0$: $\\sum_i (a_i/\\lambda)\\,x_i\\le b/\\lambda$. Because $x_i\\ge0$, rounding the coefficients down can only decrease the left-hand side: $$\\sum_i\\lfloor a_i/\\lambda\\rfloor x_i\\le\\sum_i (a_i/\\lambda)\\,x_i\\le b/\\lambda .$$ For $x\\in X$ the left-hand side is an integer, hence it is at most $\\lfloor b/\\lambda\\rfloor$. The inequality holds at every point of $X$ and therefore on its convex hull.",
+  "rubric": [
+   "Scales the constraint by $1/\\lambda$",
+   "Uses $x\\ge0$ to round the coefficients down (a weakening)",
+   "Uses integrality of the left-hand side to round the right-hand side down",
+   "Notes that validity on $X$ carries over to $\\operatorname{conv}(X)$"
+  ],
+  "difficulty": 2,
+  "explain": "This is a Chvátal–Gomory cut with the single multiplier $u=1/\\lambda$.",
+  "source": {
+   "label": "MIT OCW 15.083J / 6.859J (Fall 2009) — Final Exam and Final Exam Solutions",
+   "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/8516510b21065391c45b723f82bb2394_MIT15_083JF09_final_sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-fin-uniform-facet",
+  "topic": "t206b",
+  "type": "short",
+  "q": "Let $C=\\operatorname{conv}\\{x\\in\\{0,1\\}^n : \\lambda\\sum_{i=1}^n x_i\\le b\\}$, where $\\lambda$ and $b$ are positive integers with $\\lambda \\lt b \\lt\\lambda n$ and $b/\\lambda$ not an integer. Prove that $\\sum_{i=1}^n x_i\\le\\lfloor b/\\lambda\\rfloor$ defines a facet of $C$.",
+  "model": "Let $k=\\lfloor b/\\lambda\\rfloor$; the assumptions give $1\\le k\\le n-1$, and the feasible 0-1 points are exactly those with at most $k$ ones. <br><b>Dimension of $C$.</b> The zero vector and the $n$ unit vectors are feasible ($k\\ge1$), so $\\dim C=n$. <br><b>The face.</b> $F=\\{x\\in C:\\sum_i x_i=k\\}$ contains every 0-1 vector with exactly $k$ ones. Let $h^\\top x=d$ be an equation satisfied by all points of $F$. For $i\\ne j$ take a vector with exactly $k$ ones that has $x_i=1$ and $x_j=0$ (possible because $1\\le k\\le n-1$); exchanging the two coordinates gives another point of $F$, and subtracting the two equations gives $h_i=h_j$. Hence $h$ is a multiple of the all-ones vector: the only equations satisfied by $F$ are multiples of $\\sum_i x_i=k$. So $\\dim F=n-1$ and $F$ is a facet.",
+  "rubric": [
+   "Sets $k=\\lfloor b/\\lambda\\rfloor$ and notes $1\\le k\\le n-1$",
+   "Shows that $C$ is full-dimensional",
+   "Identifies the vectors with exactly $k$ ones as points of the face",
+   "Exchange argument (or $n$ affinely independent points) showing that the face has dimension $n-1$"
+  ],
+  "difficulty": 3,
+  "explain": "Validity of the inequality is the integer-rounding argument with multiplier $1/\\lambda$. The facet proof uses the standard technique &quot;every equation satisfied by the face is a multiple of the inequality&quot;. The condition $b \\gt\\lambda$ is written explicitly here so that $k\\ge1$, as the source's solution assumes.",
+  "source": {
+   "label": "MIT OCW 15.083J / 6.859J (Fall 2009) — Final Exam and Final Exam Solutions",
+   "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/8516510b21065391c45b723f82bb2394_MIT15_083JF09_final_sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-fin-arcset-integrality",
+  "topic": "t106",
+  "type": "mcq",
+  "q": "In a digraph $D=(V,A)$ with arc weights we want a maximum-weight set of arcs such that no node is the head of one chosen arc and the tail of another. Formulation: $x_a\\in\\{0,1\\}$ and $x_e+x_{e'}\\le1$ for every node $v$ and every pair ($e$ entering $v$, $e'$ leaving $v$). Which statement about the LP relaxation ($0\\le x\\le1$) is correct?",
+  "options": [
+   "It is integral for every digraph, because each constraint contains only two variables",
+   "It is integral exactly when $D$ has no directed cycle",
+   "It is not integral in general (on the directed triangle $(i,j),(j,k),(k,i)$ the point $(\\tfrac12,\\tfrac12,\\tfrac12)$ is a vertex), but it is integral when $D$ is bipartite, because the constraint matrix is then the edge–node incidence matrix of a bipartite graph",
+   "It is never integral, because the constraint matrix always has a square submatrix with determinant $\\pm2$"
+  ],
+  "answer": 2,
+  "difficulty": 3,
+  "explain": "On the directed triangle the three constraints $x_{ij}+x_{jk}\\le1$, $x_{jk}+x_{ki}\\le1$, $x_{ki}+x_{ij}\\le1$ are tight at $(\\tfrac12,\\tfrac12,\\tfrac12)$ and linearly independent (determinant $\\pm2$): a fractional vertex of value $1.5$ for unit weights, while only one arc can be chosen. If $D$ is bipartite with sides $U,W$, each conflict pairs a $U\\to W$ arc with a $W\\to U$ arc, so the conflict graph (one node per arc) is bipartite and its incidence matrix is totally unimodular. The claim &quot;integral exactly when there is no directed cycle&quot; fails: the source gives the acyclic digraph with arcs $(1,2),(3,1),(4,3),(3,5),(5,1)$, whose conflict graph is a 5-cycle (LP value $2.5$, integer optimum $2$). The claim &quot;never integral&quot; fails for bipartite digraphs.",
+  "source": {
+   "label": "MIT OCW 15.083J / 6.859J (Fall 2009) — Final Exam and Final Exam Solutions",
+   "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/8516510b21065391c45b723f82bb2394_MIT15_083JF09_final_sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-fin-odd-cycle-cg",
+  "topic": "t204",
+  "type": "short",
+  "q": "Binary variables $x_a$ on the arcs of a digraph satisfy $x_e+x_{e'}\\le1$ whenever the head of arc $e$ is the tail of arc $e'$. Let $C$ be a directed cycle with an odd number $|C|$ of arcs. Derive, as a Chvátal–Gomory cut, a valid inequality on the arcs of $C$ that is not implied by the pair constraints, and give a fractional point that it cuts off.",
+  "model": "Consecutive arcs of the cycle are in conflict, which gives $|C|$ pair constraints $x_a+x_{a'}\\le1$. Adding them, every arc of $C$ appears exactly twice: $2\\sum_{a\\in C}x_a\\le|C|$. Multiplying by $\\tfrac12$ gives $\\sum_{a\\in C}x_a\\le|C|/2$. The left-hand side is an integer for integer $x$ and $|C|$ is odd, so the right-hand side can be rounded down: $$\\sum_{a\\in C}x_a\\le\\frac{|C|-1}{2} .$$ The point $x_a=\\tfrac12$ for all $a\\in C$ satisfies every pair constraint but has left-hand side $|C|/2 \\gt(|C|-1)/2$, so it is cut off.",
+  "rubric": [
+   "Adds the $|C|$ pair constraints of consecutive arcs (each arc counted twice)",
+   "Uses multipliers $\\tfrac12$ to obtain $\\sum_{a\\in C}x_a\\le|C|/2$",
+   "Rounds down to $(|C|-1)/2$ using integrality and the oddness of $|C|$",
+   "Gives $x=\\tfrac12$ on the cycle as a point that is cut off"
+  ],
+  "difficulty": 2,
+  "explain": "This is the odd-cycle inequality of the stable-set problem on the conflict graph, a rank-1 Chvátal–Gomory cut. For the directed triangle it reads $x_{ij}+x_{jk}+x_{ki}\\le1$.",
+  "source": {
+   "label": "MIT OCW 15.083J / 6.859J (Fall 2009) — Final Exam and Final Exam Solutions",
+   "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/8516510b21065391c45b723f82bb2394_MIT15_083JF09_final_sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-fin-uls-bigm",
+  "topic": "t104",
+  "type": "mcq",
+  "q": "Uncapacitated lot-sizing over periods $t=1,\\dots,T$: demand $d_t\\ge0$, production $y_t\\ge0$, set-up $x_t\\in\\{0,1\\}$, end-of-period stock $s_t\\ge0$, balance $s_{t-1}+y_t-d_t=s_t$ and $s_0=s_T=0$. Production is linked to the set-up by $y_t\\le M_t\\,x_t$. What is the smallest value of $M_t$ that is valid for every feasible solution?",
+  "options": [
+   "$M_t=d_t$",
+   "$M_t=\\sum_{s=1}^{T}d_s$",
+   "$M_t=\\sum_{s=1}^{t}d_s$",
+   "$M_t=\\sum_{s=t}^{T}d_s$"
+  ],
+  "answer": 3,
+  "difficulty": 2,
+  "explain": "Production of period $t$ can only serve the demand of periods $t,\\dots,T$ (no backlogging, and nothing is left at the end because $s_T=0$): adding the balance equations of periods $t,\\dots,T$ gives $y_t\\le\\sum_{s=t}^{T}d_s-s_{t-1}\\le\\sum_{s=t}^{T}d_s$, and this value is reached by producing all remaining demand in period $t$. $M_t=d_t$ is invalid (it forbids producing ahead), and so is $\\sum_{s\\le t}d_s$ (take $T=2$, $d=(0,5)$, $y_1=5$). The total demand is valid but looser, and a looser big-M weakens the LP relaxation. The complete model is $\\min\\sum_t(f_tx_t+p_ty_t+h_ts_t)$ with these constraints.",
+  "source": {
+   "label": "MIT OCW 15.083J / 6.859J (Fall 2009) — Final Exam and Final Exam Solutions",
+   "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/8516510b21065391c45b723f82bb2394_MIT15_083JF09_final_sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-fin-ls-inequality",
+  "topic": "t206c",
+  "type": "short",
+  "q": "Uncapacitated lot-sizing: $s_{t-1}+y_t=d_t+s_t$ for $t=1,\\dots,T$, $s_0=0$, $s_t\\ge0$, $0\\le y_t\\le M_tx_t$, $x_t\\in\\{0,1\\}$, with demands $d_t\\ge0$. Write $d_{ik}=\\sum_{t=i}^{k}d_t$. For $k\\le T$ and $C\\subseteq\\{1,\\dots,k\\}$ prove that $$\\sum_{i\\in C}y_i\\le\\sum_{i\\in C}d_{ik}\\,x_i+s_k$$ is a valid inequality.",
+  "model": "If $x_i=0$ for all $i\\in C$, then $y_i=0$ on $C$ and the left-hand side is $0\\le s_k$. Otherwise let $t=\\min\\{i\\in C:x_i=1\\}$. The periods of $C$ before $t$ produce nothing, so $$\\sum_{i\\in C}y_i\\le\\sum_{i=t}^{k}y_i .$$ Adding the balance equations of periods $t,\\dots,k$ gives $\\sum_{i=t}^{k}y_i=d_{tk}+s_k-s_{t-1}\\le d_{tk}+s_k$, because $s_{t-1}\\ge0$. Finally $d_{tk}=d_{tk}x_t\\le\\sum_{i\\in C}d_{ik}x_i$ since all terms are nonnegative. Chaining the three inequalities proves the claim.",
+  "rubric": [
+   "Treats the case in which no period of $C$ has a set-up",
+   "Takes the first period $t\\in C$ with $x_t=1$ and bounds $\\sum_{C}y_i$ by $\\sum_{i=t}^{k}y_i$",
+   "Adds the balance equations of periods $t,\\dots,k$ to get $d_{tk}+s_k-s_{t-1}$",
+   "Uses $s_{t-1}\\ge0$ and $d_{tk}\\le\\sum_{C}d_{ik}x_i$ to conclude"
+  ],
+  "difficulty": 3,
+  "explain": "These are the $(l,S)$ inequalities of uncapacitated lot-sizing: what the periods of $C$ produce up to period $k$ either covers demand up to $k$ from a period with a set-up or ends up in the stock $s_k$. The source proves validity by induction on $k$; the direct argument given here (first open period of $C$) was worked for this bank and checked numerically on random instances.",
+  "source": {
+   "label": "MIT OCW 15.083J / 6.859J (Fall 2009) — Final Exam and Final Exam Solutions",
+   "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/8516510b21065391c45b723f82bb2394_MIT15_083JF09_final_sol.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-fin-mir-basic",
+  "topic": "t205",
+  "type": "short",
+  "q": "Let $S=\\{(x,y)\\in\\mathbb{Z}\\times\\mathbb{R}_+ : x-y\\le b\\}$ and $f_0=b-\\lfloor b\\rfloor$. Prove that the basic mixed-integer rounding inequality $$x-\\frac{y}{1-f_0}\\le\\lfloor b\\rfloor$$ is valid for $S$, hence for $\\operatorname{conv}(S)$.",
+  "model": "Put $t=x-\\lfloor b\\rfloor\\in\\mathbb{Z}$; the claim is $(1-f_0)\\,t\\le y$. <br><b>Case $t\\le0$</b> (that is, $x\\le\\lfloor b\\rfloor$): $(1-f_0)\\,t\\le0\\le y$. <br><b>Case $t\\ge1$</b> (that is, $x\\ge\\lfloor b\\rfloor+1$): the constraint $x-y\\le b$ gives $y\\ge x-b=t-f_0$, and $t-f_0\\ge(1-f_0)\\,t$ because this is equivalent to $f_0\\,(t-1)\\ge0$. <br>Since $x$ is an integer, every point of $S$ falls in one of the two cases, so the inequality is valid on $S$; a linear inequality valid on $S$ is valid on its convex hull.",
+  "rubric": [
+   "Splits on the disjunction $x\\le\\lfloor b\\rfloor$ or $x\\ge\\lfloor b\\rfloor+1$ (integrality of $x$)",
+   "First case: uses $y\\ge0$",
+   "Second case: uses $x-y\\le b$ together with $x-\\lfloor b\\rfloor\\ge1$",
+   "Concludes validity on the union of the two pieces and hence on the convex hull"
+  ],
+  "difficulty": 2,
+  "explain": "It is a split (disjunctive) cut for the split $x\\le\\lfloor b\\rfloor$ or $x\\ge\\lfloor b\\rfloor+1$. At $y=0$ it reduces to the plain rounding $x\\le\\lfloor b\\rfloor$.",
+  "source": {
+   "label": "MIT OCW 15.083J / 6.859J (Fall 2009) — Final Exam and Final Exam Solutions",
+   "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/8516510b21065391c45b723f82bb2394_MIT15_083JF09_final_sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-fin-mir-general",
+  "topic": "t205",
+  "type": "short",
+  "q": "Let $T=\\{(x,y)\\in\\mathbb{Z}^n_+\\times\\mathbb{R}^p_+ : \\sum_j a_jx_j+\\sum_j g_jy_j\\le b\\}$, $f_j=a_j-\\lfloor a_j\\rfloor$ and $f_0=b-\\lfloor b\\rfloor \\gt 0$. Using the basic MIR inequality (if $w\\in\\mathbb{Z}$, $z\\ge0$ and $w-z\\le b$, then $w-\\frac{z}{1-f_0}\\le\\lfloor b\\rfloor$), derive the MIR inequality $$\\sum_j\\Big(\\lfloor a_j\\rfloor+\\frac{(f_j-f_0)^+}{1-f_0}\\Big)x_j+\\frac{1}{1-f_0}\\sum_{j:\\,g_j \\lt 0}g_jy_j\\le\\lfloor b\\rfloor .$$",
+  "model": "<b>1. Relax.</b> Drop the terms $g_jy_j$ with $g_j\\ge0$ (they are nonnegative). For $f_j\\le f_0$ replace $a_j$ by $\\lfloor a_j\\rfloor$ (valid because $x_j\\ge0$). For $f_j \\gt f_0$ write $a_j=\\lceil a_j\\rceil-(1-f_j)$. The constraint becomes $w-z\\le b$ with $$w=\\sum_{f_j\\le f_0}\\lfloor a_j\\rfloor x_j+\\sum_{f_j \\gt f_0}\\lceil a_j\\rceil x_j\\in\\mathbb{Z},\\qquad z=\\sum_{f_j \\gt f_0}(1-f_j)\\,x_j-\\sum_{g_j \\lt 0}g_jy_j\\ \\ge0 .$$ <b>2. Apply the basic MIR:</b> $w-\\frac{z}{1-f_0}\\le\\lfloor b\\rfloor$. <br><b>3. Expand.</b> For $f_j \\gt f_0$ the coefficient of $x_j$ is $\\lceil a_j\\rceil-\\frac{1-f_j}{1-f_0}=\\lfloor a_j\\rfloor+\\frac{f_j-f_0}{1-f_0}$; for $f_j\\le f_0$ it is $\\lfloor a_j\\rfloor$; and $y_j$ with $g_j \\lt 0$ receives $\\frac{g_j}{1-f_0}$. This is the stated inequality.",
+  "rubric": [
+   "Relaxes: drops the terms with $g_j\\ge0$ and rounds $a_j$ down when $f_j\\le f_0$",
+   "Rounds $a_j$ up when $f_j \\gt f_0$, moving $(1-f_j)x_j$ into the nonnegative continuous part",
+   "Identifies an integer $w$ and a nonnegative $z$ with $w-z\\le b$",
+   "Applies the basic MIR and expands the coefficients correctly"
+  ],
+  "difficulty": 3,
+  "explain": "Rounding up when $f_j \\gt f_0$ is what improves on plain rounding: the coefficient $\\lfloor a_j\\rfloor+\\frac{f_j-f_0}{1-f_0}$ exceeds $\\lfloor a_j\\rfloor$. Applied to a simplex tableau row written with its slack, this inequality is exactly the Gomory mixed-integer cut (the source's next question; the identity was re-checked symbolically for this bank).",
+  "source": {
+   "label": "MIT OCW 15.083J / 6.859J (Fall 2009) — Final Exam and Final Exam Solutions",
+   "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/8516510b21065391c45b723f82bb2394_MIT15_083JF09_final_sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-ps1-mtz-subtour",
+  "topic": "t201",
+  "type": "short",
+  "q": "Asymmetric TSP on nodes $1,\\dots,n$ with binary arc variables $y_{ij}$, assignment constraints (exactly one arc leaves and one arc enters every node) and the Miller–Tucker–Zemlin constraints $$u_i-u_j+n\\,y_{ij}\\le n-1\\qquad\\text{for all } i\\ne j \\text{ in } \\{2,\\dots,n\\}.$$ Show (a) that for every Hamiltonian tour there are values $u$ satisfying the MTZ constraints, and (b) that no assignment solution containing a subtour satisfies them.",
+  "model": "(a) Given a tour, let $u_i$ be the position of node $i$ when the tour starts at node 1, so $u_i\\in\\{2,\\dots,n\\}$. If $y_{ij}=1$ with $i,j\\ne1$, then $u_j=u_i+1$ and the constraint reads $-1+n\\le n-1$: it holds with equality. If $y_{ij}=0$, then $u_i-u_j\\le n-2\\le n-1$. <br>(b) An assignment solution that is not a single tour consists of several disjoint directed cycles, so at least one cycle $C$ avoids node 1. Add the MTZ constraints of the arcs of $C$ (all have $y_{ij}=1$): the $u$ terms cancel around the cycle and we are left with $n\\,|C|\\le(n-1)\\,|C|$, a contradiction.",
+  "rubric": [
+   "(a) defines $u_i$ as the visiting position counted from node 1",
+   "(a) checks both cases $y_{ij}=1$ (equality) and $y_{ij}=0$",
+   "(b) notes that a solution with subtours has a cycle avoiding node 1",
+   "(b) sums the MTZ constraints around that cycle to obtain $n|C|\\le(n-1)|C|$"
+  ],
+  "difficulty": 2,
+  "explain": "MTZ needs only $O(n^2)$ constraints and $n-1$ extra variables, but its LP relaxation is weaker than that of the cutset/subtour formulation.",
+  "source": {
+   "label": "MIT OCW 15.083J / 6.859J (Fall 2009) — Problem Set 1 Solutions",
+   "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/9254df85c806f8bf0ad9b0482e4fdd60_MIT15_083JF09_assn01_sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-ps1-mtz-projection",
+  "topic": "t201",
+  "type": "mcq",
+  "q": "In the LP relaxation of the MTZ formulation ($u_i-u_j+n\\,y_{ij}\\le n-1$ for $i\\ne j$ in $\\{2,\\dots,n\\}$, $u$ free) take a directed cycle $C$ that does not pass through node 1 and add up its MTZ constraints. Which inequality on $y(C)=\\sum_{(i,j)\\in C}y_{ij}$ results, and how does it compare with the subtour inequality $y(C)\\le|C|-1$ implied by the directed cutset formulation?",
+  "options": [
+   "$y(C)\\le|C|-\\dfrac{|C|}{n}$, which is weaker than $y(C)\\le|C|-1$ because $|C|/n \\lt 1$",
+   "$y(C)\\le|C|-1$: the two formulations are equally strong",
+   "$y(C)\\le|C|-\\dfrac{n}{|C|}$, which is stronger than $y(C)\\le|C|-1$",
+   "$y(C)\\le|C|-\\dfrac{1}{n}$, which is weaker than $y(C)\\le|C|-1$"
+  ],
+  "answer": 0,
+  "difficulty": 3,
+  "explain": "Around the cycle the $u$ terms cancel: $n\\,y(C)\\le(n-1)\\,|C|$, i.e. $y(C)\\le|C|-|C|/n$. A cycle avoiding node 1 has $|C|\\le n-1$, so the right-hand side is larger than $|C|-1$ and the MTZ relaxation tolerates &quot;almost subtours&quot; (for $n=5$ a 2-cycle may carry $y_{23}+y_{32}=1.6$). The source shows by LP duality that these cycle inequalities describe exactly the projection of the MTZ relaxation onto the $y$ variables, so the cutset relaxation is strictly contained in it: MTZ is the weaker formulation.",
+  "source": {
+   "label": "MIT OCW 15.083J / 6.859J (Fall 2009) — Problem Set 1 Solutions",
+   "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/9254df85c806f8bf0ad9b0482e4fdd60_MIT15_083JF09_assn01_sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-ps4-mincut-separation",
+  "topic": "t203",
+  "type": "short",
+  "q": "A network-design LP relaxation has variables $0\\le x_e\\le1$ on the edges of an undirected graph and the exponentially many constraints $$x(\\delta(S))\\ge r_{ij}\\qquad\\text{for every pair of nodes } i,j \\text{ and every node set } S \\text{ with } i\\in S,\\ j\\notin S .$$ Given a point $x^*$, describe a polynomial-time separation routine: it must either certify that $x^*$ satisfies all constraints or return a violated one.",
+  "model": "Check the bounds $0\\le x^*_e\\le1$ directly. Then use $x^*_e$ as edge capacities and, for each pair $(i,j)$, compute a minimum $i$–$j$ cut (one maximum-flow computation). The minimum cut is the smallest value of $x^*(\\delta(S))$ over all sets $S$ separating $i$ from $j$. If its capacity is at least $r_{ij}$, all constraints of this pair hold. If it is smaller, the node set $S$ of that cut gives a violated inequality $x(\\delta(S))\\ge r_{ij}$ (the most violated one for the pair). There are $O(n^2)$ pairs, so the routine is polynomial.",
+  "rubric": [
+   "Uses $x^*$ as capacities",
+   "Solves a minimum $i$–$j$ cut (maximum flow) for each pair",
+   "Compares the cut value with $r_{ij}$ and returns the cut set $S$ when it is smaller",
+   "Explains why this is exact (the minimum cut minimises the left-hand side over all $S$) and polynomial"
+  ],
+  "difficulty": 2,
+  "explain": "The same routine separates the Steiner-tree cut constraints ($r_{ij}=1$ when $i$ and $j$ are both terminals) and fractional TSP subtour constraints (right-hand side 2). By the equivalence of separation and optimisation the LP is then solvable in polynomial time.",
+  "source": {
+   "label": "MIT OCW 15.083J / 6.859J (Fall 2009) — Problem Set 4 Solutions",
+   "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/ca2d48a402d086cee864c4764d0a104a_MIT15_083JF09_assn04_sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-epfl-transport-tu",
+  "topic": "t106",
+  "type": "short",
+  "q": "Warehouses $j\\in F$, goods $i\\in G$, clients $k\\in C$. Warehouse $j$ holds $s_{ij}$ units of good $i$, client $k$ requires $d_{ik}$ units of good $i$, and shipping one unit of good $i$ from $j$ to $k$ costs $c_{ijk}$; all data are integers. Write an integer program for the cheapest shipment plan and decide, with a justification, whether its LP relaxation has integral optimal solutions.",
+  "model": "Let $x_{ijk}\\ge0$ (integer) be the number of units of good $i$ shipped from $j$ to $k$. $$\\min\\sum_{i,j,k}c_{ijk}x_{ijk}\\quad\\text{s.t.}\\quad\\sum_k x_{ijk}\\le s_{ij}\\ \\ \\forall i,j,\\qquad\\sum_j x_{ijk}\\ge d_{ik}\\ \\ \\forall i,k .$$ Every variable $x_{ijk}$ appears in exactly one supply row $(i,j)$ and one demand row $(i,k)$, with coefficient 1. So the constraint matrix is the node–edge incidence matrix of a bipartite graph (supply rows on one side, demand rows on the other), which is totally unimodular; multiplying the demand rows by $-1$ and appending an identity for $x\\ge0$ keeps it TU. With integer right-hand sides all vertices of the LP relaxation are integral, so whenever the LP has an optimal solution it has an integral one.",
+  "rubric": [
+   "Variables $x_{ijk}$ and a linear shipping-cost objective",
+   "Supply constraints per (good, warehouse) and demand constraints per (good, client)",
+   "Observes that each column has exactly two ones, one in a supply row and one in a demand row (bipartite incidence matrix)",
+   "Concludes: TU matrix and integer right-hand sides give integral vertices"
+  ],
+  "difficulty": 2,
+  "explain": "The model decomposes into one transportation problem per good, the classical totally unimodular example.",
+  "source": {
+   "label": "EPFL Discrete Optimization (Spring 2010, Prof. F. Eisenbrand) — Sample exam with solutions",
+   "url": "https://www.epfl.ch/labs/disopt/wp-content/uploads/2018/09/sample_exam_sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-epfl-interval-tu",
+  "topic": "t106",
+  "type": "short",
+  "q": "An <i>interval matrix</i> is a 0/1 matrix in which the ones of every row are consecutive. Prove that every interval matrix is totally unimodular.",
+  "model": "Every submatrix of an interval matrix is again an interval matrix (deleting rows or columns keeps the ones of each row consecutive), so it suffices to show $\\det B\\in\\{-1,0,1\\}$ for a square $n\\times n$ interval matrix $B$. <br>For $i=n-1,n-2,\\dots,1$ subtract column $i$ from column $i+1$. The determinant is unchanged, and the new column $j\\ge2$ equals (old column $j$) minus (old column $j-1$). A row whose ones occupy the columns $a,\\dots,b$ becomes a row with a single $+1$ in column $a$ and, if $b \\lt n$, a single $-1$ in column $b+1$. So every row now has at most one $+1$ and at most one $-1$. <br>Expand the determinant along a row with exactly one nonzero entry (a factor $\\pm1$) and repeat. The process ends with (i) an empty matrix, $\\det=\\pm1$; (ii) a zero row, $\\det=0$; or (iii) a matrix in which every row has exactly one $+1$ and one $-1$: then its columns add up to the zero vector and $\\det=0$.",
+  "rubric": [
+   "Reduces to square submatrices, which are interval matrices too",
+   "Applies column differences and notes that the determinant does not change",
+   "Shows that each row then has at most one $+1$ and at most one $-1$",
+   "Finishes by expansion / dependent columns to get a determinant in $\\{0,\\pm1\\}$"
+  ],
+  "difficulty": 3,
+  "explain": "After the column operation every row has at most one $+1$ and one $-1$, so the transpose is, up to a deleted row, the node–arc incidence matrix of a directed graph. The same statement holds for 0/1 matrices with consecutive ones in every column (transpose).",
+  "source": {
+   "label": "EPFL Discrete Optimization (Spring 2010, Prof. F. Eisenbrand) — Sample exam with solutions",
+   "url": "https://www.epfl.ch/labs/disopt/wp-content/uploads/2018/09/sample_exam_sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-epfl-maxflow",
+  "topic": "t105c",
+  "type": "num",
+  "q": "A network has the following arcs, written as <i>current flow / capacity</i>: <br>$s\\to u$: 2/6, &nbsp; $s\\to v$: 4/4, &nbsp; $s\\to x$: 5/9, &nbsp; $v\\to u$: 1/1, &nbsp; $u\\to y$: 3/3, &nbsp; $x\\to y$: 2/2, &nbsp; $x\\to t$: 4/4, &nbsp; $z\\to x$: 1/1, &nbsp; $v\\to z$: 3/6, &nbsp; $y\\to t$: 5/8, &nbsp; $z\\to t$: 2/4. <br>Starting from this feasible flow (value 11), run the Ford–Fulkerson algorithm. What is the value of a maximum $s$–$t$ flow?",
+  "answer": 13,
+  "difficulty": 2,
+  "explain": "Two augmentations of one unit are possible, for example $s\\to x\\to z\\to t$ using the backward residual arc of $z\\to x$ (its flow drops from 1 to 0), and $s\\to u\\to v\\to z\\to t$ using the backward residual arc of $v\\to u$. Then no augmenting path remains: the nodes reachable from $s$ in the residual graph are $\\{s,u,x\\}$, and the cut $(\\{s,u,x\\},\\{v,y,z,t\\})$ has capacity $4+3+2+4=13$ (arcs $s\\to v$, $u\\to y$, $x\\to y$, $x\\to t$), equal to the flow value, so both are optimal. Note: the arc directions were reconstructed from flow conservation because the source's figure does not survive text extraction; the final flow and the minimum cut $\\{s,u,x\\}$ agree with the source's answer and were re-checked with an LP.",
+  "source": {
+   "label": "EPFL Discrete Optimization (Spring 2010, Prof. F. Eisenbrand) — Sample exam with solutions",
+   "url": "https://www.epfl.ch/labs/disopt/wp-content/uploads/2018/09/sample_exam_sol.pdf",
+   "solution": "source"
+  },
+  "tol": 0
+ },
+ {
+  "id": "x1-epfl-tu-rowop",
+  "topic": "t106",
+  "type": "tf",
+  "q": "<b>Claim:</b> if $A$ is a totally unimodular matrix and $A'$ is obtained from $A$ by adding row 1 to row 2, then $A'$ is totally unimodular as well (elementary row operations preserve total unimodularity).",
+  "answer": false,
+  "difficulty": 2,
+  "explain": "Row operations preserve the determinant of the whole square matrix, but total unimodularity is a condition on <i>every</i> square submatrix, including the single entries. Counter-example: $$A=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}\\ \\text{is TU, but adding row 1 to row 2 gives}\\ \\begin{pmatrix}1&1\\\\1&2\\end{pmatrix},$$ which contains the entry 2. Operations that do preserve TU: transposing, multiplying a row or column by $-1$, deleting or duplicating rows or columns, appending unit vectors, and simplex pivots.",
+  "source": {
+   "label": "EPFL Discrete Optimization (Spring 2010, Prof. F. Eisenbrand) — Sample exam with solutions",
+   "url": "https://www.epfl.ch/labs/disopt/wp-content/uploads/2018/09/sample_exam_sol.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-epfl-tu-incidence",
+  "topic": "t106",
+  "type": "tf",
+  "q": "<b>Claim:</b> the node–edge incidence matrix of every undirected graph is totally unimodular.",
+  "answer": false,
+  "difficulty": 1,
+  "explain": "It is totally unimodular if and only if the graph is bipartite. For a triangle the incidence matrix $$\\begin{pmatrix}1&1&0\\\\1&0&1\\\\0&1&1\\end{pmatrix}$$ has determinant $-2$, and every odd cycle yields a square submatrix with determinant $\\pm2$. Node–arc incidence matrices of <i>directed</i> graphs, in contrast, are always totally unimodular.",
+  "source": {
+   "label": "EPFL Discrete Optimization (Spring 2010, Prof. F. Eisenbrand) — Sample exam with solutions",
+   "url": "https://www.epfl.ch/labs/disopt/wp-content/uploads/2018/09/sample_exam_sol.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-epfl-cs-proof",
+  "topic": "t001",
+  "type": "short",
+  "q": "Consider the linear program (variables unrestricted in sign) $$\\begin{array}{rl}\\min & 2x_1+2x_2+4x_3\\\\ \\text{s.t.} & x_1+2x_2+4x_3=20\\\\ & -x_1+3x_3\\le10\\\\ & -2x_2+x_3\\ge3\\\\ & 4x_1+x_2\\le40\\\\ & x_1-10x_2+x_3\\ge-3 .\\end{array}$$ Use complementary slackness to prove that $x^*=(\\tfrac{19}{8},\\tfrac{9}{16},\\tfrac{33}{8})$ is optimal, and give the optimal value.",
+  "model": "<b>Primal check.</b> $x^*$ satisfies rows 1–3 with equality (values $20$, $10$, $3$) and rows 4–5 strictly: $4x_1+x_2=\\tfrac{161}{16} \\lt 40$ and $x_1-10x_2+x_3=\\tfrac78 \\gt-3$. <br><b>Dual</b> (multipliers $y_1,\\dots,y_5$ in the order of the rows): $\\max 20y_1+10y_2+3y_3+40y_4-3y_5$ subject to $y_1-y_2+4y_4+y_5=2$, $\\ 2y_1-2y_3+y_4-10y_5=2$, $\\ 4y_1+3y_2+y_3+y_5=4$, with $y_1$ free, $y_2,y_4\\le0$, $y_3,y_5\\ge0$ (equations because $x$ is free). <br><b>Complementary slackness.</b> Rows 4 and 5 are not tight, so $y_4=y_5=0$. The remaining system $y_1-y_2=2$, $2y_1-2y_3=2$, $4y_1+3y_2+y_3=4$ has the unique solution $y=(\\tfrac{11}{8},-\\tfrac58,\\tfrac38)$, which has the required signs: it is dual feasible. <br><b>Conclusion.</b> Primal value $2\\cdot\\tfrac{19}{8}+2\\cdot\\tfrac{9}{16}+4\\cdot\\tfrac{33}{8}=\\tfrac{179}{8}$; dual value $20\\cdot\\tfrac{11}{8}-10\\cdot\\tfrac58+3\\cdot\\tfrac38=\\tfrac{179}{8}$. A primal-dual feasible pair with equal values is optimal, so the minimum is $\\tfrac{179}{8}=22.375$.",
+  "rubric": [
+   "Checks primal feasibility and identifies rows 4 and 5 as non-binding",
+   "Sets the dual variables of rows 4 and 5 to zero by complementary slackness",
+   "Solves the remaining $3\\times3$ system: $y=(\\tfrac{11}{8},-\\tfrac58,\\tfrac38)$",
+   "Checks the sign conditions of the dual solution",
+   "Concludes with equal objective values $\\tfrac{179}{8}$ (weak/strong duality)"
+  ],
+  "difficulty": 2,
+  "explain": "The sign convention of the dual may differ (the source works with the max-form and obtains $-\\tfrac{179}{8}$), but the logic is the same: tight primal rows may carry nonzero multipliers, slack rows must have multiplier 0.",
+  "source": {
+   "label": "EPFL Discrete Optimization (Spring 2010, Prof. F. Eisenbrand) — Sample exam with solutions",
+   "url": "https://www.epfl.ch/labs/disopt/wp-content/uploads/2018/09/sample_exam_sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-epfl4-tu-closure",
+  "topic": "t106",
+  "type": "short",
+  "q": "Let $M$ be a totally unimodular matrix. Prove that (a) $(M\\ \\ I)$ and (b) $(M\\ \\ {-M})$ are totally unimodular.",
+  "model": "(a) Take a square submatrix $B$ of $(M\\ \\ I)$. If $B$ uses a column that comes from $I$, that column has at most one nonzero entry, equal to 1. If the column is zero, $\\det B=0$; otherwise expand along it, which leaves $\\pm$ the determinant of a smaller square submatrix of $(M\\ \\ I)$. Repeating, we end with $\\pm$ the determinant of a square submatrix of $M$ (or of the empty matrix), which lies in $\\{0,\\pm1\\}$. <br>(b) Take a square submatrix $B$ of $(M\\ \\ {-M})$ and multiply by $-1$ the columns that come from $-M$; this changes $\\det B$ at most by its sign. If two columns now come from the same column of $M$ they are identical and $\\det B=0$. Otherwise the result is, up to the order of its columns, a square submatrix of $M$, so $\\det B\\in\\{0,\\pm1\\}$.",
+  "rubric": [
+   "(a) Laplace expansion along the identity columns",
+   "(a) what remains is a square submatrix of $M$",
+   "(b) flipping the sign of the columns from $-M$ changes the determinant only by a factor $\\pm1$",
+   "(b) either two equal columns (determinant 0) or a column-permuted submatrix of $M$"
+  ],
+  "difficulty": 2,
+  "explain": "Further consequences: $M^\\top$ is TU ($\\det A=\\det A^\\top$), and multiplying a column by $-1$ preserves TU. Part (a) is the reason why adding slack variables or bounds $x\\ge0$ does not destroy integrality.",
+  "source": {
+   "label": "EPFL Discrete Optimization (Spring 2010) — Solutions 4",
+   "url": "https://www.epfl.ch/labs/disopt/wp-content/uploads/2018/09/solutions04.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-epfl4-integral-not-tu",
+  "topic": "t106",
+  "type": "mcq",
+  "q": "Is the polyhedron $P=\\{x\\in\\mathbb{R}^3 : x_1+2x_2+4x_3\\le4,\\ x\\ge0\\}$ integral?",
+  "options": [
+   "No: the row $(1\\ \\ 2\\ \\ 4)$ has entries other than $0,\\pm1$, so the matrix is not TU and $P$ must have a fractional vertex",
+   "Yes: its vertices are $(0,0,0)$, $(4,0,0)$, $(0,2,0)$ and $(0,0,1)$, all integer",
+   "Yes, because every polyhedron defined by integer data is integral",
+   "No: $(0,0,1)$ is its only integer vertex"
+  ],
+  "answer": 1,
+  "difficulty": 2,
+  "explain": "A vertex of $P\\subset\\mathbb{R}^3$ is the unique solution of three linearly independent tight constraints among the four. The three sign constraints give the origin; the knapsack row with two sign constraints gives $(4,0,0)$, $(0,2,0)$, $(0,0,1)$. All are integer, and a polyhedron with vertices is integral exactly when all its vertices are integer. Total unimodularity is sufficient for integrality (for all integer right-hand sides) but not necessary: with right-hand side 5 instead of 4 the vertex $(0,0,\\tfrac54)$ would be fractional.",
+  "source": {
+   "label": "EPFL Discrete Optimization (Spring 2010) — Solutions 4",
+   "url": "https://www.epfl.ch/labs/disopt/wp-content/uploads/2018/09/solutions04.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-epfl4-recognise-tu",
+  "topic": "t106",
+  "type": "mcq",
+  "q": "Which of the following matrices are totally unimodular? $$A_1=\\begin{pmatrix}1&1&0&1&0\\\\0&0&1&0&1\\\\0&1&1&1&0\\\\1&1&0&0&0\\\\0&1&0&0&1\\end{pmatrix},\\qquad A_2=\\begin{pmatrix}1&1&1&1&1\\\\1&1&0&0&0\\\\1&1&1&0&0\\\\1&1&1&1&0\\end{pmatrix}$$",
+  "options": [
+   "Both",
+   "Only $A_1$",
+   "Only $A_2$",
+   "Neither"
+  ],
+  "answer": 2,
+  "difficulty": 2,
+  "explain": "$\\det A_1=2$, so $A_1$ itself is a square submatrix whose determinant is outside $\\{0,\\pm1\\}$: not TU. In $A_2$ the ones of every row are consecutive, so it is an interval matrix, and interval matrices are totally unimodular. (Both facts were re-checked by computer: $\\det A_1=2$, and all square submatrices of $A_2$ have determinant $0$ or $\\pm1$.)",
+  "source": {
+   "label": "EPFL Discrete Optimization (Spring 2010) — Solutions 4",
+   "url": "https://www.epfl.ch/labs/disopt/wp-content/uploads/2018/09/solutions04.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-epfl4-vc-triangle",
+  "topic": "t103",
+  "type": "num",
+  "q": "Vertex cover on the triangle $K_3$ with unit weights: $\\min x_1+x_2+x_3$ subject to $x_1+x_2\\ge1$, $x_1+x_3\\ge1$, $x_2+x_3\\ge1$, $x\\in\\{0,1\\}^3$. What is the optimal value of the LP relaxation ($0\\le x\\le1$)?",
+  "answer": "3/2",
+  "difficulty": 1,
+  "explain": "Adding the three constraints gives $2(x_1+x_2+x_3)\\ge3$, so the LP value is at least $\\tfrac32$, and $x=(\\tfrac12,\\tfrac12,\\tfrac12)$ attains it. The integer optimum is 2 (two vertices are needed), so the relaxation is not integral: the incidence matrix of an odd cycle is not totally unimodular. Since the objective is integer-valued, the bound $\\tfrac32$ can be rounded up to 2.",
+  "source": {
+   "label": "EPFL Discrete Optimization (Spring 2010) — Solutions 4",
+   "url": "https://www.epfl.ch/labs/disopt/wp-content/uploads/2018/09/solutions04.pdf",
+   "solution": "source"
+  },
+  "tol": 0.001
+ },
+ {
+  "id": "x1-bonn-unimodular-not-tu",
+  "topic": "t106",
+  "type": "mcq",
+  "q": "Let $$A=\\begin{pmatrix}1&1&1\\\\-1&1&0\\\\1&0&0\\end{pmatrix}.$$ Which statement is correct?",
+  "options": [
+   "$A$ is totally unimodular, hence $\\{x : Ax=b\\}$ is integral for every integer $b$",
+   "$A$ is not totally unimodular, and for some integer $b$ the solution of $Ax=b$ is fractional",
+   "$A$ is not totally unimodular (it has a $2\\times2$ submatrix with determinant 2), yet $Ax=b$ has an integer solution for every integer $b$ because $\\det A=-1$",
+   "$A$ is singular, so $Ax=b$ never has a unique solution"
+  ],
+  "answer": 2,
+  "difficulty": 2,
+  "explain": "The submatrix on rows 1–2 and columns 1–2 has determinant $1\\cdot1-1\\cdot(-1)=2$, so $A$ is not TU. But $\\det A=-1$: $A$ is unimodular, $A^{-1}$ is an integer matrix and the unique solution is integral; by back-substitution $x_1=b_3$, $x_2=b_2+x_1$, $x_3=b_1-x_1-x_2$. (The source's sketch prints the last step as &quot;$x_3=b_3-x_1-x_2$&quot;; row 1 of $A$ shows that it must be $b_1$.) Lesson: total unimodularity is sufficient, not necessary, for the integrality of a particular system.",
+  "source": {
+   "label": "University of Bonn, Linear and Integer Optimization (Summer term 2019, Dr. U. Brenner) — Assignment Sheet 13, sketches of solutions",
+   "url": "https://or.uni-bonn.de/lectures/ss19/lgo_daten/lgo_ue13_sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-delft18-faces",
+  "topic": "t206b",
+  "type": "mcq",
+  "q": "Let $X=\\{x\\in\\mathbb{R}^2 : 0\\le x_1\\le1,\\ 0\\le x_2\\le1\\}$ (the unit square). Which of the following valid inequalities defines a <i>facet</i> of $X$?",
+  "options": [
+   "$x_1\\le2$",
+   "$x_1+x_2\\le2$",
+   "$x_1+x_2\\le3$",
+   "$x_2\\le1$"
+  ],
+  "answer": 3,
+  "difficulty": 1,
+  "explain": "$\\dim X=2$, so facets are the faces of dimension 1 (edges). $x_2\\le1$ is tight on the whole top edge: a facet. $x_1+x_2\\le2$ is tight only at the vertex $(1,1)$: a face of dimension 0. $x_1\\le2$ and $x_1+x_2\\le3$ are never tight on $X$: they define the empty (improper) face.",
+  "source": {
+   "label": "TU Delft WI4410 Advanced Discrete Optimization — Exam of August 15th, 2018, with solutions",
+   "url": "https://ch.tudelft.nl/choice2/api/v1/document/exam/4175",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-delft18-gomory-frac",
+  "topic": "t204",
+  "type": "mcq",
+  "q": "For $\\max 4x_1+3x_2$ s.t. $2x_1+x_2\\le11$, $-x_1+2x_2\\le6$, $x\\ge0$ integer (the slacks $s_1,s_2$ are then integer too), the optimal LP tableau contains the row $$x_1+\\tfrac25 s_1-\\tfrac15 s_2=\\tfrac{16}{5}.$$ Which is the Gomory fractional cut generated from this row?",
+  "options": [
+   "$\\tfrac25 s_1+\\tfrac45 s_2\\ge\\tfrac15$",
+   "$\\tfrac25 s_1+\\tfrac15 s_2\\ge\\tfrac15$",
+   "$\\tfrac25 s_1-\\tfrac15 s_2\\ge\\tfrac15$",
+   "$\\tfrac25 s_1+\\tfrac45 s_2\\le\\tfrac15$"
+  ],
+  "answer": 0,
+  "difficulty": 2,
+  "explain": "Use the fractional parts $f=a-\\lfloor a\\rfloor\\in[0,1)$: $f_{s_1}=\\tfrac25$, $f_{s_2}=-\\tfrac15-(-1)=\\tfrac45$, $f_0=\\tfrac{16}{5}-3=\\tfrac15$. The cut is $\\sum_j f_jx_j\\ge f_0$, i.e. $\\tfrac25 s_1+\\tfrac45 s_2\\ge\\tfrac15$, or $2s_1+4s_2\\ge1$. The classical slip is to take $\\tfrac15$ (or to keep $-\\tfrac15$) for the negative coefficient. The current LP solution has $s_1=s_2=0$ and violates the cut.",
+  "source": {
+   "label": "TU Delft WI4410 Advanced Discrete Optimization — Exam of August 15th, 2018, with solutions",
+   "url": "https://ch.tudelft.nl/choice2/api/v1/document/exam/4175",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-delft18-gmi",
+  "topic": "t205",
+  "type": "mcq",
+  "q": "A tableau row of a pure integer program reads $x_1+\\tfrac25 s_1-\\tfrac15 s_2=\\tfrac{16}{5}$, with all variables integer and nonnegative. The Gomory mixed-integer (GMI) cut of a row whose nonbasic variables are integer is $$\\sum_{f_j\\le f_0}f_j\\,x_j+\\sum_{f_j \\gt f_0}\\frac{f_0(1-f_j)}{1-f_0}\\,x_j\\ \\ge f_0 .$$ Which is the GMI cut of this row, scaled to right-hand side 1?",
+  "options": [
+   "$2s_1+4s_2\\ge1$",
+   "$\\tfrac34 s_1+\\tfrac14 s_2\\ge1$",
+   "$\\tfrac14 s_1+\\tfrac34 s_2\\ge1$",
+   "$\\tfrac32 s_1+\\tfrac12 s_2\\ge1$"
+  ],
+  "answer": 1,
+  "difficulty": 3,
+  "explain": "$f_0=\\tfrac15$, $f_{s_1}=\\tfrac25$, $f_{s_2}=\\tfrac45$. Both exceed $f_0$, so both coefficients are $\\frac{f_0(1-f_j)}{1-f_0}$: $\\frac{(1/5)(3/5)}{4/5}=\\tfrac{3}{20}$ and $\\frac{(1/5)(1/5)}{4/5}=\\tfrac{1}{20}$. Multiplying $\\tfrac{3}{20}s_1+\\tfrac{1}{20}s_2\\ge\\tfrac15$ by 5 gives $\\tfrac34s_1+\\tfrac14s_2\\ge1$. The inequality $2s_1+4s_2\\ge1$ is the Gomory <i>fractional</i> cut of the same row. For a $\\ge$ cut on nonnegative variables with the same right-hand side, smaller coefficients are stronger, so the GMI cut dominates the fractional cut (this holds in general).",
+  "source": {
+   "label": "TU Delft WI4410 Advanced Discrete Optimization — Exam of August 15th, 2018, with solutions",
+   "url": "https://ch.tudelft.nl/choice2/api/v1/document/exam/4175",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-delft18-flowcover",
+  "topic": "t206c",
+  "type": "num",
+  "q": "Single-node flow set: $x_1+x_2+x_3+x_4=66$, $0\\le x_1\\le30y_1$, $0\\le x_2\\le50y_2$, $0\\le x_3\\le20y_3$, $0\\le x_4\\le45y_4$, $y\\in\\{0,1\\}^4$. For a flow cover $C$ (that is, $\\sum_{j\\in C}u_j \\gt b$) with excess $\\lambda=\\sum_{j\\in C}u_j-b$, the flow-cover inequality is $$\\sum_{j\\in C}x_j+\\sum_{j\\in C}(u_j-\\lambda)^+(1-y_j)\\le b .$$ For $C=\\{2,3\\}$, what is the coefficient of $(1-y_2)$?",
+  "answer": 46,
+  "difficulty": 2,
+  "explain": "$\\lambda=50+20-66=4$, so the coefficients are $(50-4)^+=46$ and $(20-4)^+=16$: $$x_2+x_3+46(1-y_2)+16(1-y_3)\\le66 .$$ Check: if arc 2 is closed ($y_2=0$) the inequality says $x_2+x_3\\le20=66-46$, which is exactly what arc 3 alone can carry.",
+  "source": {
+   "label": "TU Delft WI4410 Advanced Discrete Optimization — Exam of August 15th, 2018, with solutions",
+   "url": "https://ch.tudelft.nl/choice2/api/v1/document/exam/4175",
+   "solution": "source"
+  },
+  "tol": 0
+ },
+ {
+  "id": "x1-delft18-flowcover-proof",
+  "topic": "t206c",
+  "type": "short",
+  "q": "Single-node flow set $X=\\{(x,y)\\in\\mathbb{R}^n_+\\times\\{0,1\\}^n : \\sum_{j=1}^n x_j=b,\\ x_j\\le u_jy_j\\ \\text{for all } j\\}$. Let $C$ be a flow cover, i.e. $\\lambda=\\sum_{j\\in C}u_j-b \\gt 0$. Prove that $$\\sum_{j\\in C}x_j+\\sum_{j\\in C}(u_j-\\lambda)^+(1-y_j)\\le b$$ is valid for $X$.",
+  "model": "Let $C_0=\\{j\\in C:y_j=0\\}$; on $C_0$ we have $x_j=0$. <br><b>Case $C_0=\\emptyset$.</b> The inequality reads $\\sum_{j\\in C}x_j\\le b$, which holds because the $x_j\\ge0$ sum to $b$. <br><b>Case $C_0\\ne\\emptyset$.</b> Then $\\sum_{j\\in C}x_j\\le\\sum_{j\\in C\\setminus C_0}u_j=b+\\lambda-\\sum_{j\\in C_0}u_j$, hence $$\\text{LHS}\\le b+\\lambda-\\sum_{j\\in C_0}\\big(u_j-(u_j-\\lambda)^+\\big)=b+\\lambda-\\sum_{j\\in C_0}\\min(u_j,\\lambda) .$$ If some $k\\in C_0$ has $u_k\\ge\\lambda$, the last sum is at least $\\lambda$ and LHS $\\le b$. If every $j\\in C_0$ has $u_j \\lt\\lambda$, all the terms $(u_j-\\lambda)^+(1-y_j)$ vanish (zero coefficient on $C_0$, zero factor on $C\\setminus C_0$) and LHS $=\\sum_{j\\in C}x_j\\le b$.",
+  "rubric": [
+   "Case with all arcs of $C$ open: reduces to $\\sum_{C}x_j\\le b$",
+   "With closed arcs $C_0$: bounds $\\sum_{C}x_j$ by $\\sum_{C\\setminus C_0}u_j=b+\\lambda-\\sum_{C_0}u_j$",
+   "Uses $u_j-(u_j-\\lambda)^+=\\min(u_j,\\lambda)$",
+   "Distinguishes $u_k\\ge\\lambda$ for some closed arc from $u_j \\lt\\lambda$ for all closed arcs, and concludes"
+  ],
+  "difficulty": 3,
+  "explain": "Intuition: closing an arc $k\\in C$ with $u_k \\gt\\lambda$ lowers the largest possible flow through $C$ from $b$ to $b-(u_k-\\lambda)$. The 2018 paper only gives a hint; the 2017 paper of the same course treats one closed arc, $\\sum_{C}x_j\\le\\min(b,\\,b+\\lambda-u_k)=b-(u_k-\\lambda)^+$. The complete case analysis above was worked for this bank.",
+  "source": {
+   "label": "TU Delft WI4410 Advanced Discrete Optimization — Exam of August 15th, 2018, with solutions",
+   "url": "https://ch.tudelft.nl/choice2/api/v1/document/exam/4175",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-delft18-downlift",
+  "topic": "t206b",
+  "type": "num",
+  "q": "$S_K=\\{x\\in\\{0,1\\}^4 : 25x_1+20x_2+15x_3+10x_4\\le44\\}$. When $x_4$ is fixed to 1 the inequality $x_2+x_3\\le1$ is valid. Lift $x_4$: what is the smallest (hence best) value of $\\beta$ such that $$x_2+x_3+\\beta\\,x_4\\le1+\\beta$$ is valid for $S_K$?",
+  "answer": 1,
+  "difficulty": 2,
+  "explain": "For $x_4=1$ the inequality is the given one. For $x_4=0$ it requires $x_2+x_3\\le1+\\beta$ at every feasible point, so $\\beta=\\max\\{x_2+x_3 : 25x_1+20x_2+15x_3\\le44\\}-1=2-1=1$ (items 2 and 3 weigh $35\\le44$). Lifted inequality: $x_2+x_3+x_4\\le2$, which is the cover inequality of $\\{2,3,4\\}$ ($20+15+10=45 \\gt 44$).",
+  "source": {
+   "label": "TU Delft WI4410 Advanced Discrete Optimization — Exam of August 15th, 2018, with solutions",
+   "url": "https://ch.tudelft.nl/choice2/api/v1/document/exam/4175",
+   "solution": "source"
+  },
+  "tol": 0
+ },
+ {
+  "id": "x1-rec8-integer-hull",
+  "topic": "t104",
+  "type": "short",
+  "q": "The feasible set of an integer program is $F=\\{x\\in\\mathbb{Z}^2_+ : -3x_1+5x_2\\le12,\\ 4x_1+3x_2\\le20,\\ x_1+x_2\\le\\tfrac{11}{2}\\}$. Describe $\\operatorname{conv}(F)$ by linear inequalities (the ideal formulation).",
+  "model": "Enumerate the largest feasible $x_2$ for each $x_1$: $x_1=0$: 2; $x_1=1$: 3; $x_1=2$: 3; $x_1=3$: 2; $x_1=4$: 1; $x_1=5$: 0. The extreme points of the hull are $(0,0)$, $(5,0)$, $(2,3)$, $(1,3)$, $(0,2)$, and $$\\operatorname{conv}(F)=\\{x\\ge0 : -x_1+x_2\\le2,\\ \\ x_2\\le3,\\ \\ x_1+x_2\\le5\\}.$$ Each inequality is tight at two extreme points: $(0,2),(1,3)$; then $(1,3),(2,3)$; then $(2,3),(5,0)$.",
+  "rubric": [
+   "Finds the extreme points $(0,0),(5,0),(2,3),(1,3),(0,2)$ (or the full list of integer points)",
+   "$-x_1+x_2\\le2$",
+   "$x_2\\le3$",
+   "$x_1+x_2\\le5$ (the rounding of $x_1+x_2\\le\\tfrac{11}{2}$)",
+   "Keeps $x_1,x_2\\ge0$"
+  ],
+  "difficulty": 2,
+  "explain": "$x_1+x_2\\le5$ is the integer rounding of the third constraint and is a facet of the hull. Once the hull is known, the integer program can be solved as a linear program over these inequalities.",
+  "source": {
+   "label": "MIT OCW 15.053 Optimization Methods in Management Science (Spring 2013) — Recitation 8 with solutions",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/658722be10a4c5ae0f51bd7b12316d15_MIT15_053S13_rec08sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-rec8-gomory-x1row",
+  "topic": "t204",
+  "type": "mcq",
+  "q": "A pure integer program in the nonnegative integer variables $x_1,x_2,x_3$ with integer slacks $s_1,s_2,s_3$ has an optimal LP tableau containing the row $$x_1+\\tfrac23x_3-\\tfrac16s_2+\\tfrac13s_3=\\tfrac53 .$$ Which is the Gomory fractional cut from this row?",
+  "options": [
+   "$\\tfrac23x_3+\\tfrac16s_2+\\tfrac13s_3\\ge\\tfrac23$",
+   "$\\tfrac23x_3-\\tfrac16s_2+\\tfrac13s_3\\ge\\tfrac23$",
+   "$\\tfrac23x_3+\\tfrac56s_2+\\tfrac13s_3\\ge\\tfrac23$",
+   "$\\tfrac23x_3+\\tfrac56s_2+\\tfrac13s_3\\ge\\tfrac53$"
+  ],
+  "answer": 2,
+  "difficulty": 2,
+  "explain": "Fractional parts: $\\tfrac23$, $-\\tfrac16-(-1)=\\tfrac56$, $\\tfrac13$, and $\\tfrac53-1=\\tfrac23$ on the right. Equivalently, round the row down to $x_1-s_2\\le1$ and subtract it from the row. At the current LP solution the nonbasic variables $x_3,s_2,s_3$ are 0, so the left-hand side is $0 \\lt\\tfrac23$: the cut removes that solution.",
+  "source": {
+   "label": "MIT OCW 15.053 Optimization Methods in Management Science (Spring 2013) — Recitation 8 with solutions",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/658722be10a4c5ae0f51bd7b12316d15_MIT15_053S13_rec08sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-rec8-gomory-x2row",
+  "topic": "t204",
+  "type": "mcq",
+  "q": "The constraints of an integer program, written with slacks, are $$2x_1+x_2+x_3+s_1=8,\\qquad-4x_1+4x_2+2x_3+s_2=8,\\qquad x_1+2x_2+3x_3+s_3=9,$$ all variables nonnegative integers. For the optimal LP basis $\\{x_2,x_1,s_1\\}$ the row of $x_2$ is $$x_2+\\tfrac76x_3+\\tfrac1{12}s_2+\\tfrac13s_3=\\tfrac{11}{3}.$$ Which is the Gomory fractional cut from this row?",
+  "options": [
+   "$\\tfrac16x_3+\\tfrac1{12}s_2+\\tfrac13s_3\\le\\tfrac23$",
+   "$\\tfrac76x_3+\\tfrac1{12}s_2+\\tfrac13s_3\\ge\\tfrac23$",
+   "$\\tfrac16x_3+\\tfrac1{12}s_2+\\tfrac13s_3\\ge\\tfrac13$",
+   "$\\tfrac16x_3+\\tfrac1{12}s_2+\\tfrac13s_3\\ge\\tfrac23$"
+  ],
+  "answer": 3,
+  "difficulty": 2,
+  "explain": "Round the row down to $x_2+x_3\\le3$ and subtract it from the row: $\\tfrac16x_3+\\tfrac1{12}s_2+\\tfrac13s_3\\ge\\tfrac23$ (fractional parts $\\tfrac76-1=\\tfrac16$ and $\\tfrac{11}{3}-3=\\tfrac23$). Note: the source's printed solution shows the $x_3$ coefficient of this cut as $\\tfrac13$. Recomputing the tableau row exactly from the three constraints confirms the coefficient $\\tfrac76$ in the row, whose fractional part is $\\tfrac16$; the value $\\tfrac13$ is a misprint (it would give a valid but weaker inequality).",
+  "source": {
+   "label": "MIT OCW 15.053 Optimization Methods in Management Science (Spring 2013) — Recitation 8 with solutions",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/658722be10a4c5ae0f51bd7b12316d15_MIT15_053S13_rec08sol.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-rec8-minimal-covers",
+  "topic": "t206a",
+  "type": "mcq",
+  "q": "$K=\\{x\\in\\{0,1\\}^7 : 11x_1+6x_2+6x_3+5x_4+5x_5+4x_6+x_7\\le19\\}$. The sets (b) $\\{1,2,6\\}$, (d) $\\{2,4,5,6\\}$, (e) $\\{1,3,4,5\\}$ and (f) $\\{2,3,4,5,6\\}$ are covers. Which of them are <b>minimal</b> covers?",
+  "options": [
+   "(b) and (d) only",
+   "(b), (d) and (e)",
+   "(e) and (f) only",
+   "All four"
+  ],
+  "answer": 0,
+  "difficulty": 2,
+  "explain": "The weights are 21, 20, 27 and 26, all above 19, so all four are covers. A cover is minimal if removing any single item makes the rest fit; it is enough to remove the lightest item. (b): $21-4=17\\le19$, minimal. (d): $20-4=16\\le19$, minimal. (e): $27-5=22 \\gt 19$, so $\\{1,3,4\\}$ is still a cover: not minimal. (f): $26-4=22 \\gt 19$, so $\\{2,3,4,5\\}$ is still a cover: not minimal. By contrast $\\{4,5,6\\}$ (weight 14) and $\\{2,3,6,7\\}$ (weight 17) are not covers at all, and the corresponding inequalities would be invalid.",
+  "source": {
+   "label": "MIT OCW 15.053 Optimization Methods in Management Science (Spring 2013) — Recitation 8 with solutions",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/658722be10a4c5ae0f51bd7b12316d15_MIT15_053S13_rec08sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-rec8-extended-cover",
+  "topic": "t206a",
+  "type": "mcq",
+  "q": "For $K=\\{x\\in\\{0,1\\}^7 : 11x_1+6x_2+6x_3+5x_4+5x_5+4x_6+x_7\\le19\\}$ take the cover $C=\\{2,3,4,5\\}$ with cover inequality $x_2+x_3+x_4+x_5\\le3$. Which is the <i>extended cover inequality</i> of $C$ (obtained by adding the variables of $E(C)\\setminus C$ and keeping the right-hand side $|C|-1$)?",
+  "options": [
+   "$x_1+x_2+x_3+x_4+x_5\\le3$",
+   "$x_1+x_2+x_3+x_4+x_5\\le4$",
+   "$x_2+x_3+x_4+x_5+x_7\\le3$",
+   "$x_1+x_2+x_3+x_4+x_5\\le2$"
+  ],
+  "answer": 0,
+  "difficulty": 2,
+  "explain": "$E(C)$ adds every item at least as heavy as all items of $C$: only item 1 ($a_1=11\\ge6$). Any four items among $\\{1,\\dots,5\\}$ weigh at least $6+6+5+5=22 \\gt 19$, so at most three can be chosen: $x_1+\\dots+x_5\\le3$ is valid, and it dominates the cover inequality because $x_1\\ge0$. For instance the LP-feasible point $(\\tfrac{3}{11},1,0,1,1,0,0)$ (weight exactly 19) satisfies the cover inequality but violates the extended one. Right-hand side 2 is invalid (items 2, 4, 5 weigh 16), right-hand side 4 is weaker than the cover inequality, and adding the light item 7 is invalid (items 2, 4, 5, 7 weigh 17).",
+  "source": {
+   "label": "MIT OCW 15.053 Optimization Methods in Management Science (Spring 2013) — Recitation 8 with solutions",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/658722be10a4c5ae0f51bd7b12316d15_MIT15_053S13_rec08sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-delft17-dimension",
+  "topic": "t206b",
+  "type": "mcq",
+  "q": "$S_K=\\{x\\in\\{0,1\\}^n : \\sum_{j=1}^na_jx_j\\le b\\}$ with positive integers $a_j$ and $b$, and $a_j \\lt b$ for every $j$. What is the dimension of $\\operatorname{conv}(S_K)$?",
+  "options": [
+   "$n-1$",
+   "$n$",
+   "$n+1$",
+   "It depends on whether $\\sum_ja_j \\gt b$"
+  ],
+  "answer": 1,
+  "difficulty": 2,
+  "explain": "Because $a_j \\lt b$, every unit vector $e_j$ is feasible, and so is the zero vector. These $n+1$ points are affinely independent, hence the dimension is $n$: the polytope is full-dimensional (it lives in $\\mathbb{R}^n$, so the dimension cannot be larger). Recall: dimension = (maximum number of affinely independent points) $-1$; to show that an inequality defines a facet one then needs $n$ affinely independent points on its face.",
+  "source": {
+   "label": "TU Delft WI4410 Advanced Discrete Optimization — Exam of June 28, 2017, with solutions",
+   "url": "https://ch.tudelft.nl/choice2/api/v1/document/exam/4166",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-delft20-gmi-coef",
+  "topic": "t205",
+  "type": "num",
+  "q": "For $\\max 5x_1+8x_2$ s.t. $x_1+x_2\\le6$, $5x_1+9x_2\\le45$, $x\\ge0$ integer (integer slacks $s_1,s_2$), the optimal tableau contains the row $$x_1+2.25\\,s_1-0.25\\,s_2=2.25 .$$ Its Gomory fractional cut is $s_1+3s_2\\ge1$. The Gomory mixed-integer cut, scaled to the form $s_1+\\gamma\\,s_2\\ge1$, has which value of $\\gamma$? (GMI coefficient of an integer nonbasic variable: $f_j$ if $f_j\\le f_0$, and $\\frac{f_0(1-f_j)}{1-f_0}$ if $f_j \\gt f_0$; right-hand side $f_0$.)",
+  "answer": "1/3",
+  "difficulty": 2,
+  "explain": "$f_0=0.25$. For $s_1$: $f=0.25\\le f_0$, coefficient $0.25$. For $s_2$: $f=-0.25-(-1)=0.75 \\gt f_0$, coefficient $\\frac{0.25\\cdot0.25}{0.75}=\\tfrac{1}{12}$. The cut $0.25\\,s_1+\\tfrac{1}{12}s_2\\ge0.25$ scales to $s_1+\\tfrac13s_2\\ge1$. It has the same right-hand side and the same $s_1$ coefficient as the fractional cut but a smaller $s_2$ coefficient ($\\tfrac13$ instead of 3), so the GMI cut is the stronger one.",
+  "source": {
+   "label": "TU Delft WI4410 Advanced Discrete Optimization — Exam of July 1, 2020 (open book), with solutions",
+   "url": "https://ch.tudelft.nl/choice2/api/v1/document/exam/4169",
+   "solution": "source"
+  },
+  "tol": 0.005
+ },
+ {
+  "id": "x1-delft20-split",
+  "topic": "t205",
+  "type": "mcq",
+  "q": "$\\max x_2$ s.t. $-x_1+2x_2\\le2$, $2x_1+x_2\\le10$, $x\\ge0$ integer. The LP relaxation $P$ has the extreme points $(0,0)$, $(5,0)$, $(3.6,\\,2.8)$, $(0,1)$. For the split disjunction &quot;$x_1\\le3$ or $x_1\\ge4$&quot;, which inequality is valid for both $P\\cap\\{x_1\\le3\\}$ and $P\\cap\\{x_1\\ge4\\}$ and cuts off the fractional vertex $(3.6,\\,2.8)$?",
+  "options": [
+   "$x_1+2x_2\\le10$",
+   "$x_1+2x_2\\le8$",
+   "$x_2\\le2$",
+   "$x_1+2x_2\\le7$"
+  ],
+  "answer": 1,
+  "difficulty": 3,
+  "explain": "On the side $x_1\\le3$ the highest point is $(3,\\tfrac52)$ (from $-x_1+2x_2\\le2$); on the side $x_1\\ge4$ it is $(4,2)$ (from $2x_1+x_2\\le10$). The line through these two points is $x_1+2x_2=8$, and the maximum of $x_1+2x_2$ is 8 on each side, so the inequality is valid for the union and its convex hull; the fractional vertex gives $3.6+5.6=9.2 \\gt 8$. Right-hand side 10 is valid but does not cut the vertex; right-hand side 7 cuts off the feasible integer point $(4,2)$; $x_2\\le2$ is violated by $(3,\\tfrac52)$ on the first side — it is the split cut of the other disjunction, &quot;$x_2\\le2$ or $x_2\\ge3$&quot;, whose second side is empty.",
+  "source": {
+   "label": "TU Delft WI4410 Advanced Discrete Optimization — Exam of July 1, 2020 (open book), with solutions",
+   "url": "https://ch.tudelft.nl/choice2/api/v1/document/exam/4169",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-delft20-uplift",
+  "topic": "t206b",
+  "type": "num",
+  "q": "$S_K=\\{x\\in\\{0,1\\}^4 : 19x_1+28x_2+12x_3+16x_4\\le39\\}$. The cover inequality $x_1+x_3+x_4\\le2$ is valid ($19+12+16=47 \\gt 39$). Lift $x_2$: what is the largest $\\alpha$ such that $$x_1+\\alpha\\,x_2+x_3+x_4\\le2$$ is valid for $S_K$?",
+  "answer": 2,
+  "difficulty": 2,
+  "explain": "With $x_2=1$ the remaining capacity is $39-28=11$ and no other item fits ($12$, $16$, $19$ all exceed 11), so $\\max\\{x_1+x_3+x_4 : x_2=1\\}=0$ and $\\alpha=2-0=2$. Lifted inequality: $x_1+2x_2+x_3+x_4\\le2$. ($\\alpha=3$ would cut off the feasible point with only $x_2=1$.)",
+  "source": {
+   "label": "TU Delft WI4410 Advanced Discrete Optimization — Exam of July 1, 2020 (open book), with solutions",
+   "url": "https://ch.tudelft.nl/choice2/api/v1/document/exam/4169",
+   "solution": "source"
+  },
+  "tol": 0
+ },
+ {
+  "id": "x1-delft20-flowcover-uniform",
+  "topic": "t206c",
+  "type": "mcq",
+  "q": "Single-node flow set $\\sum_{j=1}^nx_j=b$, $0\\le x_j\\le u\\,y_j$, $y_j\\in\\{0,1\\}$, with the same capacity $u$ on every arc and $b$ not a multiple of $u$. For a flow cover $C$ the flow-cover inequality is $\\sum_{j\\in C}x_j+\\sum_{j\\in C}(u-\\lambda)^+(1-y_j)\\le b$ with $\\lambda=|C|\\,u-b \\gt 0$. For which cover sizes is this inequality non-trivial, i.e. not implied by the equation $\\sum_jx_j=b$ and $x\\ge0$?",
+  "options": [
+   "For every cover",
+   "Only for $|C|=\\lfloor b/u\\rfloor$",
+   "Only for $|C|=\\lceil b/u\\rceil$",
+   "Only for $|C|\\ge\\lceil b/u\\rceil+1$"
+  ],
+  "answer": 2,
+  "difficulty": 3,
+  "explain": "$C$ is a cover iff $|C|\\,u \\gt b$, i.e. $|C|\\ge k=\\lceil b/u\\rceil$. For $|C|=k$: $\\lambda=ku-b \\lt u$, so every coefficient $(u-\\lambda)^+=b-(k-1)u$ is positive and the inequality carries information. For $|C|\\ge k+1$: $\\lambda\\ge(k+1)u-b \\gt u$, all coefficients $(u-\\lambda)^+$ are 0 and the inequality collapses to $\\sum_{j\\in C}x_j\\le b$, which the flow equation already implies. A set of size $\\lfloor b/u\\rfloor$ is not a cover.",
+  "source": {
+   "label": "TU Delft WI4410 Advanced Discrete Optimization — Exam of July 1, 2020 (open book), with solutions",
+   "url": "https://ch.tudelft.nl/choice2/api/v1/document/exam/4169",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-polimi-bb-root",
+  "topic": "t102",
+  "type": "num",
+  "q": "$\\max 3x_1+4x_2$ s.t. $2x_1+x_2\\le6$, $2x_1+3x_2\\le9$, $x\\ge0$ integer. What is the optimal value of the LP relaxation at the root node of the branch-and-bound tree?",
+  "answer": "51/4",
+  "difficulty": 2,
+  "explain": "Both constraints are tight at the LP optimum: subtracting them gives $2x_2=3$, so $x=(\\tfrac94,\\tfrac32)$ and $z=\\tfrac{27}{4}+6=\\tfrac{51}{4}=12.75$. Because the objective coefficients are integers, the root upper bound can be rounded down to 12.",
+  "source": {
+   "label": "Politecnico di Milano, Foundations of Operations Research (Prof. E. Amaldi), exercises 5.1–5.3 with solutions (document prepared by Liberti, Bosio, Coniglio)",
+   "url": "https://amaldi.faculty.polimi.it/SlidesFOR-19-20/FOR-exercises-19-20/ex-5.1-5.3.pdf",
+   "solution": "source"
+  },
+  "tol": 0.001
+ },
+ {
+  "id": "x1-polimi-bb-branchvar",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "$\\max 3x_1+4x_2$ s.t. $2x_1+x_2\\le6$, $2x_1+3x_2\\le9$, $x\\ge0$ integer. The root LP solution is $x=(\\tfrac94,\\tfrac32)$ with $z=\\tfrac{51}{4}$. Branching on the variable whose fractional part is closest to $\\tfrac12$, which two subproblems are created and what are their LP values?",
+  "options": [
+   "$x_1\\le2$ with $z\\approx12.67$ and $x_1\\ge3$ with $z=9$",
+   "$x_2\\le1$ with $z=11$ and $x_2\\ge2$ with $z=12$",
+   "$x_2\\le1$ with $z=12.5$ and $x_2\\ge2$ with $z=11.5$",
+   "$x_2\\le1$ with $z=11.5$ and $x_2\\ge2$ with $z=12.5$"
+  ],
+  "answer": 3,
+  "difficulty": 2,
+  "explain": "Fractional parts: $0.25$ for $x_1$ and $0.5$ for $x_2$, so the rule selects $x_2$. With $x_2\\le1$: $x=(\\tfrac52,1)$, $z=7.5+4=11.5$. With $x_2\\ge2$: $x=(\\tfrac32,2)$, $z=4.5+8=12.5$. Both children are still fractional and neither value exceeds the parent's $12.75$. (Branching on $x_1$ would indeed give $12.67$ and $9$, but that is not the variable chosen by the rule.)",
+  "source": {
+   "label": "Politecnico di Milano, Foundations of Operations Research (Prof. E. Amaldi), exercises 5.1–5.3 with solutions (document prepared by Liberti, Bosio, Coniglio)",
+   "url": "https://amaldi.faculty.polimi.it/SlidesFOR-19-20/FOR-exercises-19-20/ex-5.1-5.3.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-polimi-bb-finish",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "Branch-and-bound for $\\max 3x_1+4x_2$, $2x_1+x_2\\le6$, $2x_1+3x_2\\le9$, $x\\ge0$ integer has produced: root $z=12.75$; P2 ($x_2\\le1$): $x=(\\tfrac52,1)$, $z=11.5$; P3 ($x_2\\ge2$): $x=(\\tfrac32,2)$, $z=12.5$. Under P3: P4 ($x_1\\le1$): $x=(1,\\tfrac73)$, $z=\\tfrac{37}{3}$; P5 ($x_1\\ge2$): infeasible. Under P4: P6 ($x_2\\le2$): $x=(1,2)$, $z=11$; P7 ($x_2\\ge3$): $x=(0,3)$, $z=12$. What happens to the node P2, which is still open?",
+  "options": [
+   "It is pruned by bound: $11.5 \\lt 12$, the value of the incumbent $(0,3)$, which is therefore optimal",
+   "It must be branched on $x_1$, because its LP solution is fractional",
+   "It is pruned by infeasibility",
+   "It is pruned by integrality and becomes the new incumbent"
+  ],
+  "answer": 0,
+  "difficulty": 2,
+  "explain": "P7 gives a feasible integer solution of value 12, better than P6's 11, so the incumbent is $(0,3)$ with $z=12$. The upper bound of P2 is $11.5$ (even 11 after rounding down, since the objective is integer-valued), which cannot beat 12, so P2 is fathomed without branching. No open node remains: $x^*=(0,3)$, $z^*=12$.",
+  "source": {
+   "label": "Politecnico di Milano, Foundations of Operations Research (Prof. E. Amaldi), exercises 5.1–5.3 with solutions (document prepared by Liberti, Bosio, Coniglio)",
+   "url": "https://amaldi.faculty.polimi.it/SlidesFOR-19-20/FOR-exercises-19-20/ex-5.1-5.3.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-polimi-knap-root",
+  "topic": "t102",
+  "type": "num",
+  "q": "A budget of 14 can be spent on four all-or-nothing investments with revenues $(16,22,12,8)$ and costs $(5,7,4,3)$: $$\\max 16x_1+22x_2+12x_3+8x_4\\quad\\text{s.t.}\\quad5x_1+7x_2+4x_3+3x_4\\le14,\\quad x\\in\\{0,1\\}^4 .$$ What is the value of the LP relaxation (the bound at the root node)?",
+  "answer": 44,
+  "difficulty": 2,
+  "explain": "The LP relaxation of a knapsack is solved greedily by revenue/cost ratio: $3.2,\\ 3.14,\\ 3,\\ 2.67$ (already in order). Take items 1 and 2 (cost 12), then half of item 3 with the remaining 2 units: $x=(1,1,\\tfrac12,0)$, $z=16+22+6=44$. Only the last item taken is fractional. Branch-and-bound then finds the integer optimum $x^*=(0,1,1,1)$ of value 42, whereas the rounded-down greedy solution $(1,1,0,0)$ is worth only 38.",
+  "source": {
+   "label": "Politecnico di Milano, Foundations of Operations Research (Prof. E. Amaldi), exercises 5.1–5.3 with solutions (document prepared by Liberti, Bosio, Coniglio)",
+   "url": "https://amaldi.faculty.polimi.it/SlidesFOR-19-20/FOR-exercises-19-20/ex-5.1-5.3.pdf",
+   "solution": "source"
+  },
+  "tol": 0.001
+ },
+ {
+  "id": "x1-polimi-bounds-tf",
+  "topic": "t102",
+  "type": "tf",
+  "q": "<b>Claim:</b> in LP-based branch-and-bound for a <i>maximisation</i> problem, the lower bound (value of the incumbent) is specific to each node, whereas the upper bound obtained from an LP relaxation is valid for the whole tree.",
+  "answer": false,
+  "difficulty": 1,
+  "explain": "It is the other way round. The lower bound is global: it is the value of the best feasible solution found so far anywhere in the tree. An LP value is an upper bound only for the subtree of the node where it was computed (it can be rounded down when the data are integer). A node is pruned by infeasibility, by integrality (its LP solution is integer), or by bound when its local upper bound does not exceed the global lower bound.",
+  "source": {
+   "label": "Politecnico di Milano, Foundations of Operations Research (Prof. E. Amaldi), exercises 5.1–5.3 with solutions (document prepared by Liberti, Bosio, Coniglio)",
+   "url": "https://amaldi.faculty.polimi.it/SlidesFOR-19-20/FOR-exercises-19-20/ex-5.1-5.3.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-polimi-gomory-first",
+  "topic": "t204",
+  "type": "mcq",
+  "q": "$\\min x_1-2x_2$ s.t. $-4x_1+6x_2\\le9$ (slack $x_3$), $x_1+x_2\\le4$ (slack $x_4$), $x\\ge0$ integer. The LP optimum is $x=(\\tfrac32,\\tfrac52)$ and the tableau row of $x_2$ is $$x_2+\\tfrac1{10}x_3+\\tfrac25x_4=\\tfrac52 .$$ Written in the original variables, the Gomory fractional cut from this row is:",
+  "options": [
+   "$x_2\\ge3$",
+   "$x_2\\le2$",
+   "$x_1+x_2\\le3$",
+   "$x_2\\le\\tfrac52$"
+  ],
+  "answer": 1,
+  "difficulty": 2,
+  "explain": "Fractional form: $\\tfrac1{10}x_3+\\tfrac25x_4\\ge\\tfrac12$. Substituting $x_3=9+4x_1-6x_2$ and $x_4=4-x_1-x_2$ gives $\\tfrac52-x_2\\ge\\tfrac12$, i.e. $x_2\\le2$. Shortcut: the integer form of the cut is the row rounded down, $x_2+0\\,x_3+0\\,x_4\\le2$. Re-optimising with the dual simplex gives $x=(\\tfrac34,2)$ with objective $-\\tfrac{13}{4}$ (up from $-\\tfrac72$).",
+  "source": {
+   "label": "Politecnico di Milano, Foundations of Operations Research (Prof. E. Amaldi), exercises 5.1–5.3 with solutions (document prepared by Liberti, Bosio, Coniglio)",
+   "url": "https://amaldi.faculty.polimi.it/SlidesFOR-19-20/FOR-exercises-19-20/ex-5.1-5.3.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-polimi-gomory-second",
+  "topic": "t204",
+  "type": "short",
+  "q": "Gomory's algorithm for $\\min x_1-2x_2$ s.t. $-4x_1+6x_2\\le9$ (slack $x_3$), $x_1+x_2\\le4$ (slack $x_4$), $x\\ge0$ integer: after adding the first cut $x_2\\le2$ (slack $x_5$) the LP optimum is $x=(\\tfrac34,2)$ and the tableau row of $x_1$ is $$x_1-\\tfrac14x_3+\\tfrac32x_5=\\tfrac34 .$$ Derive the Gomory cut of this row in integer form and in fractional form, and express it in the original variables $x_1,x_2$.",
+  "model": "Round every coefficient and the right-hand side down ($\\lfloor-\\tfrac14\\rfloor=-1$, $\\lfloor\\tfrac32\\rfloor=1$, $\\lfloor\\tfrac34\\rfloor=0$): the integer form is $x_1-x_3+x_5\\le0$. Subtracting it from the row gives the fractional form $\\tfrac34x_3+\\tfrac12x_5\\ge\\tfrac34$. With $x_3=9+4x_1-6x_2$ and $x_5=2-x_2$: $x_1-(9+4x_1-6x_2)+(2-x_2)\\le0$, i.e. $$-3x_1+5x_2\\le7 .$$ It cuts off $(\\tfrac34,2)$, where $-\\tfrac94+10=7.75 \\gt 7$. After one more dual-simplex pivot the LP optimum is the integer point $x^*=(1,2)$ with objective $-3$.",
+  "rubric": [
+   "Fractional parts $\\tfrac34$ (for $-\\tfrac14$), $\\tfrac12$ (for $\\tfrac32$) and $\\tfrac34$ on the right",
+   "Integer form $x_1-x_3+x_5\\le0$ and/or fractional form $\\tfrac34x_3+\\tfrac12x_5\\ge\\tfrac34$",
+   "Correct substitution of the slacks $x_3=9+4x_1-6x_2$, $x_5=2-x_2$",
+   "Final cut $-3x_1+5x_2\\le7$, violated by $(\\tfrac34,2)$"
+  ],
+  "difficulty": 3,
+  "explain": "Both forms describe the same cut. The fractional form is written in the nonbasic variables, so its slack can be appended to the tableau directly and the dual simplex method restores feasibility.",
+  "source": {
+   "label": "Politecnico di Milano, Foundations of Operations Research (Prof. E. Amaldi), exercises 5.1–5.3 with solutions (document prepared by Liberti, Bosio, Coniglio)",
+   "url": "https://amaldi.faculty.polimi.it/SlidesFOR-19-20/FOR-exercises-19-20/ex-5.1-5.3.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-polimi-gomory-forms",
+  "topic": "t204",
+  "type": "card",
+  "q": "Gomory fractional cut from a tableau row $x_i+\\sum_{j\\in N}\\bar a_{ij}x_j=\\bar b_i$ (all variables integer, $\\bar b_i$ fractional): what are its two equivalent forms?",
+  "a": "<b>Integer form:</b> round the row down, $x_i+\\sum_{j\\in N}\\lfloor\\bar a_{ij}\\rfloor x_j\\le\\lfloor\\bar b_i\\rfloor$. <br><b>Fractional form:</b> subtract the integer form from the row, $$\\sum_{j\\in N}\\big(\\bar a_{ij}-\\lfloor\\bar a_{ij}\\rfloor\\big)\\,x_j\\ \\ge\\ \\bar b_i-\\lfloor\\bar b_i\\rfloor .$$ The fractional form only involves nonbasic variables: the current LP solution (all $x_j=0$ for $j\\in N$) violates it, its slack can be added to the tableau directly, and the dual simplex method re-optimises.",
+  "difficulty": 1,
+  "source": {
+   "label": "Politecnico di Milano, Foundations of Operations Research (Prof. E. Amaldi), exercises 5.1–5.3 with solutions (document prepared by Liberti, Bosio, Coniglio)",
+   "url": "https://amaldi.faculty.polimi.it/SlidesFOR-19-20/FOR-exercises-19-20/ex-5.1-5.3.pdf",
+   "solution": "source"
+  },
+  "explain": "Remember that the fractional part of a negative number is taken in $[0,1)$: for example $-\\tfrac14$ has fractional part $\\tfrac34$."
+ },
+ {
+  "id": "x1-lec25-pigeonhole",
+  "topic": "t104",
+  "type": "mcq",
+  "q": "Pigeonhole problem: put $n+1$ pigeons into $n$ holes ($n\\ge2$), at most one pigeon per hole; $x_{ij}=1$ if pigeon $i$ is in hole $j$. Both formulations contain $\\sum_jx_{ij}=1$ for every pigeon $i$. Formulation 1 adds $x_{ij}+x_{kj}\\le1$ for every hole $j$ and every pair of pigeons $i\\ne k$. Formulation 2 adds $\\sum_ix_{ij}\\le1$ for every hole $j$. Which statement is correct?",
+  "options": [
+   "Both LP relaxations are infeasible, so the two formulations are equally good",
+   "Formulation 1 is stronger because it has many more constraints",
+   "The LP relaxation of Formulation 1 is feasible (e.g. $x_{ij}=1/n$) although the integer problem is infeasible, whereas the LP relaxation of Formulation 2 is already infeasible: Formulation 2 is both stronger and smaller",
+   "The LP relaxation of Formulation 2 is feasible with $x_{ij}=1/n$, and that of Formulation 1 is infeasible"
+  ],
+  "answer": 2,
+  "difficulty": 2,
+  "explain": "With $x_{ij}=1/n$ every pigeon row sums to 1 and every pair constraint reads $2/n\\le1$: feasible for Formulation 1, so LP-based branch-and-bound needs almost complete enumeration to prove infeasibility. In Formulation 2, summing the pigeon rows gives a total of $n+1$ while summing the hole rows gives at most $n$: the LP is infeasible at the root. The hole constraints are clique inequalities that imply all pair constraints; $O(n^3)$ pair constraints are weaker than $n$ clique rows, so more constraints does not mean a tighter formulation.",
+  "source": {
+   "label": "MIT OCW 6.251J / 15.081J Introduction to Mathematical Programming (Fall 2009) — Lecture 25, \"Exact Methods for Discrete Optimization\"",
+   "url": "https://www.ocw.mit.edu/courses/6-251j-introduction-to-mathematical-programming-fall-2009/d0be6aa7393f489a419add7cec874a4c_MIT6_251JF09_lec25.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-lec25-probing",
+  "topic": "t104",
+  "type": "mcq",
+  "q": "Binary variables $x,y,z$ satisfy $5x+4y+z\\le8$. Probing temporarily fixes $x=1$ and examines the logical consequences. Which valid inequality does this produce?",
+  "options": [
+   "$x+y+z\\le1$",
+   "$x+z\\le1$",
+   "$y+z\\le1$",
+   "$x+y\\le1$"
+  ],
+  "answer": 3,
+  "difficulty": 2,
+  "explain": "With $x=1$ the constraint becomes $4y+z\\le3$, which forces $y=0$ while $z$ stays free ($5+1\\le8$). So $x=1$ implies $y=0$, i.e. $x+y\\le1$; it is also the cover inequality of $\\{x,y\\}$ ($5+4=9 \\gt 8$). $x+z\\le1$ is invalid ($x=z=1$ is feasible), $y+z\\le1$ is invalid ($4+1\\le8$), and therefore so is $x+y+z\\le1$.",
+  "source": {
+   "label": "MIT OCW 6.251J / 15.081J Introduction to Mathematical Programming (Fall 2009) — Lecture 25, \"Exact Methods for Discrete Optimization\"",
+   "url": "https://www.ocw.mit.edu/courses/6-251j-introduction-to-mathematical-programming-fall-2009/d0be6aa7393f489a419add7cec874a4c_MIT6_251JF09_lec25.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-lec25-nonbasic-cut",
+  "topic": "t204",
+  "type": "tf",
+  "q": "Pure integer program in standard form $\\{Ax=b,\\ x\\ge0,\\ x\\in\\mathbb{Z}^n\\}$ (slack variables included and integer). Let $x^*$ be an optimal basic feasible solution of the LP relaxation with at least one fractional basic variable, and let $N$ be its set of nonbasic indices. <b>Claim:</b> $\\sum_{j\\in N}x_j\\ge1$ is a valid cut: every integer feasible point satisfies it, and $x^*$ violates it.",
+  "answer": true,
+  "difficulty": 2,
+  "explain": "Setting all nonbasic variables to 0 determines the basic variables uniquely ($x_B=B^{-1}b$), so $x^*$ is the only feasible point with $x_N=0$. Since $x^*$ is not integer, every integer feasible point has some nonbasic variable positive, hence at least 1 by integrality, and the sum is at least 1. At $x^*$ the left-hand side is 0, so $x^*$ is cut off. It is a weak cut; Gomory cuts use the same idea with better coefficients. (The slide asks the question without printing the answer; this argument was worked for the bank.)",
+  "source": {
+   "label": "MIT OCW 6.251J / 15.081J Introduction to Mathematical Programming (Fall 2009) — Lecture 25, \"Exact Methods for Discrete Optimization\"",
+   "url": "https://www.ocw.mit.edu/courses/6-251j-introduction-to-mathematical-programming-fall-2009/d0be6aa7393f489a419add7cec874a4c_MIT6_251JF09_lec25.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-tut11-gomory-neg",
+  "topic": "t204",
+  "type": "mcq",
+  "q": "$x,y\\ge0$ are integers satisfying $2.3x-0.6y=3.9$. Which is the Gomory cut derived from this equation?",
+  "options": [
+   "$0.3x+0.4y\\ge0.9$",
+   "$0.3x+0.6y\\ge0.9$",
+   "$0.3x-0.6y\\ge0.9$",
+   "$0.3x+0.4y\\le0.9$"
+  ],
+  "answer": 0,
+  "difficulty": 1,
+  "explain": "Round the coefficients down: $\\lfloor2.3\\rfloor=2$ and $\\lfloor-0.6\\rfloor=-1$, so $2x-y\\le3.9$ and, the left-hand side being an integer, $2x-y\\le3$. Subtracting this from the equation gives $0.3x+0.4y\\ge0.9$. Shortcut: replace each coefficient and the right-hand side by its fractional part in $[0,1)$ — the fractional part of $-0.6$ is $0.4$, not $0.6$ — and write $\\ge$.",
+  "source": {
+   "label": "MIT OCW 15.053 Optimization Methods in Management Science (Spring 2013) — Tutorial 11, \"Gomory Cuts and a little more\"",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/4717f89c50e91aaa455dbe9cb5a3e225_MIT15_053S13_tut11.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-tut11-second-cut",
+  "topic": "t204",
+  "type": "short",
+  "q": "$\\max x_1+x_2$ s.t. $-5x_1+4x_2\\le0$ (slack $y_1$), $5x_1+2x_2\\le15$ (slack $y_2$), $x\\ge0$ integer. The LP optimum is $(2,\\tfrac52)$ with value $\\tfrac92$. (a) From the tableau row $x_2+\\tfrac16y_1+\\tfrac16y_2=\\tfrac52$ derive the Gomory fractional cut and express it in $x$. (b) After adding this cut (slack $y_3$) the LP optimum is $(\\tfrac{11}{5},2)$ and the row of $x_1$ is $x_1+\\tfrac15y_2-\\tfrac25y_3=\\tfrac{11}{5}$. Derive the next Gomory fractional cut and express it in $x$.",
+  "model": "(a) $\\tfrac16y_1+\\tfrac16y_2\\ge\\tfrac12$. Since $y_1+y_2=(5x_1-4x_2)+(15-5x_1-2x_2)=15-6x_2$, this is $15-6x_2\\ge3$, i.e. $x_2\\le2$. <br>(b) Fractional parts: $\\tfrac15$ for $y_2$, $-\\tfrac25-(-1)=\\tfrac35$ for $y_3$, and $\\tfrac15$ on the right: $\\tfrac15y_2+\\tfrac35y_3\\ge\\tfrac15$. With $y_2=15-5x_1-2x_2$ and $y_3=2-x_2$ the left-hand side equals $\\tfrac{21}{5}-x_1-x_2$, so the cut is $$x_1+x_2\\le4 .$$ The LP value decreases $4.5\\to4.2\\to4$, and $(2,2)$ is an optimal integer solution of value 4.",
+  "rubric": [
+   "(a) cut $\\tfrac16y_1+\\tfrac16y_2\\ge\\tfrac12$",
+   "(a) in the original variables: $x_2\\le2$",
+   "(b) fractional part of $-\\tfrac25$ is $\\tfrac35$; cut $\\tfrac15y_2+\\tfrac35y_3\\ge\\tfrac15$",
+   "(b) in the original variables: $x_1+x_2\\le4$"
+  ],
+  "difficulty": 3,
+  "explain": "Part (a) is the source's solution. For part (b) the tutorial only states, without derivation, that a second cut &quot;$x_1\\le2$&quot; leads to the integer optimum $(2,2)$; that inequality would exclude the feasible integer point $(3,0)$. The Gomory fractional cut of the printed row, recomputed exactly for this bank, is $x_1+x_2\\le4$; with it the LP value is 4 and $(2,2)$ is optimal (confirmed by enumeration).",
+  "source": {
+   "label": "MIT OCW 15.053 Optimization Methods in Management Science (Spring 2013) — Tutorial 11, \"Gomory Cuts and a little more\"",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/4717f89c50e91aaa455dbe9cb5a3e225_MIT15_053S13_tut11.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-uw-bb-child",
+  "topic": "t102",
+  "type": "num",
+  "q": "$\\max 9x_1+5x_2$ s.t. $4x_1+9x_2\\le35$, $3x_1+2x_2\\le19$, $x_1-3x_2\\ge1$, $x_1\\le6$, $x\\ge0$ integer. The root LP optimum is $x=(6,\\tfrac12)$ with $z=56.5$. Branching on $x_2$ creates the children $x_2\\le0$ and $x_2\\ge1$. What is the LP value of the child $x_2\\ge1$?",
+  "answer": 56,
+  "difficulty": 2,
+  "explain": "With $x_2\\ge1$ the binding constraint is $3x_1+2x_2\\le19$; along it $z=9x_1+5x_2=57-x_2$, so the best choice is $x_2=1$, $x_1=\\tfrac{17}{3}$, with $z=51+5=56$. The other child ($x_2\\le0$) gives the integer point $(6,0)$ with $z=54$, the incumbent. Branching the node $x_2\\ge1$ on $x_1$: $x_1\\ge6$ is infeasible and $x_1\\le5$ has LP value $51\\tfrac23 \\lt 54$, pruned by bound. Hence $x^*=(6,0)$ and $z^*=54$ (confirmed by enumeration). The source gives no solutions; all values were computed for this bank.",
+  "source": {
+   "label": "University of Washington MATH 409 — Final exam guide and sample questions (exam dated Monday June 4, 2012)",
+   "url": "https://sites.math.washington.edu/~burke/crs/409/samples/fe_sample-s12.pdf",
+   "solution": "worked"
+  },
+  "tol": 0.001
+ },
+ {
+  "id": "x1-uw-tu-lp-integral",
+  "topic": "t106",
+  "type": "short",
+  "q": "Let $A$ be a totally unimodular $m\\times n$ matrix and $b\\in\\mathbb{Z}^m$. Explain why the linear program $\\min\\{c^\\top x : Ax\\le b,\\ x\\ge0\\}$ has an integral optimal solution whenever it has an optimal solution.",
+  "model": "Add slack variables: $Ax+s=b$, $(x,s)\\ge0$. The constraint matrix $(A\\ \\ I)$ is totally unimodular because $A$ is (expand any square submatrix along its identity columns). The feasible region contains no line (all variables are nonnegative), so if an optimum exists there is an optimal <i>basic</i> feasible solution: the nonbasic variables are 0 and the basic ones solve $Bx_B=b$, where $B$ is a nonsingular $m\\times m$ submatrix of $(A\\ \\ I)$, hence $\\det B=\\pm1$. By Cramer's rule each basic variable equals $\\det(B_i)/\\det(B)$, where $B_i$ is $B$ with one column replaced by the integer vector $b$; the numerator is an integer and the denominator is $\\pm1$, so $x_B$ is integral.",
+  "rubric": [
+   "Passes to standard form with matrix $(A\\ \\ I)$ and notes that it is TU",
+   "Existence of an optimal basic (vertex) solution",
+   "The basis matrix is a nonsingular square submatrix, so $\\det B=\\pm1$",
+   "Cramer's rule (or integrality of $B^{-1}$) with integer $b$ gives an integral solution"
+  ],
+  "difficulty": 2,
+  "explain": "This is why shortest-path, assignment, transportation and maximum-flow problems, whose matrices are totally unimodular, are solved by their LP relaxations when the data are integer.",
+  "source": {
+   "label": "University of Washington MATH 409 — Final exam guide and sample questions (exam dated Monday June 4, 2012)",
+   "url": "https://sites.math.washington.edu/~burke/crs/409/samples/fe_sample-s12.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-uw-recognise-tu",
+  "topic": "t106",
+  "type": "tf",
+  "q": "<b>Claim:</b> the matrix $$A=\\begin{pmatrix}0&1&1&-1&0\\\\-1&0&-1&0&1\\\\1&0&0&1&0\\\\0&1&0&0&1\\end{pmatrix}$$ is totally unimodular.",
+  "answer": true,
+  "difficulty": 2,
+  "explain": "All entries are $0,\\pm1$ and every column has exactly two nonzeros. Split the rows into $M_1=\\{1,2,3\\}$ and $M_2=\\{4\\}$. Columns 1, 3 and 4 contain a $+1$ and a $-1$, both in $M_1$, so their sums over $M_1$ and over $M_2$ are both 0. Columns 2 and 5 contain two $+1$'s, one in $M_1$ (row 1, respectively row 2) and one in $M_2$ (row 4), so both sums equal 1. The sufficient condition (for each column, sum over $M_1$ = sum over $M_2$) holds, hence $A$ is TU. A brute-force check of all square submatrices confirms it.",
+  "source": {
+   "label": "University of Washington MATH 409 — Final exam guide and sample questions (exam dated Monday June 4, 2012)",
+   "url": "https://sites.math.washington.edu/~burke/crs/409/samples/fe_sample-s12.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-uw-preprocessing",
+  "topic": "t104",
+  "type": "num",
+  "q": "Apply bound tightening (preprocessing) to $$\\max 2x_1+x_2-x_3\\quad\\text{s.t.}\\quad5x_1-2x_2+8x_3\\le15,\\quad8x_1+3x_2-x_3\\ge9,\\quad x_1+x_2+x_3\\le6,$$ with $0\\le x_1\\le1$, $0\\le x_2\\le1$, $x_3\\ge1$, all variables integer. Preprocessing alone fixes every variable. What is the optimal objective value?",
+  "answer": 2,
+  "difficulty": 2,
+  "explain": "Row 1 with $x_1\\ge0$, $x_2\\le1$: $8x_3\\le15+2=17$, so $x_3\\le2$. Row 2: $8x_1\\ge9-3x_2+x_3\\ge9-3+1=7$, so $x_1=1$. Row 1 again: $8x_3\\le10+2x_2\\le12$, so $x_3=1$. Row 2: $8+3x_2-1\\ge9$ gives $x_2\\ge\\tfrac23$, so $x_2=1$. The point $(1,1,1)$ satisfies all rows ($11\\le15$, $10\\ge9$, $3\\le6$) and is the only feasible solution (checked by enumeration); its objective value is $2+1-1=2$.",
+  "source": {
+   "label": "University of Washington MATH 409 — Final exam guide and sample questions (exam dated Monday June 4, 2012)",
+   "url": "https://sites.math.washington.edu/~burke/crs/409/samples/fe_sample-s12.pdf",
+   "solution": "worked"
+  },
+  "tol": 0
+ },
+ {
+  "id": "x1-sdu-gomory1",
+  "topic": "t204",
+  "type": "mcq",
+  "q": "$\\max x_1+2x_2$ s.t. $x_1-2x_2\\ge-2$, $x_1+x_2\\le3$, $x\\ge0$ integer. With the slacks $s_1=2+x_1-2x_2$ and $s_2=3-x_1-x_2$ the optimal LP tableau (value $\\tfrac{14}{3}$) is $$x_1-\\tfrac13s_1+\\tfrac23s_2=\\tfrac43,\\qquad x_2+\\tfrac13s_1+\\tfrac13s_2=\\tfrac53 .$$ Written in the original variables, the Gomory fractional cut from the $x_2$ row is:",
+  "options": [
+   "$x_2\\le\\tfrac32$",
+   "$x_2\\le1$",
+   "$x_1+x_2\\le2$",
+   "$x_1\\le1$"
+  ],
+  "answer": 1,
+  "difficulty": 2,
+  "explain": "From the $x_2$ row: $\\tfrac13s_1+\\tfrac13s_2\\ge\\tfrac23$, i.e. $s_1+s_2\\ge2$. Since $s_1+s_2=5-3x_2$, this is $x_2\\le1$. (The $x_1$ row gives $\\tfrac23s_1+\\tfrac23s_2\\ge\\tfrac13$, i.e. $x_2\\le\\tfrac32$, which is weaker.) Adding $x_2\\le1$, the LP optimum becomes $(2,1)$ with $z=4$, which is integer, so the algorithm stops after one cut. The inequalities $x_1+x_2\\le2$ and $x_1\\le1$ are not valid: they cut off the feasible point $(2,1)$. The source has no solutions; the tableau was computed in exact arithmetic for this bank.",
+  "source": {
+   "label": "University of Southern Denmark DM545/DM871 Linear and Integer Programming — Sheet 6, Spring 2022 (M. Chiarandini)",
+   "url": "https://imada.sdu.dk/u/march/Teaching/AY2021-2022/DM871/assets/dm545_sheet6.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-sdu-gomory2",
+  "topic": "t204",
+  "type": "mcq",
+  "q": "$\\max 4x_0-2x_1$ s.t. $x_0+2x_1\\le2$, $3x_1\\le2$, $3x_0-3x_1\\le2$, $x\\ge0$ integer (slacks $s_1,s_2,s_3$ in this order). At the LP optimum $(\\tfrac{10}{9},\\tfrac49)$ the variables $x_0$, $x_1$, $s_2$ are basic and the row of $x_0$ is $$x_0+\\tfrac13s_1+\\tfrac29s_3=\\tfrac{10}{9}.$$ Written in the original variables, the Gomory fractional cut of this row is:",
+  "options": [
+   "$3x_0-2x_1\\le2$",
+   "$x_0\\ge1$",
+   "$x_0\\le1$",
+   "$x_0\\le\\tfrac{10}{9}$"
+  ],
+  "answer": 2,
+  "difficulty": 3,
+  "explain": "Fractional form: $\\tfrac13s_1+\\tfrac29s_3\\ge\\tfrac19$. Substituting $s_1=2-x_0-2x_1$ and $s_3=2-3x_0+3x_1$, the left-hand side is $\\tfrac23-\\tfrac13x_0-\\tfrac23x_1+\\tfrac49-\\tfrac23x_0+\\tfrac23x_1=\\tfrac{10}{9}-x_0$, so the cut is $x_0\\le1$. The LP optimum has $x_0=\\tfrac{10}{9} \\gt 1$ and is cut off. The inequality $3x_0-2x_1\\le2$ is the Gomory cut of the other row, $x_1+\\tfrac13s_1-\\tfrac19s_3=\\tfrac49$. The source has no solutions; the tableau was computed in exact arithmetic for this bank.",
+  "source": {
+   "label": "University of Southern Denmark DM545/DM871 Linear and Integer Programming — Sheet 6, Spring 2022 (M. Chiarandini)",
+   "url": "https://imada.sdu.dk/u/march/Teaching/AY2021-2022/DM871/assets/dm545_sheet6.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-sdu-knap-lp",
+  "topic": "t102",
+  "type": "num",
+  "q": "Budget 20 (million). Five projects have scores $(1,\\ 1.8,\\ 1.4,\\ 0.6,\\ 1.4)$ and costs $(6,12,10,4,8)$; projects 2 and 3 cannot both be funded: $$\\max x_1+1.8x_2+1.4x_3+0.6x_4+1.4x_5\\ \\ \\text{s.t.}\\ \\ 6x_1+12x_2+10x_3+4x_4+8x_5\\le20,\\ \\ x_2+x_3\\le1,\\ \\ x\\in\\{0,1\\}^5 .$$ What is the optimal value of the LP relaxation?",
+  "answer": 3.3,
+  "difficulty": 2,
+  "explain": "Score/cost ratios: $0.167,\\ 0.15,\\ 0.14,\\ 0.15,\\ 0.175$. Fill greedily: project 5 (cost 8), project 1 (cost 6), and the remaining 6 budget units go to the projects of ratio $0.15$ (2 and 4): $1.4+1+6\\cdot0.15=3.3$, for example $x=(1,\\tfrac16,0,1,1)$ or $x=(1,\\tfrac12,0,0,1)$. The conflict row is not binding. Hence $z^*\\le3.3$; since all scores are multiples of $0.2$, even $z^*\\le3.2$. (Worked for this bank and checked with an LP solver; the source has no solutions.)",
+  "source": {
+   "label": "University of Southern Denmark DM545/DM871 Linear and Integer Programming — Sheet 6, Spring 2022 (M. Chiarandini)",
+   "url": "https://imada.sdu.dk/u/march/Teaching/AY2021-2022/DM871/assets/dm545_sheet6.pdf",
+   "solution": "worked"
+  },
+  "tol": 0.005
+ },
+ {
+  "id": "x1-sdu-knap-rounding",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "Project selection: $\\max x_1+1.8x_2+1.4x_3+0.6x_4+1.4x_5$ s.t. $6x_1+12x_2+10x_3+4x_4+8x_5\\le20$, $x_2+x_3\\le1$, $x$ binary. An LP optimum is $x=(1,\\tfrac16,0,1,1)$ with value $3.3$; rounding it down gives the feasible point $x'=(1,0,0,1,1)$ with value $3.0$. Using only this information, what can be said about $x'$?",
+  "options": [
+   "$x'$ is certainly optimal, because it is the rounding of an LP optimum",
+   "$x'$ is certainly not optimal, because its value is below the LP bound",
+   "$x'$ cannot be feasible, because rounding never preserves feasibility",
+   "$x'$ may or may not be optimal: all we know is $3.0\\le z^*\\le3.3$"
+  ],
+  "answer": 3,
+  "difficulty": 2,
+  "explain": "For a maximisation problem a feasible solution gives a lower (primal) bound and the LP relaxation an upper (dual) bound: $3.0\\le z^*\\le3.3$. A gap remains, so nothing is proved yet. Branch-and-bound settles it: with $x_2=1$ the LP solution is the integer point $(0,1,0,0,1)$ of value $3.2$; with $x_2=0$ the LP bound is $3.28$, which can be lowered to $3.2$ because all scores are multiples of $0.2$, so that node is pruned. Hence $z^*=3.2$ (projects 2 and 5, cost 20) and $x'$ turns out not to be optimal.",
+  "source": {
+   "label": "University of Southern Denmark DM545/DM871 Linear and Integer Programming — Sheet 6, Spring 2022 (M. Chiarandini)",
+   "url": "https://imada.sdu.dk/u/march/Teaching/AY2021-2022/DM871/assets/dm545_sheet6.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-sdu-bb-mostfrac",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "$\\max 5x_1+5x_2+8x_3-2x_4-4x_5$ s.t. $-3x_1+6x_2-7x_3+9x_4+9x_5\\ge10$, $x_1+2x_2-x_4-3x_5\\le0$, $x\\in\\{0,1\\}^5$. The root LP solution is $x=(1,1,1,\\tfrac56,\\tfrac{13}{18})$ with bound $\\tfrac{121}{9}\\approx13.44$. With most-fractional branching, on which variable do we branch?",
+  "options": [
+   "$x_4$",
+   "$x_5$",
+   "$x_3$",
+   "$x_4$ or $x_5$ indifferently: they are equally fractional"
+  ],
+  "answer": 1,
+  "difficulty": 2,
+  "explain": "Most fractional means closest to $\\tfrac12$. $x_4=\\tfrac56\\approx0.833$ is at distance $0.333$ from $\\tfrac12$ and $x_5=\\tfrac{13}{18}\\approx0.722$ at distance $0.222$, so we branch on $x_5$. Depth-first with the branch $x_5=1$ first: bound $\\tfrac{116}{9}\\approx12.89$, branch on $x_4$; $x_4=1$ gives the integer LP solution $(1,1,1,1,1)$ of value 12 (incumbent), $x_4=0$ has bound $8.29$ and is pruned; the branch $x_5=0$ has bound $2.79$ and is pruned. So $z^*=12$ (confirmed by enumerating the 32 points). Worked for this bank; the source has no solutions.",
+  "source": {
+   "label": "University of Southern Denmark DM545/DM871 Linear and Integer Programming — Sheet 6, Spring 2022 (M. Chiarandini)",
+   "url": "https://imada.sdu.dk/u/march/Teaching/AY2021-2022/DM871/assets/dm545_sheet6.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-sfu5-extcover-proof",
+  "topic": "t206a",
+  "type": "short",
+  "q": "Knapsack set $X=\\{x\\in\\{0,1\\}^n:\\sum_ja_jx_j\\le b\\}$ with $a_j \\gt 0$. Let $C$ be a cover ($\\sum_{j\\in C}a_j \\gt b$) and $E(C)=C\\cup\\{j : a_j\\ge a_i\\ \\text{for all } i\\in C\\}$. Prove that the extended cover inequality $$\\sum_{j\\in E(C)}x_j\\le|C|-1$$ is valid for $X$.",
+  "model": "Suppose some $x\\in X$ selects at least $|C|$ items of $E(C)$, and keep exactly $|C|$ of them: $r$ of them lie in $C$ and $|C|-r$ lie in $E(C)\\setminus C$. Exactly $|C|-r$ items of $C$ are then not among the kept ones; pair each kept outside item with a different unselected item of $C$. Every item of $E(C)\\setminus C$ weighs at least as much as every item of $C$, so replacing the outside items by their partners does not increase the weight. Hence the kept items weigh at least $\\sum_{j\\in C}a_j \\gt b$, contradicting $x\\in X$. So at most $|C|-1$ items of $E(C)$ can be selected.",
+  "rubric": [
+   "Argues by contradiction with $|C|$ selected items of $E(C)$",
+   "Uses that every item of $E(C)\\setminus C$ is at least as heavy as every item of $C$",
+   "Exchange (pairing) argument: the selected weight is at least $\\sum_{C}a_j \\gt b$",
+   "Concludes that at most $|C|-1$ items of $E(C)$ fit"
+  ],
+  "difficulty": 2,
+  "explain": "The extended cover inequality dominates the cover inequality: same right-hand side, additional nonnegative terms on the left. (The source gives no solution; this proof was worked for the bank.)",
+  "source": {
+   "label": "Simon Fraser University MATH 408/708 (T. Stephen) — Assignment 5 (Fall 2020 offering)",
+   "url": "https://www.sfu.ca/~tstephen/Teaching/1207_Math408/hw5.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-sfu5-chvatal-closure",
+  "topic": "t204",
+  "type": "mcq",
+  "q": "Let $P=\\{(x,y)\\in[0,1]^2 : 2x+2y\\le3\\}$. What is the Chvátal closure $P'$ of $P$, i.e. the set obtained by adding all Chvátal–Gomory cuts of $P$?",
+  "options": [
+   "$P'=\\{(x,y)\\ge0 : x+y\\le1\\}$, which is the integer hull of $P$",
+   "$P'=P$: no Chvátal–Gomory cut removes a point of $P$",
+   "$P'=\\{(x,y)\\in[0,1]^2 : x+y\\le\\tfrac32\\}$",
+   "$P'=[0,1]^2$"
+  ],
+  "answer": 0,
+  "difficulty": 2,
+  "explain": "Multiplying $2x+2y\\le3$ by $\\tfrac12$ gives $x+y\\le\\tfrac32$, whose Chvátal–Gomory rounding is $x+y\\le1$. Together with $x,y\\ge0$ this is the triangle with vertices $(0,0),(1,0),(0,1)$, exactly the convex hull of the integer points of $P$ (the point $(1,1)$ is infeasible). The closure always contains the integer hull, so $P'$ equals it: one round of cuts suffices (Chvátal rank 1). The set $\\{x+y\\le\\tfrac32\\}\\cap[0,1]^2$ is just $P$ rewritten. (Worked for this bank; the source has no solutions.)",
+  "source": {
+   "label": "Simon Fraser University MATH 408/708 (T. Stephen) — Assignment 5 (Fall 2020 offering)",
+   "url": "https://www.sfu.ca/~tstephen/Teaching/1207_Math408/hw5.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-sfu5-mtz-count",
+  "topic": "t201",
+  "type": "num",
+  "q": "MTZ formulation on the complete digraph with 4 vertices: binary $x_{ij}$ for all 12 arcs, $\\sum_jx_{ij}=1$ and $\\sum_ix_{ij}=1$ for every vertex, and $u_i-u_j+4x_{ij}\\le3$ for all $i\\ne j$ in $\\{2,3,4\\}$, where $u_2,u_3,u_4$ are integers in $\\{2,3,4\\}$. How many feasible integer points $(x,u)$ are there?",
+  "answer": 6,
+  "difficulty": 2,
+  "explain": "The feasible $x$ are the $(4-1)!=6$ directed Hamiltonian cycles. For each tour, every tour arc $(i,j)$ not touching vertex 1 forces $u_j\\ge u_i+1$, so the vertices 2, 3, 4 must receive three strictly increasing values of $\\{2,3,4\\}$ along the tour: $u$ is forced to be the visiting position. For example $1\\to3\\to4\\to2\\to1$ has $(u_2,u_3,u_4)=(4,2,3)$. So there is exactly one $u$ per tour and 6 points in total (confirmed by complete enumeration; the source has no solutions).",
+  "source": {
+   "label": "Simon Fraser University MATH 408/708 (T. Stephen) — Assignment 5 (Fall 2020 offering)",
+   "url": "https://www.sfu.ca/~tstephen/Teaching/1207_Math408/hw5.pdf",
+   "solution": "worked"
+  },
+  "tol": 0
+ },
+ {
+  "id": "x1-ps6-child-bound",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "A maximisation integer program with integer objective coefficients is solved by LP-based branch-and-bound. LP values so far: N2: 27.2 and N3: 26.5 (children of the root); N4: 25 with an integer LP solution and N5: 26.8 (children of N2); N6: 26.5 and N7: 24.8 (children of N3); N8: 25.2 and N9: not yet solved (children of N6). What is the strongest statement that can be made about the LP value $v_9$ of node N9 (if its LP is feasible)?",
+  "options": [
+   "$v_9\\le27.2$",
+   "$v_9\\le26.5$",
+   "$v_9=26.5$",
+   "$v_9\\ge25.2$"
+  ],
+  "answer": 1,
+  "difficulty": 1,
+  "explain": "A child solves its parent's LP with one additional constraint, so its value cannot exceed the parent's: $v_9\\le v_6=26.5$. Nothing relates it to its sibling N8 (25.2), and equality with the parent is possible but not guaranteed. $v_9\\le27.2$ is true but weaker.",
+  "source": {
+   "label": "MIT OCW 15.053 (Spring 2013) — Problem Set 6, with solutions",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/eb9a9f8e46267ad66619926f8c32aea5_MIT15_053S13_ps6sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-ps6-bounds",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "A maximisation integer program with integer objective coefficients is solved by LP-based branch-and-bound. LP values so far: N2: 27.2 and N3: 26.5 (children of the root); N4: 25 with an integer LP solution and N5: 26.8 (children of N2); N6: 26.5 and N7: 24.8 (children of N3); N8: 25.2 and N9: not yet solved (children of N6). What are the best lower and upper bounds on the optimal value $v^*$ that can be deduced at this point?",
+  "options": [
+   "$25.2\\le v^*\\le26.8$",
+   "$25\\le v^*\\le27$",
+   "$25\\le v^*\\le26$",
+   "$24.8\\le v^*\\le27.2$"
+  ],
+  "answer": 2,
+  "difficulty": 2,
+  "explain": "Lower bound: the incumbent found at N4, value 25. Upper bound: the largest LP value among the nodes that are still open, N5 (26.8) and N9 (at most 26.5), i.e. 26.8; all objective coefficients are integers, so $v^*$ is an integer and the bound rounds down to 26. The LP values of fractional nodes such as 25.2 are not lower bounds.",
+  "source": {
+   "label": "MIT OCW 15.053 (Spring 2013) — Problem Set 6, with solutions",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/eb9a9f8e46267ad66619926f8c32aea5_MIT15_053S13_ps6sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-ps6-fathom",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "A maximisation integer program with integer objective coefficients is solved by LP-based branch-and-bound. LP values so far: N2: 27.2 and N3: 26.5 (children of the root); N4: 25 with an integer LP solution and N5: 26.8 (children of N2); N6: 26.5 and N7: 24.8 (children of N3); N8: 25.2 and N9: not yet solved (children of N6). Which classification of the nodes N5, N7 and N8 is correct?",
+  "options": [
+   "N5 active, N7 fathomed, N8 active",
+   "N5 active, N7 active, N8 fathomed",
+   "N5 fathomed, N7 fathomed, N8 fathomed",
+   "N5 active, N7 fathomed, N8 fathomed"
+  ],
+  "answer": 3,
+  "difficulty": 2,
+  "explain": "The incumbent has value 25 (N4, fathomed because its LP solution is integer). N5: bound $\\lfloor26.8\\rfloor=26 \\gt 25$, it may still contain a better solution, so it is active. N7: $24.8 \\lt 25$, fathomed by bound. N8: $25.2$ rounds down to 25 because the objective is integer-valued, so it cannot contain a solution strictly better than the incumbent: fathomed. N9 cannot be classified before its LP is solved.",
+  "source": {
+   "label": "MIT OCW 15.053 (Spring 2013) — Problem Set 6, with solutions",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/eb9a9f8e46267ad66619926f8c32aea5_MIT15_053S13_ps6sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-ps6-cover-cut-lp",
+  "topic": "t206a",
+  "type": "num",
+  "q": "Capital budgeting: $\\max 33x_1+45x_2+25x_3+17x_4+39x_5+23x_6$ s.t. $10x_1+14x_2+8x_3+6x_4+12x_5+8x_6\\le28$, $x\\in\\{0,1\\}^6$. The LP relaxation has the optimum $x=(1,\\tfrac37,0,0,1,0)$ with value $\\approx91.29$. Add the cover cut $x_1+x_2+x_5\\le2$ (items 1, 2, 5 weigh $36 \\gt 28$). What is the new LP value?",
+  "answer": 90.75,
+  "difficulty": 2,
+  "explain": "The new LP optimum is $x=(1,0,\\tfrac34,0,1,0)$: items 1 and 5 use 22 units and the remaining 6 units go to item 3 (ratio $25/8=3.125$), giving $33+39+\\tfrac34\\cdot25=90.75$ (checked with an LP solver). The bound improves from $91.29$ to $90.75$ but the solution is still fractional. A second cover cut $x_1+x_3+x_5\\le2$ gives $90.6$. The incumbent $(1,0,0,1,1,0)$ of value 89 is in fact optimal, but $\\lfloor90.6\\rfloor=90 \\gt 89$: these two cuts alone do not prove it.",
+  "source": {
+   "label": "MIT OCW 15.053 (Spring 2013) — Problem Set 6, with solutions",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/eb9a9f8e46267ad66619926f8c32aea5_MIT15_053S13_ps6sol.pdf",
+   "solution": "source"
+  },
+  "tol": 0.01
+ },
+ {
+  "id": "x1-ps6-cover-validity",
+  "topic": "t206a",
+  "type": "mcq",
+  "q": "Knapsack constraint $4x_1+3x_2+7x_3+6x_4+5x_5+8x_6\\le15$ with $x\\in\\{0,1\\}^6$. Which of the following inequalities are valid? <br>(a) $x_1+x_3+x_4\\le2$ &nbsp; (b) $x_2+x_3+x_5\\le2$ &nbsp; (c) $x_3+x_5\\le1$ &nbsp; (d) $x_1+x_2+x_4+x_6\\le3$",
+  "options": [
+   "(a) and (d) only",
+   "(a), (b) and (d)",
+   "(b) and (c) only",
+   "All four"
+  ],
+  "answer": 0,
+  "difficulty": 1,
+  "explain": "Check whether the items of each set fit together. (a) $4+7+6=17 \\gt 15$: a cover, valid. (b) $3+7+5=15\\le15$: all three fit, invalid. (c) $7+5=12\\le15$: invalid. (d) $4+3+6+8=21 \\gt 15$: a cover, valid. Watch out for (b): a set whose weight equals the capacity is not a cover.",
+  "source": {
+   "label": "MIT OCW 15.053 (Spring 2013) — Problem Set 6, with solutions",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/eb9a9f8e46267ad66619926f8c32aea5_MIT15_053S13_ps6sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-ps6-slack-integrality",
+  "topic": "t204",
+  "type": "tf",
+  "q": "For $\\max 4x_1+3x_2$ s.t. $2x_1+x_2\\le11$, $-x_1+2x_2\\le6$, $x\\ge0$ integer, let $s_1,s_2$ be the slack variables of the two constraints. <b>Claim:</b> in every integer feasible solution $s_1$ and $s_2$ are integers, so Gomory fractional cuts may treat the slacks as integer variables.",
+  "answer": true,
+  "difficulty": 1,
+  "explain": "$s_1=11-2x_1-x_2$ and $s_2=6+x_1-2x_2$ are integer combinations of integers. This relies on the constraint coefficients and right-hand sides being integers; with fractional data one first scales the rows (or uses mixed-integer cuts).",
+  "source": {
+   "label": "MIT OCW 15.053 (Spring 2013) — Problem Set 6, with solutions",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/eb9a9f8e46267ad66619926f8c32aea5_MIT15_053S13_ps6sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-ps6-gomory-xspace",
+  "topic": "t204",
+  "type": "mcq",
+  "q": "For $\\max 4x_1+3x_2$ s.t. $2x_1+x_2\\le11$ (slack $s_1$), $-x_1+2x_2\\le6$ (slack $s_2$), $x\\ge0$ integer, the optimal LP tableau is $$x_1+\\tfrac25s_1-\\tfrac15s_2=\\tfrac{16}{5},\\qquad x_2+\\tfrac15s_1+\\tfrac25s_2=\\tfrac{23}{5}.$$ Written in the original variables, the Gomory fractional cuts from row 1 and from row 2 are:",
+  "options": [
+   "Row 1: $x_2\\le\\tfrac92$; row 2: $x_2\\le4$",
+   "Row 1: $x_1\\le3$; row 2: $x_2\\le4$",
+   "Row 1: $x_2\\le4$; row 2: $x_2\\le\\tfrac92$",
+   "Row 1: $x_1\\le3$; row 2: $x_1+x_2\\le7$"
+  ],
+  "answer": 0,
+  "difficulty": 2,
+  "explain": "Row 1: $\\tfrac25s_1+\\tfrac45s_2\\ge\\tfrac15$; with $s_1=11-2x_1-x_2$ and $s_2=6+x_1-2x_2$ the left-hand side is $\\tfrac{46}{5}-2x_2$, so $x_2\\le\\tfrac92$. Row 2: $\\tfrac15s_1+\\tfrac25s_2\\ge\\tfrac35$; the left-hand side is $\\tfrac{23}{5}-x_2$, so $x_2\\le4$, which dominates the first cut. The row-1 cut is not $x_1\\le3$: the negative coefficient $-\\tfrac15$ has fractional part $\\tfrac45$, so rounding the row down gives $x_1-s_2\\le3$, not $x_1\\le3$ (indeed the point $(4,3)$ is feasible).",
+  "source": {
+   "label": "MIT OCW 15.053 (Spring 2013) — Problem Set 6, with solutions",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/eb9a9f8e46267ad66619926f8c32aea5_MIT15_053S13_ps6sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-ps6-gomory-round2",
+  "topic": "t204",
+  "type": "mcq",
+  "q": "$\\max 4x_1+3x_2$ s.t. $2x_1+x_2+s_1=11$, $-x_1+2x_2+s_2=6$, all variables nonnegative integers. After adding the cut $x_2\\le4$ (slack $s_3$) the optimal tableau is $$x_1+\\tfrac12s_1-\\tfrac12s_3=\\tfrac72,\\qquad s_2+\\tfrac12s_1-\\tfrac52s_3=\\tfrac32,\\qquad x_2+s_3=4,$$ with value 26. Both fractional rows give the same Gomory cut. What is this cut in the original variables, and what is the next LP optimum?",
+  "options": [
+   "$x_1\\le3$; the next LP optimum is $(3,4)$ with value 24",
+   "$x_1+x_2\\le7$; the next LP optimum is $(4,3)$ with value 25, integer and hence optimal",
+   "$x_1+x_2\\le7$; the next LP optimum is $(3,4)$ with value 24",
+   "$2x_1+x_2\\le10$; the next LP optimum is $(3,4)$ with value 24"
+  ],
+  "answer": 1,
+  "difficulty": 2,
+  "explain": "Fractional parts: $\\tfrac12$ for $s_1$; $-\\tfrac12-(-1)=\\tfrac12$ and $-\\tfrac52-(-3)=\\tfrac12$ for $s_3$; right-hand sides $\\tfrac12$. Both rows give $\\tfrac12s_1+\\tfrac12s_3\\ge\\tfrac12$, i.e. $s_1+s_3\\ge1$. With $s_1=11-2x_1-x_2$ and $s_3=4-x_2$: $15-2x_1-2x_2\\ge1$, so $x_1+x_2\\le7$. The new LP optimum is $(4,3)$ with value $16+9=25$; it is integer, so it solves the integer program. ($(3,4)$ also satisfies the cut but is worth only 24.)",
+  "source": {
+   "label": "MIT OCW 15.053 (Spring 2013) — Problem Set 6, with solutions",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/eb9a9f8e46267ad66619926f8c32aea5_MIT15_053S13_ps6sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-ps5-binpacking",
+  "topic": "t101",
+  "type": "short",
+  "q": "Six commercials of lengths 12, 18, 22, 35, 40 and 59 seconds must be placed into 60-second blocks. Formulate an integer program that minimises the number of blocks used, and give the optimal number of blocks with a justification.",
+  "model": "Let $j=1,\\dots,5$ index the available blocks (five certainly suffice), $y_j=1$ if block $j$ is used and $x_{ij}=1$ if commercial $i$ is placed in block $j$. $$\\min\\sum_{j}y_j\\quad\\text{s.t.}\\quad12x_{1j}+18x_{2j}+22x_{3j}+35x_{4j}+40x_{5j}+59x_{6j}\\le60\\,y_j\\ \\ \\forall j,\\qquad\\sum_jx_{ij}=1\\ \\ \\forall i,\\qquad x,y\\ \\text{binary}.$$ The optimal value is 4: the total length is $186 \\gt 180=3\\cdot60$, so three blocks are not enough, and four are, e.g. $\\{59\\}$, $\\{40,18\\}$, $\\{35,22\\}$, $\\{12\\}$.",
+  "rubric": [
+   "Binary assignment variables $x_{ij}$ and block-usage variables $y_j$",
+   "Capacity constraint linked to $y_j$: $\\sum_i\\ell_ix_{ij}\\le60\\,y_j$",
+   "Each commercial assigned to exactly one block",
+   "Objective $\\min\\sum_jy_j$",
+   "Optimum 4, with the lower bound $186/60 \\gt 3$ and a feasible packing"
+  ],
+  "difficulty": 2,
+  "explain": "This is a bin-packing model; the right-hand side $60\\,y_j$ acts as capacity constraint and as linking (fixed-charge) constraint at the same time.",
+  "source": {
+   "label": "MIT OCW 15.053 (Spring 2013) — Problem Set 5 solutions (IP modelling)",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/77f1525c9ea6ccaf4038972b6ef69699_MIT15_053S13_ps5sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-ps5-logic",
+  "topic": "t101",
+  "type": "mcq",
+  "q": "Binary variables $x_A,x_B,x_C,x_D$ indicate whether the projects A, B, C, D are selected. Which set of constraints models: (i) if A is selected then B must be selected; (ii) exactly one of A and C is selected; (iii) at least one of A, B, D is selected?",
+  "options": [
+   "$x_A\\ge x_B$; &nbsp; $x_A+x_C=1$; &nbsp; $x_A+x_B+x_D\\ge1$",
+   "$x_A\\le x_B$; &nbsp; $x_A+x_C\\le1$; &nbsp; $x_A+x_B+x_D\\ge1$",
+   "$x_A\\le x_B$; &nbsp; $x_A+x_C=1$; &nbsp; $x_A+x_B+x_D\\ge1$",
+   "$x_A\\le x_B$; &nbsp; $x_A+x_C=1$; &nbsp; $x_A+x_B+x_D=1$"
+  ],
+  "answer": 2,
+  "difficulty": 1,
+  "explain": "(i) $x_A=1$ must force $x_B=1$: $x_A\\le x_B$ (the reverse inequality says &quot;if B then A&quot;). (ii) &quot;Exactly one&quot; is an equation, $x_A+x_C=1$; with $\\le1$ neither project would also be allowed. (iii) &quot;At least one&quot; is $x_A+x_B+x_D\\ge1$; with $=1$ it would mean exactly one. Note: the source's printed solution writes (ii) as $x_A+x_B=1$ and (iii) as $x_A+x_B+x_C\\ge1$, which does not match the conditions it states; the constraints given here follow the stated conditions.",
+  "source": {
+   "label": "MIT OCW 15.053 (Spring 2013) — Problem Set 5 solutions (IP modelling)",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/77f1525c9ea6ccaf4038972b6ef69699_MIT15_053S13_ps5sol.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-ps5-and",
+  "topic": "t101",
+  "type": "mcq",
+  "q": "$x_1,x_2$ are binary. Which system forces the binary variable $w$ to equal $x_1\\wedge x_2$ (that is, $w=1$ exactly when $x_1=x_2=1$) without extra variables?",
+  "options": [
+   "$w\\ge x_1,\\ \\ w\\ge x_2,\\ \\ w\\le x_1+x_2$",
+   "$2w=x_1+x_2$",
+   "$w\\le x_1,\\ \\ w\\le x_2$",
+   "$w\\le x_1,\\ \\ w\\le x_2,\\ \\ w\\ge x_1+x_2-1$"
+  ],
+  "answer": 3,
+  "difficulty": 2,
+  "explain": "$w\\le x_1$ and $w\\le x_2$ force $w=0$ unless both are 1, and $w\\ge x_1+x_2-1$ forces $w=1$ when both are 1. The system $w\\ge x_1$, $w\\ge x_2$, $w\\le x_1+x_2$ is the linearisation of OR. Without the third inequality, $w=0$ remains possible when $x_1=x_2=1$. The equation $2w=x_1+x_2$ makes $x_1\\ne x_2$ infeasible.",
+  "source": {
+   "label": "MIT OCW 15.053 (Spring 2013) — Problem Set 5 solutions (IP modelling)",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/77f1525c9ea6ccaf4038972b6ef69699_MIT15_053S13_ps5sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-ps5-xor",
+  "topic": "t101",
+  "type": "short",
+  "q": "$x_1,x_2$ are binary. Give linear constraints that force a binary variable $z$ to equal $x_1\\oplus x_2$ (exclusive or: $z=1$ exactly when one of the two equals 1). One auxiliary binary variable may be used.",
+  "model": "Introduce $a=x_1\\wedge x_2$ through $a\\le x_1$, $a\\le x_2$, $a\\ge x_1+x_2-1$, $a\\in\\{0,1\\}$, and set $$z=x_1+x_2-2a .$$ Check: $(0,0)$ gives $a=0$, $z=0$; $(1,0)$ and $(0,1)$ give $a=0$, $z=1$; $(1,1)$ gives $a=1$, $z=0$.",
+  "rubric": [
+   "Auxiliary variable for the AND of $x_1$ and $x_2$ with its three linearisation constraints",
+   "$z=x_1+x_2-2a$ (or an equivalent system)",
+   "Verification on the four 0-1 cases"
+  ],
+  "difficulty": 2,
+  "explain": "An equivalent formulation without auxiliary variable uses four inequalities: $z\\le x_1+x_2$, $z\\ge x_1-x_2$, $z\\ge x_2-x_1$, $z\\le2-x_1-x_2$.",
+  "source": {
+   "label": "MIT OCW 15.053 (Spring 2013) — Problem Set 5 solutions (IP modelling)",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/77f1525c9ea6ccaf4038972b6ef69699_MIT15_053S13_ps5sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-ps5-bigm-k-of-m",
+  "topic": "t104",
+  "type": "mcq",
+  "q": "Variables $0\\le x_4,x_5,x_6,x_7\\le200$. At least two of the three conditions (i) $x_4\\ge50$, (ii) $x_5\\le25$, (iii) $x_6+x_7\\le100$ must hold. With binaries $w_1,w_2,w_3$ this is modelled by $$x_4\\ge50-M_1(1-w_1),\\quad x_5\\le25+M_2(1-w_2),\\quad x_6+x_7\\le100+M_3(1-w_3),\\quad w_1+w_2+w_3\\ge2 .$$ Using only the variable bounds, what are the smallest valid values of $(M_1,M_2,M_3)$?",
+  "options": [
+   "$(50,\\ 175,\\ 300)$",
+   "$(50,\\ 25,\\ 100)$",
+   "$(200,\\ 200,\\ 400)$",
+   "$(150,\\ 175,\\ 300)$"
+  ],
+  "answer": 0,
+  "difficulty": 2,
+  "explain": "When $w_k=0$ the constraint must be redundant for every point within the bounds. (i) $x_4\\ge50-M_1$ must hold at $x_4=0$: $M_1\\ge50$. (ii) $x_5\\le25+M_2$ must hold at $x_5=200$: $M_2\\ge175$. (iii) $x_6+x_7\\le100+M_3$ must hold at $x_6+x_7=400$: $M_3\\ge300$. The source uses a single constant $M\\ge300$ for all three rows, which is valid; one tight constant per row, as computed here, gives a stronger LP relaxation.",
+  "source": {
+   "label": "MIT OCW 15.053 (Spring 2013) — Problem Set 5 solutions (IP modelling)",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/77f1525c9ea6ccaf4038972b6ef69699_MIT15_053S13_ps5sol.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-ps5-piecewise",
+  "topic": "t101",
+  "type": "short",
+  "q": "The cost of an integer quantity $x_4\\in[0,200]$ is discontinuous: $f(x_4)=20x_4$ for $0\\le x_4\\le50$; $f(x_4)=1000$ for $51\\le x_4\\le100$; $f(x_4)=-500+15x_4$ for $101\\le x_4\\le200$. Model $f$ with linear constraints and binary variables.",
+  "model": "Binaries $w_1,w_2,w_3$ select the piece and $y_1,y_2,y_3$ carry the quantity on the selected piece: $$w_1+w_2+w_3=1,\\qquad x_4=y_1+y_2+y_3,$$ $$0\\le y_1\\le50\\,w_1,\\qquad51\\,w_2\\le y_2\\le100\\,w_2,\\qquad101\\,w_3\\le y_3\\le200\\,w_3,$$ $$f=20y_1+1000\\,w_2-500\\,w_3+15y_3 .$$ If $w_k=0$ then $y_k=0$; the selected piece has $y_k=x_4$ inside its interval, and the cost expression evaluates to the right formula (the constants $1000$ and $-500$ are attached to the binaries).",
+  "rubric": [
+   "One binary per piece with $w_1+w_2+w_3=1$",
+   "Quantity split $x_4=y_1+y_2+y_3$ with interval bounds multiplied by the binaries",
+   "Lower bounds $51\\,w_2$ and $101\\,w_3$ (not 0), so that the correct piece is forced",
+   "Cost $20y_1+1000w_2-500w_3+15y_3$ with the constants on the binaries"
+  ],
+  "difficulty": 3,
+  "explain": "Checked by evaluating the model for every integer $x_4$ from 0 to 200: exactly one piece is feasible and it reproduces $f(x_4)$.",
+  "source": {
+   "label": "MIT OCW 15.053 (Spring 2013) — Problem Set 5 solutions (IP modelling)",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/77f1525c9ea6ccaf4038972b6ef69699_MIT15_053S13_ps5sol.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-tut10-node3",
+  "topic": "t102",
+  "type": "num",
+  "q": "$\\max 15x_1+12x_2+4x_3+2x_4$ s.t. $8x_1+5x_2+3x_3+2x_4\\le10$, $x\\in\\{0,1\\}^4$. The root LP solution is $x=(\\tfrac58,1,0,0)$ with value $21\\tfrac38$. Branching on $x_1$, the child $x_1=0$ has the integer LP solution $(0,1,1,1)$ of value 18 (the incumbent). What is the LP value of the other child, $x_1=1$?",
+  "answer": 19.8,
+  "difficulty": 2,
+  "explain": "With $x_1=1$ the remaining capacity is 2. Among the other items the best ratio is that of item 2 ($12/5=2.4$), so $x_2=\\tfrac25$ and the value is $15+12\\cdot\\tfrac25=19.8$ at $x=(1,\\tfrac25,0,0)$. Since $19.8 \\gt 18$ and the solution is fractional, the node is branched on $x_2$: $x_2=0$ gives $17\\tfrac23 \\lt 18$ (pruned by bound) and $x_2=1$ is infeasible ($8+5 \\gt 10$), so the optimum is $(0,1,1,1)$ with value 18. Note: the extracted slide text of the source shows this node with the root's numbers ($(\\tfrac58,1,0,0)$ and $21\\tfrac38$), which cannot be right when $x_1=1$; $19.8$ is the LP value recomputed for this bank.",
+  "source": {
+   "label": "MIT OCW 15.053 (Spring 2013) — Tutorial 10, \"Branch and Bound\"",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/72350db759d0557c9d44df4fe7263397_MIT15_053S13_tut10.pdf",
+   "solution": "worked"
+  },
+  "tol": 0.01
+ },
+ {
+  "id": "x1-tut10-pruning-card",
+  "topic": "t102",
+  "type": "card",
+  "q": "LP-based branch-and-bound for a maximisation problem: with incumbent value $z^*$ and LP value $z_{LP}$ at the current node, what are the three possible outcomes?",
+  "a": "<ul><li><b>$z_{LP}\\le z^*$</b> (an infeasible LP is counted here too): prune the node, it cannot contain a better solution.</li><li><b>$z_{LP} \\gt z^*$ and the LP solution is feasible for the integer program</b>: it becomes the new incumbent and the node is pruned.</li><li><b>$z_{LP} \\gt z^*$ and the LP solution is not integer-feasible</b>: branch; the children become active nodes.</li></ul>",
+  "difficulty": 1,
+  "source": {
+   "label": "MIT OCW 15.053 (Spring 2013) — Tutorial 10, \"Branch and Bound\"",
+   "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/72350db759d0557c9d44df4fe7263397_MIT15_053S13_tut10.pdf",
+   "solution": "source"
+  },
+  "explain": "In the tutorial's knapsack example the search starts with the incumbent $(0,0,0,0)$ of value 0 and ends when no active node is left."
+ },
+ {
+  "id": "x1-lec1-facility",
+  "topic": "t104",
+  "type": "mcq",
+  "q": "Uncapacitated facility location with $m$ clients and $n$ sites: $x_j\\in\\{0,1\\}$ opens site $j$, $y_{ij}\\ge0$ is the fraction of client $i$ served from site $j$, and $\\sum_jy_{ij}=1$ for every client. Formulation 1 links with $y_{ij}\\le x_j$ for all $i,j$; Formulation 2 with $\\sum_iy_{ij}\\le m\\,x_j$ for all $j$. Let $Z_1,Z_2$ be the values of the two LP relaxations (minimisation) and $Z_{IP}$ the integer optimum. Which statement is correct?",
+  "options": [
+   "$Z_1\\le Z_2\\le Z_{IP}$: the aggregated formulation is tighter because it has fewer constraints",
+   "$Z_2\\le Z_1\\le Z_{IP}$: the relaxations satisfy $P_1\\subseteq P_2$, so the disaggregated formulation gives the better bound",
+   "$Z_1=Z_2$, because the two formulations have the same integer solutions",
+   "$Z_{IP}\\le Z_2\\le Z_1$"
+  ],
+  "answer": 1,
+  "difficulty": 2,
+  "explain": "Summing $y_{ij}\\le x_j$ over the $m$ clients gives $\\sum_iy_{ij}\\le m\\,x_j$, so every point of $P_1$ lies in $P_2$; the converse fails (one client fully served from a site with $x_j=1/m$ satisfies the aggregated row only). Minimising over the smaller set gives a larger, hence better, lower bound. Both formulations have the same integer solutions, so the integer optimum is the same; Formulation 1 has $mn$ linking constraints instead of $n$ but is much tighter.",
+  "source": {
+   "label": "MIT OCW 15.083J / 6.859J (Fall 2009) — Lecture 1 notes (formulations)",
+   "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/c09092933303a4c92797db2e8e4cc853_MIT15_083JF09_lec01.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-lec1-mst-formulations",
+  "topic": "t105b",
+  "type": "tf",
+  "q": "Minimum spanning tree on a graph $G=(V,E)$ with $n$ nodes and variables $0\\le x_e\\le1$. <b>Claim:</b> the <i>cut</i> formulation $\\{x(E)=n-1,\\ x(\\delta(S))\\ge1\\ \\text{for all } \\emptyset\\ne S\\subsetneq V\\}$ and the <i>subtour</i> formulation $\\{x(E)=n-1,\\ x(E(S))\\le|S|-1\\ \\text{for all } \\emptyset\\ne S\\subsetneq V\\}$ have the same LP relaxation, namely the convex hull of the spanning trees.",
+  "answer": false,
+  "difficulty": 2,
+  "explain": "Both are valid integer formulations, but only the subtour formulation describes the convex hull of the spanning trees (its LP relaxation is integral). The cut formulation is weaker in general: its LP relaxation can have fractional vertices and a value below the cost of a minimum spanning tree (a small computer search for this bank found a 5-node instance with LP value 8 against an MST cost of 9). Contrast with the TSP, where the cutset and subtour constraints are equivalent because the degree equations are present.",
+  "source": {
+   "label": "MIT OCW 15.083J / 6.859J (Fall 2009) — Lecture 1 notes (formulations)",
+   "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/c09092933303a4c92797db2e8e4cc853_MIT15_083JF09_lec01.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-kth23-tree-size",
+  "topic": "t102",
+  "type": "num",
+  "q": "A mixed-integer model contains three binary variables linked by $2x_1+4x_2+4x_3\\le6$ (together with continuous variables and other constraints that are not specified). Branch-and-bound branches on one free binary variable at a time ($x_j=0$ or $x_j=1$). Take the worst case: a node is closed only if (i) its fixings violate this constraint, or (ii) all three binaries are fixed, or (iii) in the LP relaxation this constraint already forces every free binary to 0, so that the LP solution is necessarily integral. What is the largest possible number of nodes in the tree (root included)?",
+  "answer": 13,
+  "difficulty": 3,
+  "explain": "A complete binary tree on three variables has $1+2+4+8=15$ nodes. Whatever the branching order, exactly one node at depth 2 is closed early and loses its two children: with $x_1=1$ and $x_2=1$ (or $x_3=1$) fixed, the constraint forces the last variable to 0, so the LP solution is integral; with $x_2=x_3=1$ fixed the node is infeasible ($8 \\gt 6$). Every other depth-2 node can still have a fractional LP solution (for instance $x_1=0$, $x_2=1$ leaves $0\\le x_3\\le\\tfrac12$ in the LP, so both children are created, one of them infeasible). Hence $15-2=13$ nodes, for every branching order.",
+  "source": {
+   "label": "KTH SF2812 Applied Linear Optimization — Final exam of March 10, 2023, brief solutions",
+   "url": "https://www.kth.se/files/view/jankr/6473b353c91a80822e7f2ffd/solutions_exam_10_march_2023.pdf",
+   "solution": "source"
+  },
+  "tol": 0
+ },
+ {
+  "id": "x1-kth23-cover-dominance",
+  "topic": "t206a",
+  "type": "mcq",
+  "q": "For $2x_1+4x_2+4x_3\\le6$, $x\\in\\{0,1\\}^3$, compare the two cover inequalities (A) $x_2+x_3\\le1$ and (B) $x_1+x_2+x_3\\le2$ within the LP relaxation $0\\le x\\le1$. Which statement is correct?",
+  "options": [
+   "(B) is stronger, because it involves more variables",
+   "They are equivalent, since both are cover inequalities of the same constraint",
+   "(A) is stronger: (A) together with $x_1\\le1$ implies (B), while $(0,\\tfrac34,\\tfrac34)$ satisfies the knapsack row and (B) but violates (A)",
+   "Neither is valid, because $(0,\\tfrac34,\\tfrac34)$ satisfies the knapsack constraint"
+  ],
+  "answer": 2,
+  "difficulty": 2,
+  "explain": "$\\{2,3\\}$ is a minimal cover ($4+4=8 \\gt 6$); $\\{1,2,3\\}$ is a cover ($10 \\gt 6$) but not a minimal one. Adding $x_1\\le1$ to (A) gives (B), so (A) dominates (B). The fractional point $(0,\\tfrac34,\\tfrac34)$ has knapsack weight exactly 6 and satisfies (B) ($1.5\\le2$) but not (A) ($1.5 \\gt 1$): (A) removes fractional points and no integer point. Minimal covers give the stronger cuts.",
+  "source": {
+   "label": "KTH SF2812 Applied Linear Optimization — Final exam of March 10, 2023, brief solutions",
+   "url": "https://www.kth.se/files/view/jankr/6473b353c91a80822e7f2ffd/solutions_exam_10_march_2023.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x1-kth22-five-nodes",
+  "topic": "t102",
+  "type": "short",
+  "q": "A MILP has many continuous variables and exactly three binary variables, which satisfy $x_1+x_2+x_3=1$. All LP relaxations have unique optimal solutions. Show that the branch-and-bound tree has at most five nodes.",
+  "model": "Root: one node. If its LP solution has a fractional binary variable, branch on one of them, say $x_1$. <br>• Child $x_1=1$: the equation forces $x_2=x_3=0$, so all binaries are integral in its LP solution; it is a leaf (or it is infeasible or pruned). <br>• Child $x_1=0$: now $x_2+x_3=1$ and the LP solution may still be fractional; branch on $x_2$. The child $x_2=1$ forces $x_3=0$ and the child $x_2=0$ forces $x_3=1$: both are leaves. <br>In total at most $1+2+2=5$ nodes.",
+  "rubric": [
+   "Root plus two children after the first branching",
+   "The child with the branching variable fixed to 1 is a leaf, because the equation forces the other two binaries to 0",
+   "Only the child with the variable fixed to 0 can be branched again, and both of its children have all binaries determined",
+   "Count: $1+2+2=5$"
+  ],
+  "difficulty": 2,
+  "explain": "The equation is a choose-exactly-one constraint: fixing one binary to 1 fixes all the others, so the tree is a path with one leaf hanging at each level. (The source is a question paper; this solution was worked for the bank.)",
+  "source": {
+   "label": "KTH SF2812 Applied Linear Optimization — Final exam of March 11, 2022 (question paper)",
+   "url": "https://www.kth.se/files/view/jankr/629890268ca4b9ea4bf34578/20220311_sf2812-tenta.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-kth22-aggregated",
+  "topic": "t104",
+  "type": "num",
+  "q": "Binary variables $x_1,\\dots,x_4$. Compare the aggregated constraint $\\tfrac13(x_1+x_2+x_3)\\le x_4$ with the disaggregated system $x_1\\le x_4$, $x_2\\le x_4$, $x_3\\le x_4$. In the LP relaxation ($0\\le x\\le1$), minimise $x_4$ subject to $x_1=1$ and the <b>aggregated</b> constraint. What is the optimal value?",
+  "answer": "1/3",
+  "difficulty": 2,
+  "explain": "With $x_1=1$ and $x_2=x_3=0$ the aggregated row only requires $x_4\\ge\\tfrac13$. The disaggregated system gives $x_4\\ge x_1=1$, the integer answer. Summing the three disaggregated inequalities and dividing by 3 yields the aggregated one, so the disaggregated relaxation is contained in the aggregated relaxation and its bounds are at least as good; the two systems have the same integer solutions. (Worked for this bank; the source is a question paper.)",
+  "source": {
+   "label": "KTH SF2812 Applied Linear Optimization — Final exam of March 11, 2022 (question paper)",
+   "url": "https://www.kth.se/files/view/jankr/629890268ca4b9ea4bf34578/20220311_sf2812-tenta.pdf",
+   "solution": "worked"
+  },
+  "tol": 0.005
+ },
+ {
+  "id": "x1-kth09-three-nodes",
+  "topic": "t102",
+  "type": "short",
+  "q": "A MILP with exactly one integer variable $x$ (all other variables continuous) is solved by LP-based branch-and-bound; every feasible LP relaxation has a unique optimal solution. Show that the tree has at most three nodes.",
+  "model": "If the root LP optimum $r$ has an integer value $x_r=v$, the tree has one node. Otherwise branch: left child $x\\le\\lfloor v\\rfloor$, right child $x\\ge\\lceil v\\rceil$. <br><b>Claim:</b> a feasible child attains its LP optimum on the new bound. Take the left child, with optimum $p$, and suppose $x_p \\lt\\lfloor v\\rfloor$. The root is a relaxation of the child, so $r$ is at least as good as $p$. The segment from $p$ to $r$ lies in the feasible region of the root LP (convexity) and crosses the hyperplane $x=\\lfloor v\\rfloor$ at a point $q\\ne p$, which is feasible for the left child. The objective is linear, so its value at $q$ lies between the values at $p$ and $r$: $q$ is at least as good as $p$, contradicting the uniqueness of the child's optimum. Hence $x_p=\\lfloor v\\rfloor$, an integer, and the left child is a leaf (integral, or infeasible). The same argument works for the right child with $\\lceil v\\rceil$. So there are at most $1+2=3$ nodes.",
+  "rubric": [
+   "One node if the root solution is integral; otherwise two children $x\\le\\lfloor v\\rfloor$ and $x\\ge\\lceil v\\rceil$",
+   "Convexity: the segment between the child's optimum and the root optimum crosses the branching bound",
+   "Linearity of the objective and uniqueness give a contradiction unless the child's optimum lies on the bound",
+   "Concludes that both children are leaves: at most 3 nodes"
+  ],
+  "difficulty": 3,
+  "explain": "With a single integer variable, one branching is always enough; the difficulty of MILP comes from the interaction of several integer variables. (The source is a question paper; this solution was worked for the bank.)",
+  "source": {
+   "label": "KTH SF2812 Applied Linear Optimization — Final exam of October 19, 2009 (question paper)",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t091019.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-uw22-sufficient",
+  "topic": "t106",
+  "type": "card",
+  "q": "State the classical sufficient condition for a matrix $A$ to be totally unimodular (at most two nonzeros per column, partition of the rows), with the idea of its proof.",
+  "a": "$A$ is TU if <ol><li>every entry is $0$, $+1$ or $-1$;</li><li>every column has at most two nonzero entries;</li><li>the rows can be partitioned into $M_1$ and $M_2$ such that, for every column with two nonzeros, the sum of its entries in $M_1$ equals the sum of its entries in $M_2$ (two entries of the same sign lie in different classes, two entries of opposite sign in the same class).</li></ol><b>Proof idea:</b> take a smallest square submatrix $B$ with $\\det B\\notin\\{0,\\pm1\\}$. It has no zero column and no column with a single nonzero (expanding along it would give a smaller bad submatrix), so every column of $B$ has two nonzeros. By (3) the rows of $B$ in $M_1$ and those in $M_2$ have the same sum, so the rows are linearly dependent and $\\det B=0$: a contradiction.",
+  "difficulty": 2,
+  "source": {
+   "label": "University of Washington MATH 409, Lecture 22 \"Total Unimodularity\" (Rekha Thomas, dated May 19, 2010; material credited there to Wolsey's Integer Programming)",
+   "url": "https://sites.math.washington.edu/~thomas/teaching/m409_s2010_web/lecture22.pdf",
+   "solution": "source"
+  },
+  "explain": "The condition covers node–arc incidence matrices of directed graphs ($M_2=\\emptyset$) and incidence matrices of bipartite graphs ($M_1,M_2$ = the two sides)."
+ },
+ {
+  "id": "x1-uw22-hoffman-kruskal",
+  "topic": "t106",
+  "type": "card",
+  "q": "What is the link between total unimodularity of an integer matrix $A$ and integrality of the polyhedra $\\{x : Ax\\le b,\\ x\\ge0\\}$?",
+  "a": "For an integer matrix $A$: the polyhedron $\\{x: Ax\\le b,\\ x\\ge0\\}$ is integral for <i>every</i> integer vector $b$ <b>if and only if</b> $A$ is totally unimodular. Moreover, if $A$ is TU and $b$ is integer, $\\{x:Ax\\le b\\}$ coincides with its integer hull, so the LP relaxation solves the integer program.",
+  "difficulty": 2,
+  "source": {
+   "label": "University of Washington MATH 409, Lecture 22 \"Total Unimodularity\" (Rekha Thomas, dated May 19, 2010; material credited there to Wolsey's Integer Programming)",
+   "url": "https://sites.math.washington.edu/~thomas/teaching/m409_s2010_web/lecture22.pdf",
+   "solution": "source"
+  },
+  "explain": "For one particular $b$, total unimodularity is sufficient but not necessary for integrality."
+ },
+ {
+  "id": "x1-uw22-integral-polyhedron",
+  "topic": "t106",
+  "type": "short",
+  "q": "Show that the polyhedron $P=\\{(x_1,\\dots,x_m,y)\\ge0 : y\\le1,\\ x_i\\le y\\ \\text{for } i=1,\\dots,m\\}$ is integral.",
+  "model": "Write $P=\\{z\\ge0 : Mz\\le b\\}$ with $z=(x,y)$, where $M$ has the $m$ rows $e_i-e_y$ (for $x_i-y\\le0$) and the row $e_y$ (for $y\\le1$), and $b=(0,\\dots,0,1)$. Every row of $M$ has at most one $+1$ and at most one $-1$. Hence every column of $M^\\top$ has at most two nonzeros and, when it has two, they are a $+1$ and a $-1$: the sufficient condition for total unimodularity holds with all rows in one class. So $M^\\top$ is TU, and therefore $M$ is TU. Since $b$ is integer, $\\{z\\ge0 : Mz\\le b\\}$ is integral (TU matrix with integer right-hand side).",
+  "rubric": [
+   "Writes the constraint matrix: rows $e_i-e_y$ and $e_y$",
+   "Observes at most one $+1$ and one $-1$ per row (the transpose is a directed incidence-type matrix)",
+   "Concludes that $M$ is TU (via $M^\\top$)",
+   "Integer right-hand side and TU matrix give an integral polyhedron"
+  ],
+  "difficulty": 2,
+  "explain": "$P$ is the LP relaxation of the linking constraints &quot;a client can be served only if the facility is open&quot; for one facility, which explains why the disaggregated constraints $x_i\\le y$ are ideal for this piece of a model. (The lecture gives no solution; this one was worked for the bank and checked by brute force for $m=3$.)",
+  "source": {
+   "label": "University of Washington MATH 409, Lecture 22 \"Total Unimodularity\" (Rekha Thomas, dated May 19, 2010; material credited there to Wolsey's Integer Programming)",
+   "url": "https://sites.math.washington.edu/~thomas/teaching/m409_s2010_web/lecture22.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-brown-ghouila-houri",
+  "topic": "t106",
+  "type": "card",
+  "q": "State the Ghouila-Houri characterisation of totally unimodular matrices and its corollary for matrices with at most two nonzeros per column.",
+  "a": "$A$ is TU <b>if and only if</b> every subset $I$ of its rows can be split into two parts $K$ and $L$ such that, for every column $j$, $$\\Big|\\sum_{i\\in K}a_{ij}-\\sum_{i\\in L}a_{ij}\\Big|\\le1 .$$ <b>Corollary:</b> $A$ is TU if every column has at most two nonzeros, each equal to $\\pm1$, and the columns with two nonzeros sum to 0 (one $+1$ and one $-1$), as in the node–arc incidence matrix of a directed graph.",
+  "difficulty": 3,
+  "source": {
+   "label": "Brown University CS 149 (Intro to Combinatorial Optimization) — slides \"Integer Programming: Total Unimodularity\"",
+   "url": "https://cs.brown.edu/courses/cs149/slides/CS149-TUM.pdf",
+   "solution": "source"
+  },
+  "explain": "Typical use: for a 0/1 matrix whose ones are consecutive in every column, sort the selected rows and put them alternately in $K$ and $L$; in each column the selected ones are consecutive, so the alternating sum is $-1$, $0$ or $1$."
+ },
+ {
+  "id": "x1-brown-tu-operations",
+  "topic": "t106",
+  "type": "card",
+  "q": "Which operations preserve total unimodularity?",
+  "a": "If $A$ is TU, then so are: $A^\\top$; $(A\\ \\ I)$; $(A\\ \\ {-A})$; $A^{-1}$ when $A$ is square and nonsingular; and every matrix obtained from $A$ by deleting or duplicating a row or column, multiplying a row or column by $-1$, permuting rows or columns, or pivoting.",
+  "difficulty": 1,
+  "source": {
+   "label": "Brown University CS 149 (Intro to Combinatorial Optimization) — slides \"Integer Programming: Total Unimodularity\"",
+   "url": "https://cs.brown.edu/courses/cs149/slides/CS149-TUM.pdf",
+   "solution": "source"
+  },
+  "explain": "General elementary row operations are not on the list: adding one row to another can create an entry 2."
+ },
+ {
+  "id": "x1-sfu3-cg-multipliers",
+  "topic": "t204",
+  "type": "mcq",
+  "q": "$S=\\{(x_1,x_2)\\in\\mathbb{Z}^2_+ : x_1\\le5,\\ x_1-4x_2\\le0\\}$, and $x^*=(5,\\tfrac54)$ is a fractional vertex of its LP relaxation. With the multipliers $u=(\\tfrac34,\\tfrac14)$ on the two constraints, which Chvátal–Gomory cut is obtained?",
+  "options": [
+   "$x_1+x_2\\le3$",
+   "$x_1-x_2\\le4$",
+   "$x_1-x_2\\le\\tfrac{15}{4}$",
+   "$x_1-x_2\\le3$"
+  ],
+  "answer": 3,
+  "difficulty": 2,
+  "explain": "$\\tfrac34\\,(x_1\\le5)+\\tfrac14\\,(x_1-4x_2\\le0)$ gives $x_1-x_2\\le\\tfrac{15}{4}$; the left-hand side has integer coefficients, so the right-hand side is rounded down: $x_1-x_2\\le3$. At $x^*$: $5-1.25=3.75 \\gt 3$, so $x^*$ is cut off. Validity check: $x_1=5$ needs $x_2\\ge2$ and $1\\le x_1\\le4$ needs $x_2\\ge1$, so $x_1-x_2\\le3$ on $S$. The unrounded combination does not cut $x^*$, and rounding up to 4 is pointless. (Worked for this bank; the source has no solutions.)",
+  "source": {
+   "label": "Simon Fraser University MATH 408 (T. Stephen) — Assignment 3 (Fall 2016 offering)",
+   "url": "https://www.sfu.ca/~tstephen/Teaching/1167_Math408/hw3.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-sfu3-cg-binary",
+  "topic": "t204",
+  "type": "short",
+  "q": "$S=\\{x\\in\\{0,1\\}^3 : x_1+x_2-2x_3\\le0\\}$. The point $(1,0,\\tfrac12)$ belongs to the LP relaxation. Derive a Chvátal–Gomory cut that cuts it off, and interpret the cut.",
+  "model": "Take the multiplier $\\tfrac12$ on each of $x_1+x_2-2x_3\\le0$, $-x_2\\le0$ and $x_1\\le1$: the sum is $x_1-x_3\\le\\tfrac12$. The left-hand side has integer coefficients, so round the right-hand side down: $$x_1-x_3\\le0,\\quad\\text{i.e.}\\quad x_1\\le x_3 .$$ At the point $(1,0,\\tfrac12)$: $1-\\tfrac12=\\tfrac12 \\gt 0$, so it is cut off. Interpretation: $x_1=1$ forces $x_3=1$; by symmetry $x_2\\le x_3$ is valid as well. These are the disaggregated versions of the aggregated row $x_1+x_2\\le2x_3$.",
+  "rubric": [
+   "Nonnegative combination of the constraint with $-x_2\\le0$ and $x_1\\le1$ (multipliers $\\tfrac12$)",
+   "Obtains $x_1-x_3\\le\\tfrac12$",
+   "Rounds down to $x_1-x_3\\le0$",
+   "Checks that the point violates the cut, or states the logical meaning $x_1=1\\Rightarrow x_3=1$"
+  ],
+  "difficulty": 2,
+  "explain": "The example shows that the strong (disaggregated) linking constraints are rank-1 Chvátal–Gomory cuts of the weak (aggregated) formulation. (Worked for this bank; the source has no solutions.)",
+  "source": {
+   "label": "Simon Fraser University MATH 408 (T. Stephen) — Assignment 3 (Fall 2016 offering)",
+   "url": "https://www.sfu.ca/~tstephen/Teaching/1167_Math408/hw3.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-sfu3-cg-knapsack",
+  "topic": "t204",
+  "type": "mcq",
+  "q": "$S=\\{x\\in\\mathbb{Z}^4_+ : 4x_1+8x_2+7x_3+5x_4\\le33\\}$. Which Chvátal–Gomory cut is obtained with the multiplier $u=\\tfrac17$, and does it cut off the LP vertex $(0,0,\\tfrac{33}{7},0)$?",
+  "options": [
+   "$x_2+x_3\\le4$; yes, because $\\tfrac{33}{7} \\gt 4$",
+   "$x_1+x_2+x_3+x_4\\le4$; yes",
+   "$x_2+x_3\\le5$; no",
+   "$x_3\\le4$; yes"
+  ],
+  "answer": 0,
+  "difficulty": 1,
+  "explain": "$\\lfloor\\tfrac47\\rfloor=0$, $\\lfloor\\tfrac87\\rfloor=1$, $\\lfloor\\tfrac77\\rfloor=1$, $\\lfloor\\tfrac57\\rfloor=0$ and $\\lfloor\\tfrac{33}{7}\\rfloor=4$, so the cut is $x_2+x_3\\le4$. The vertex has $x_3=\\tfrac{33}{7}\\approx4.71 \\gt 4$ and is removed. Rounding the coefficients up instead gives the invalid $x_1+x_2+x_3+x_4\\le4$ ($x_1=8$ is feasible); rounding the right-hand side up gives nothing; $x_3\\le4$ is valid but weaker, because it drops the coefficient $\\lfloor\\tfrac87\\rfloor=1$ of $x_2$. (Worked for this bank; the source has no solutions.)",
+  "source": {
+   "label": "Simon Fraser University MATH 408 (T. Stephen) — Assignment 3 (Fall 2016 offering)",
+   "url": "https://www.sfu.ca/~tstephen/Teaching/1167_Math408/hw3.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-sfu3-lp-edge",
+  "topic": "t204",
+  "type": "mcq",
+  "q": "$\\max 4x_1-6x_2$ s.t. $x_1+x_2\\le5$, $2x_1-3x_2\\le1$, $x\\ge0$ integer. The LP relaxation has optimal value 2, attained on the whole edge from $(\\tfrac12,0)$ to $(\\tfrac{16}{5},\\tfrac95)$. Which Chvátal–Gomory cut results from the multipliers $u=(\\tfrac35,\\tfrac15)$ on the two constraints, and what does it do?",
+  "options": [
+   "$x_1\\le3$: it cuts off the vertex $(\\tfrac12,0)$",
+   "$x_1\\le3$: it cuts off the vertex $(\\tfrac{16}{5},\\tfrac95)$ and no integer feasible point",
+   "$x_1+x_2\\le4$: it cuts off the vertex $(\\tfrac{16}{5},\\tfrac95)$",
+   "$x_1\\le\\tfrac{16}{5}$: it cuts off the vertex $(\\tfrac{16}{5},\\tfrac95)$"
+  ],
+  "answer": 1,
+  "difficulty": 2,
+  "explain": "$\\tfrac35(x_1+x_2)+\\tfrac15(2x_1-3x_2)=x_1$ and $\\tfrac35\\cdot5+\\tfrac15\\cdot1=\\tfrac{16}{5}$, so the combination is $x_1\\le\\tfrac{16}{5}$, rounded down to $x_1\\le3$. It removes $(3.2,1.8)$ but not $(\\tfrac12,0)$; that vertex is removed by another Chvátal–Gomory cut, $x_1-2x_2\\le0$ (multipliers $\\tfrac12$ on $2x_1-3x_2\\le1$ and on $-x_2\\le0$). The objective is twice the left-hand side of the second constraint, which explains the LP value 2 on the whole edge; the integer point $(2,1)$ lies on that edge, so the integer optimum is also 2. (Worked for this bank; the source has no solutions.)",
+  "source": {
+   "label": "Simon Fraser University MATH 408 (T. Stephen) — Assignment 3 (Fall 2016 offering)",
+   "url": "https://www.sfu.ca/~tstephen/Teaching/1167_Math408/hw3.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x1-sfu24-exponential-bb",
+  "topic": "t102",
+  "type": "short",
+  "q": "Let $n$ be odd and consider $$\\min x_{n+1}\\quad\\text{s.t.}\\quad2x_1+2x_2+\\dots+2x_n+x_{n+1}=n,\\qquad x\\in\\{0,1\\}^{n+1}.$$ Show that LP-based branch-and-bound (branching on variables, no cutting planes) must explore at least $2^{\\lfloor n/2\\rfloor}$ nodes.",
+  "model": "<b>Optimal value.</b> $n$ is odd and $2\\sum_ix_i$ is even, so every integer solution has $x_{n+1}=1$: $z^*=1$. <br><b>Nodes that cannot be pruned.</b> Consider a node in which $k\\le\\lfloor n/2\\rfloor$ of the variables $x_1,\\dots,x_n$ are fixed, $j$ of them to 1, and $x_{n+1}$ is free or fixed to 0. With $x_{n+1}=0$ the $n-k$ free variables must sum to $(n-2j)/2$, which is possible with values in $[0,1]$ because $n-2j\\ge0$ (as $j\\le\\lfloor n/2\\rfloor$) and $n-2j\\le2(n-k)$ (as $k-j\\le\\lfloor n/2\\rfloor$). So the LP of the node is feasible with value $0 \\lt 1$: the node is pruned neither by infeasibility nor by bound. Its LP solution cannot be integral, since an integral point with $x_{n+1}=0$ would make the even number $2\\sum_ix_i$ equal to the odd number $n$. Hence the node must be branched. <br><b>Counting.</b> By induction, the subtree of such a node with $k$ fixed variables contains at least $2^{\\lfloor n/2\\rfloor-k}$ nodes: branching on some $x_i$ gives two children with $k+1$ fixed variables, and branching on $x_{n+1}$ gives the child $x_{n+1}=0$ with the same $k$, which must be branched again. For the root ($k=0$) this gives at least $2^{\\lfloor n/2\\rfloor}$ nodes.",
+  "rubric": [
+   "Parity argument: every integer solution has $x_{n+1}=1$, so $z^*=1$",
+   "Shows that the LP at a node with at most $\\lfloor n/2\\rfloor$ fixed $x$-variables is feasible with value 0",
+   "Shows that this LP solution cannot be integral, so the node is pruned neither by bound nor by integrality",
+   "Concludes that all nodes down to depth $\\lfloor n/2\\rfloor$ are created: at least $2^{\\lfloor n/2\\rfloor}$ nodes"
+  ],
+  "difficulty": 3,
+  "explain": "The LP bound stays at 0 until more than half of the variables are fixed, so bounding never helps, whereas a single Chvátal–Gomory cut ($\\sum_ix_i\\le(n-1)/2$, which implies $x_{n+1}\\ge1$) closes the gap at the root. A small LP-based branch-and-bound written to check this needed 11, 39, 139 and 503 nodes for $n=3,5,7,9$. (The source is a question sheet; this solution was worked for the bank.)",
+  "source": {
+   "label": "Simon Fraser University MATH 408/708 (T. Stephen) — Assignment 3 (Fall 2024 offering)",
+   "url": "https://sfu.ca/~tstephen/Teaching/1247_Math408/hw3.pdf",
+   "solution": "worked"
+  }
+ }
+]

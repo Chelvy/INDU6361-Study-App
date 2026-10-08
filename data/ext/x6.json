@@ -1,0 +1,1819 @@
+[
+ {
+  "id": "x6-rv-p-np-npc",
+  "topic": "t002",
+  "type": "card",
+  "q": "Define the classes <b>P</b> and <b>NP</b> and say what it means for a problem to be <b>NP-complete</b>. Why is Partition (split $a_1,\\dots,a_n\\in\\mathbb{N}$ into two index sets with equal sums) in NP?",
+  "a": "<b>P</b>: problems that admit a polynomial-time algorithm. <b>NP</b>: problems for which a proposed solution (a certificate of a 'yes' answer) can be verified in polynomial time; $P\\subseteq NP$. A problem in NP is <b>NP-complete</b> if a polynomial-time algorithm for it would yield a polynomial-time algorithm for every problem in NP (the hardest problems in NP). Partition is in NP because the two index sets $I_1,I_2$ form a certificate: summing both sides and comparing takes polynomial time. No polynomial algorithm for Partition is known; whether $P=NP$ is open.",
+  "difficulty": 1,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 7-8",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-complexity-landscape",
+  "topic": "t002",
+  "type": "mcq",
+  "q": "Assuming $P\\ne NP$, which one of these problems is <b>not</b> solvable in polynomial time according to the complexity landscape of the notes?",
+  "options": [
+   "Shortest path (no negative cycles)",
+   "Maximum $s$-$t$ flow",
+   "Linear programming",
+   "Integer programming",
+   "Maximum matching"
+  ],
+  "answer": 3,
+  "explain": "Shortest path, max flow / min cut, linear programming and matching are in P. Integer programming (like Partition, TSP, SAT and max cut) is NP-complete in the notes' landscape, so it has no polynomial algorithm unless $P=NP$.",
+  "difficulty": 1,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 8",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-knapsack-dp-pseudopoly",
+  "topic": "t002",
+  "type": "tf",
+  "q": "The knapsack problem with $n$ items and integral profits can be solved by dynamic programming in $O(n\\cdot C)$ time, where $C=\\sum_i c_i$ is the sum of the profits. <b>Statement:</b> this shows that knapsack is solvable in polynomial time.",
+  "answer": false,
+  "explain": "The input has only $O(n(\\log C+\\log W))$ bits, and $n\\cdot C$ is exponential in $\\log C$. An algorithm whose running time is polynomial in $n$ and in the <i>magnitude</i> of the largest input number is only pseudo-polynomial; knapsack remains NP-hard. (The same remark applies to the $O(nmU)$ bound of Ford–Fulkerson.)",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 82-83",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-pg-bigo-crossover",
+  "topic": "t002",
+  "type": "num",
+  "q": "Recall: $f(n)=O(g(n))$ if there is a constant $c \\gt 0$ with $f(n)\\le c\\,g(n)$ for all sufficiently large $n$. Algorithm A is guaranteed to take at most $100n^2$ steps, algorithm B at most $10n^3$ steps. What is the smallest integer $n$ for which A's guarantee is strictly smaller than B's?",
+  "answer": 11,
+  "explain": "$100n^2 \\lt 10n^3 \\iff n \\gt 10$, so the first such integer is $n=11$ (the bounds are equal at $n=10$, and for $n \\lt 10$ the cubic bound is the smaller one). Big-O only compares the behaviour for large $n$: $O(n^2)$ beats $O(n^3)$ asymptotically, whatever the constants.",
+  "difficulty": 1,
+  "source": {
+   "label": "Applegate, Cook, Dash & Johnson, A Practical Guide to Discrete Optimization (ch. 1 draft, 2014), PDF p. 29",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-pg-reduction-direction",
+  "topic": "t002",
+  "type": "mcq",
+  "q": "You want to prove that a new decision problem $X$ is NP-complete. Besides showing $X\\in NP$, which reduction do you need?",
+  "options": [
+   "A polynomial-time reduction from $X$ to satisfiability (SAT)",
+   "A polynomial-time reduction from a known NP-complete problem (e.g. SAT) to $X$",
+   "An exponential-time reduction from $X$ to the TSP",
+   "A proof that every algorithm for $X$ needs exponential time"
+  ],
+  "answer": 1,
+  "explain": "A reduction from A to B maps instances of A to instances of B with the same yes/no answer in polynomial time, so 'B in P' implies 'A in P'. Reducing a known NP-complete problem to $X$ and composing with Cook's theorem (every NP problem reduces to SAT) shows that every NP problem reduces to $X$. Reducing $X$ to SAT only shows $X$ is no harder than SAT, which is true of every problem in NP.",
+  "difficulty": 2,
+  "source": {
+   "label": "Applegate, Cook, Dash & Johnson, A Practical Guide to Discrete Optimization (ch. 1 draft, 2014), PDF p. 30",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-pg-npc-does-not-mean-unsolvable",
+  "topic": "t002",
+  "type": "tf",
+  "q": "<b>Statement:</b> since the decision version of the TSP is NP-complete, a particular TSP instance with 500 cities cannot be solved to proven optimality.",
+  "answer": false,
+  "explain": "NP-completeness concerns the worst-case asymptotic behaviour over all instances; it says nothing about a specific instance. The $(n-1)!$ count of tours only shows that plain enumeration is hopeless — with strong bounds and pruning, instances with hundreds or thousands of cities are solved routinely.",
+  "difficulty": 1,
+  "source": {
+   "label": "Applegate, Cook, Dash & Johnson, A Practical Guide to Discrete Optimization (ch. 1 draft, 2014), PDF p. 5-6, 30-31",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-kruskal-mst-cost",
+  "topic": "t105b",
+  "type": "num",
+  "q": "Run Kruskal's algorithm on the undirected graph with vertices $A,\\dots,H$ and edge costs<br>$AC=3,\\ DC=3,\\ BC=1,\\ EC=2,\\ AB=4,\\ BE=3,\\ DG=1,\\ GF=4,\\ EF=1,\\ EH=1,\\ FH=2$.<br>What is the cost of a minimum spanning tree?",
+  "answer": 12,
+  "explain": "Sorted by cost: the cost-1 edges $BC, DG, EF, EH$ are all accepted; cost 2: $EC$ accepted, $FH$ rejected (cycle $E$-$F$-$H$); cost 3: $AC$ and $DC$ accepted, $BE$ rejected (cycle $B$-$C$-$E$); both cost-4 edges close cycles. The tree has $n-1=7$ edges and cost $1+1+1+1+2+3+3=12$.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 13, 16-17",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-rv-kruskal-rejected-edge",
+  "topic": "t105b",
+  "type": "mcq",
+  "q": "Undirected graph with vertices $A,\\dots,H$ and edge costs<br>$AC=3,\\ DC=3,\\ BC=1,\\ EC=2,\\ AB=4,\\ BE=3,\\ DG=1,\\ GF=4,\\ EF=1,\\ EH=1,\\ FH=2$.<br>Which of these edges is <b>not</b> in the (unique) minimum spanning tree?",
+  "options": [
+   "$EC$ (cost 2)",
+   "$DC$ (cost 3)",
+   "$FH$ (cost 2)",
+   "$AC$ (cost 3)"
+  ],
+  "answer": 2,
+  "explain": "When Kruskal reaches $FH$, the edges $EF$ and $EH$ (cost 1 each) are already chosen, so $FH$ would close the cycle $E$-$F$-$H$ and is rejected. Swap check: the tree path from $F$ to $H$ uses only edges of cost 1, so exchanging one of them for $FH$ (cost 2) cannot help. $EC$, $AC$ and $DC$ each join two different components when they are considered.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 13, 16-17",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-rv-mst-swap-criterion",
+  "topic": "t105b",
+  "type": "card",
+  "q": "State the edge-swap lemma for spanning trees and the resulting optimality criterion for minimum spanning trees.",
+  "a": "<b>Swap lemma:</b> let $T$ be a spanning tree, $e=\\{u,v\\}\\notin T$ and $P\\subseteq T$ the unique $u$-$v$ path in $T$. For every $e'\\in P$, $T'=(T\\setminus\\{e'\\})\\cup\\{e\\}$ is again a spanning tree, with $c(T')=c(T)-c(e')+c(e)$.<br><b>Criterion:</b> a spanning tree $T$ is a minimum spanning tree if and only if no edge swap decreases its cost, i.e. every non-tree edge $\\{u,v\\}$ costs at least as much as every edge on the tree path between $u$ and $v$.<br>So for spanning trees local optimality with respect to swaps implies global optimality (most problems, e.g. the TSP, do not have this property).",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 14-16",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-kruskal-algorithm",
+  "topic": "t105b",
+  "type": "card",
+  "q": "Describe Kruskal's algorithm, why its output is a minimum spanning tree, and its running time.",
+  "a": "Sort the edges so that $c_{e_1}\\le\\dots\\le c_{e_m}$; start with $T=\\emptyset$; for $i=1,\\dots,m$ add $e_i$ to $T$ if $T\\cup\\{e_i\\}$ stays acyclic.<br><b>Correctness:</b> $T$ is acyclic, and connected (an edge of $G$ leaving a component of $T$ would have been accepted), hence a spanning tree. If $e_j\\notin T$ could be swapped for $e_i\\in T$, then $e_j$ would not have closed a cycle at the moment $e_i$ was added, so it was considered later and $c(e_i)\\le c(e_j)$. No swap improves $T$, so $T$ is optimal by the swap criterion.<br><b>Running time:</b> $O(m\\log n)$ — sorting costs $O(m\\log m)$ with $\\log m\\le 2\\log n$, and the cycle tests use a union-find structure.",
+  "difficulty": 1,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 16-17",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-pg-mst-ten-cities",
+  "topic": "t105b",
+  "type": "num",
+  "q": "Ten cities $0,\\dots,9$ have symmetric road distances in miles (row $i$, column $j$ gives $d(i,j)$ for $j \\lt i$):<br><table><thead><tr><th></th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr></thead><tbody><tr><th>1</th><td>449</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th>2</th><td>618</td><td>787</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th>3</th><td>504</td><td>937</td><td>722</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th>4</th><td>529</td><td>1004</td><td>950</td><td>219</td><td></td><td></td><td></td><td></td><td></td></tr><tr><th>5</th><td>805</td><td>1132</td><td>842</td><td>195</td><td>256</td><td></td><td></td><td></td><td></td></tr><tr><th>6</th><td>1181</td><td>1441</td><td>1080</td><td>563</td><td>624</td><td>368</td><td></td><td></td><td></td></tr><tr><th>7</th><td>1538</td><td>2045</td><td>2078</td><td>1378</td><td>1229</td><td>1382</td><td>1319</td><td></td><td></td></tr><tr><th>8</th><td>1716</td><td>2165</td><td>2217</td><td>1422</td><td>1244</td><td>1375</td><td>1262</td><td>483</td><td></td></tr><tr><th>9</th><td>2065</td><td>2514</td><td>2355</td><td>1673</td><td>1570</td><td>1507</td><td>1320</td><td>842</td><td>432</td></tr></tbody></table>What is the length of a minimum spanning tree on these ten cities?",
+  "answer": 4497,
+  "explain": "Kruskal: $3$-$5$ (195), $3$-$4$ (219), [$4$-$5$ (256) closes a cycle], $5$-$6$ (368), $8$-$9$ (432), $0$-$1$ (449), $7$-$8$ (483), $0$-$3$ (504), [$0$-$4$, $3$-$6$ rejected], $0$-$2$ (618); every road after that closes a cycle until $4$-$7$ (1229) joins $\\{7,8,9\\}$ to the rest. Total $195+219+368+432+449+483+504+618+1229=4497$. Since a tour minus one road is a spanning tree, 4497 is a lower bound on the optimal tour (6514 miles).",
+  "difficulty": 2,
+  "source": {
+   "label": "Applegate, Cook, Dash & Johnson, A Practical Guide to Discrete Optimization (ch. 1 draft, 2014), PDF p. 8, 15-16",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-shortest-path-road-network",
+  "topic": "t105a",
+  "type": "num",
+  "q": "A directed road network has arcs (cost): $s\\to a$ (2), $s\\to b$ (5), $s\\to c$ (4), $a\\to b$ (2), $a\\to d$ (2), $b\\to d$ (1), $b\\to e$ (3), $b\\to c$ (1), $c\\to b$ (3), $c\\to e$ (4), $d\\to t$ (7), $e\\to t$ (4). What is the cost of a shortest $s$-$t$ path?",
+  "answer": 11,
+  "explain": "Dijkstra labels: $a=2$, $b=\\min(5,2+2)=4$, $c=4$, $d=\\min(2+2,4+1)=4$, $e=\\min(4+3,4+4)=7$, $t=\\min(4+7,7+4)=11$. One shortest path is $s\\to a\\to b\\to e\\to t$ with cost $2+2+3+4=11$ (the path $s\\to a\\to d\\to t$ also costs 11).",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 19-20",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-negative-cycle-walk",
+  "topic": "t105a",
+  "type": "tf",
+  "q": "A digraph has arcs (cost) $s\\to x$ (1), $x\\to y$ ($-3$), $y\\to z$ (1), $z\\to x$ (1), $z\\to t$ (1). <b>Statement:</b> if paths are allowed to revisit nodes, a shortest $s$-$t$ path exists and has cost 0.",
+  "answer": false,
+  "explain": "The cycle $x\\to y\\to z\\to x$ has cost $-3+1+1=-1 \\lt 0$. Going around it $k$ times before leaving to $t$ gives cost $-k$, so the cost is unbounded below and no shortest path exists; 0 is only the cost of the simple path $s,x,y,z,t$. This is why shortest-path algorithms assume $c_e\\ge 0$ (Dijkstra) or at least that there is no negative-cost cycle (Moore–Bellman–Ford).",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 20",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-dijkstra-algorithm",
+  "topic": "t105a",
+  "type": "card",
+  "q": "State Dijkstra's algorithm (input assumption, steps, invariants) and its running time.",
+  "a": "<b>Input:</b> digraph with costs $c_e\\ge 0$ and a source $s$.<br><b>Steps:</b> (1) $\\ell(s)=0$, $R=\\{s\\}$, and $\\ell(v)=c(s,v)$ if $(s,v)\\in E$, else $\\infty$. (2) While $R\\ne V$: pick $v\\notin R$ with minimum $\\ell(v)$; for every arc $(v,w)$ with $w\\notin R$ set $\\ell(w)=\\min\\{\\ell(w),\\ell(v)+c(v,w)\\}$; add $v$ to $R$. At the end $\\ell(v)=d(s,v)$ for all $v$ (store a predecessor to recover the paths).<br><b>Invariants:</b> labels of nodes in $R$ are exact; for $v\\notin R$, $\\ell(v)$ is the length of a shortest $s$-$v$ path all of whose other nodes lie in $R$.<br><b>Running time:</b> $O(n^2)$ in the simple implementation, $O(m+n\\log n)$ with Fibonacci heaps.",
+  "difficulty": 1,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 21-23",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-dijkstra-trace",
+  "topic": "t105a",
+  "type": "short",
+  "q": "Run Dijkstra's algorithm from $s$ on the digraph with arcs (cost) $s\\to v_1$ (2), $s\\to v_2$ (5), $v_1\\to v_2$ (1), $v_1\\to v_3$ (4), $v_2\\to v_3$ (2), $v_2\\to v_4$ (3), $v_3\\to v_4$ (3). Give the labels after each iteration, the final distances and the shortest-path tree.",
+  "model": "Start ($R=\\{s\\}$): $(\\ell(v_1),\\ell(v_2),\\ell(v_3),\\ell(v_4))=(2,5,\\infty,\\infty)$.<br>Iteration 1: select $v_1$ → $(2,3,6,\\infty)$.<br>Iteration 2: select $v_2$ → $(2,3,5,6)$.<br>Iteration 3: select $v_3$ → no change ($5+3=8 \\gt 6$).<br>Iteration 4: select $v_4$.<br>Distances from $s$ to $(s,v_1,v_2,v_3,v_4)$: $(0,2,3,5,6)$. Shortest-path tree: $s\\to v_1$, $v_1\\to v_2$, $v_2\\to v_3$, $v_2\\to v_4$.",
+  "rubric": [
+   "Initial labels $(2,5,\\infty,\\infty)$ with $R=\\{s\\}$",
+   "Selects $v_1$ first and updates $v_2$ to 3 and $v_3$ to 6",
+   "Selects $v_2$ next and updates $v_3$ to 5 and $v_4$ to 6",
+   "Final distances $0,2,3,5,6$",
+   "Tree arcs $s\\to v_1$, $v_1\\to v_2$, $v_2\\to v_3$, $v_2\\to v_4$"
+  ],
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 21-22",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-dijkstra-negative-arcs",
+  "topic": "t105a",
+  "type": "tf",
+  "q": "<b>Statement:</b> Dijkstra's algorithm still returns correct shortest-path lengths when some arc costs are negative, provided the digraph contains no negative-cost cycle.",
+  "answer": false,
+  "explain": "The correctness proof needs $c_e\\ge 0$: it argues that any other path to the selected node first leaves $R$ at a node whose label is no larger than the whole path, which fails if later arcs can be negative. Counterexample: arcs $s\\to a$ (1), $s\\to b$ (2), $b\\to a$ ($-2$). Dijkstra finalises $a$ first with label 1, but $d(s,a)=2-2=0$. With negative arcs and no negative cycle use Moore–Bellman–Ford.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 22-23",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-rv-bellman-ford-algorithm",
+  "topic": "t105a",
+  "type": "card",
+  "q": "State the Moore–Bellman–Ford algorithm, its assumption, its running time, and why $n-1$ rounds suffice.",
+  "a": "<b>Input:</b> digraph with arbitrary real arc costs but no negative-cost cycle, source $s$.<br><b>Steps:</b> $\\ell(s)=0$, $\\ell(v)=\\infty$ otherwise; repeat $n-1$ times: for every arc $(v,w)$, if $\\ell(w) \\gt \\ell(v)+c_{vw}$ set $\\ell(w)=\\ell(v)+c_{vw}$.<br><b>Running time:</b> $O(nm)$.<br><b>Why it works:</b> a label is always the length of some $s$-$v$ path, so it never drops below $d(s,v)$; along a shortest path $s=v_0,v_1,\\dots,v_k$ the label of $v_i$ is exact after round $i$ (prefixes of shortest paths are shortest paths), and a shortest path has at most $n-1$ arcs.<br>If some label would still change in an $n$-th round, the graph contains a negative-cost cycle.",
+  "difficulty": 1,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 23-27",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-bellman-ford-round2",
+  "topic": "t105a",
+  "type": "num",
+  "q": "Moore–Bellman–Ford is run from $s$ on the digraph with arcs (cost) $s\\to c$ (5), $s\\to d$ ($-1$), $d\\to c$ ($-1$), $d\\to b$ (4), $c\\to b$ (2), $c\\to a$ ($-2$), $b\\to a$ (3). In every round the arcs are scanned in the order $(b,a),(c,a),(c,b),(d,b),(d,c),(s,c),(s,d)$. What is the label $\\ell(a)$ at the end of round 2?",
+  "answer": 3,
+  "explain": "Round 1: only $(s,c)$ and $(s,d)$ can update: $\\ell(c)=5$, $\\ell(d)=-1$. Round 2: $(c,a)$ gives $\\ell(a)=5-2=3$ — it is scanned <i>before</i> $(d,c)$ lowers $\\ell(c)$ to $-2$; then $\\ell(b)=7$, improved to $3$ via $(d,b)$, and $\\ell(c)=-2$. So $\\ell(a)=3$ after round 2; it reaches its final value $-4$ only in round 3.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 24",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-bellman-ford-final",
+  "topic": "t105a",
+  "type": "mcq",
+  "q": "Moore–Bellman–Ford is run from $s$ on the digraph with arcs (cost) $s\\to c$ (5), $s\\to d$ ($-1$), $d\\to c$ ($-1$), $d\\to b$ (4), $c\\to b$ (2), $c\\to a$ ($-2$), $b\\to a$ (3), scanning the arcs in the order $(b,a),(c,a),(c,b),(d,b),(d,c),(s,c),(s,d)$ in every round. What are the final labels $(\\ell(a),\\ell(b),\\ell(c),\\ell(d))$?",
+  "options": [
+   "$(-4,0,-2,-1)$",
+   "$(3,3,-2,-1)$",
+   "$(-4,3,-2,-1)$",
+   "$(3,7,5,-1)$"
+  ],
+  "answer": 0,
+  "explain": "Shortest paths: $d$: $s\\to d$ ($-1$); $c$: $s\\to d\\to c$ ($-2$); $b$: $s\\to d\\to c\\to b$ ($0$); $a$: $s\\to d\\to c\\to a$ ($-4$). $(3,3,-2,-1)$ is the state after round 2 — stopping there is the typical slip; round 3 still improves $a$ and $b$, and round 4 changes nothing.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 24",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-reduced-cost",
+  "topic": "t105a",
+  "type": "num",
+  "q": "For a node potential $\\pi$, the reduced cost of an arc $(i,j)$ is $c_{ij}+\\pi(i)-\\pi(j)$. A digraph has arcs (cost) $s\\to x$ (1), $x\\to y$ ($-1$), $y\\to z$ ($-1$), $z\\to x$ (3), $z\\to t$ ($-2$), and $\\pi(s)=2,\\ \\pi(x)=2,\\ \\pi(y)=1,\\ \\pi(z)=0,\\ \\pi(t)=-3$. What is the reduced cost of the arc $z\\to t$?",
+  "answer": 1,
+  "explain": "$-2+\\pi(z)-\\pi(t)=-2+0-(-3)=1$. The five reduced costs are $1,0,0,1,1$, all $\\ge 0$, so $\\pi$ is a feasible potential; this certifies that there is no negative-cost cycle (the only cycle $x,y,z,x$ costs $-1-1+3=1$).",
+  "difficulty": 1,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 25",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-feasible-potential-proof",
+  "topic": "t105a",
+  "type": "short",
+  "q": "A potential $\\pi:V\\to\\mathbb{R}$ is <i>feasible</i> for arc costs $c$ if $c_{ij}+\\pi(i)-\\pi(j)\\ge 0$ for every arc $(i,j)$. Prove: a feasible potential exists if and only if the digraph has no negative-cost cycle.",
+  "model": "(⇒) Let $C$ be a cycle. Summing the reduced costs around $C$, every $\\pi(v)$ appears once with $+$ (as a tail) and once with $-$ (as a head), so $\\sum_{e\\in C}c_e=\\sum_{(i,j)\\in C}\\big(c_{ij}+\\pi(i)-\\pi(j)\\big)\\ge 0$.<br>(⇐) Add a new node $s$ with zero-cost arcs to all nodes. No cycle passes through $s$, so there is still no negative cycle and the distances $d(s,i)$ are well defined. Put $\\pi(i)=d(s,i)$. A shortest $s$-$i$ path followed by the arc $(i,j)$ is an $s$-$j$ path, hence $d(s,j)\\le d(s,i)+c_{ij}$, i.e. $c_{ij}+\\pi(i)-\\pi(j)\\ge 0$.<br>Algorithmically: Bellman–Ford from the added source finds in $O(nm)$ either a feasible potential or (if a label still changes in round $n$) a negative cycle.",
+  "rubric": [
+   "Telescoping: the potentials cancel around a cycle",
+   "Hence cycle cost = sum of reduced costs, which is nonnegative",
+   "Converse: add a source with zero-cost arcs to all nodes",
+   "Set $\\pi(i)=d(s,i)$ and use $d(s,j)\\le d(s,i)+c_{ij}$"
+  ],
+  "difficulty": 3,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 25-27",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-maxflow-oil-value",
+  "topic": "t105c",
+  "type": "num",
+  "q": "A network has arcs (capacity) $s\\to a$ (7), $s\\to b$ (3), $a\\to b$ (6), $a\\to c$ (2), $b\\to c$ (4), $c\\to b$ (3), $c\\to t$ (7), $a\\to t$ (3), $t\\to a$ (1), $t\\to b$ (5). What is the maximum value of an $s$-$t$ flow?",
+  "answer": 9,
+  "explain": "A flow of value 9: $f(s,a)=6,\\ f(s,b)=3,\\ f(a,b)=1,\\ f(a,c)=2,\\ f(b,c)=4,\\ f(c,t)=6,\\ f(a,t)=3$ (zero elsewhere). The cut $S=\\{s,a,b\\}$ has leaving arcs $a\\to c$, $b\\to c$, $a\\to t$ with capacity $2+4+3=9$; every flow value is at most every cut capacity, so 9 is optimal.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 29-30, 34",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-ford-fulkerson-bottleneck",
+  "topic": "t105c",
+  "type": "num",
+  "q": "Ford–Fulkerson is run on the network with arcs (capacity) $s\\to a$ (7), $s\\to b$ (3), $a\\to b$ (6), $a\\to c$ (2), $b\\to c$ (4), $c\\to b$ (3), $c\\to t$ (7), $a\\to t$ (3), $t\\to a$ (1), $t\\to b$ (5). It first augments along $s\\to a\\to b\\to c\\to t$ by 4, then along $s\\to a\\to t$ by 3. The third augmenting path in the residual graph is $s\\to b\\to a\\to c\\to t$. By how much is the flow augmented along it?",
+  "answer": 2,
+  "explain": "Residual capacities: $s\\to b$: $3-0=3$; $b\\to a$ is the backward arc of $a\\to b$, which carries 4 units, so 4; $a\\to c$: $2-0=2$; $c\\to t$: $7-4=3$. Hence $\\gamma=\\min(3,4,2,3)=2$. Augmenting lowers $f(a,b)$ from 4 to 2 and gives the flow value $4+3+2=9$, which is maximum.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 33",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-min-cut-oil",
+  "topic": "t105c",
+  "type": "mcq",
+  "q": "A network has arcs (capacity) $s\\to a$ (7), $s\\to b$ (3), $a\\to b$ (6), $a\\to c$ (2), $b\\to c$ (4), $c\\to b$ (3), $c\\to t$ (7), $a\\to t$ (3), $t\\to a$ (1), $t\\to b$ (5). Which set $S$ (with $s\\in S$, $t\\notin S$) is a minimum $s$-$t$ cut?",
+  "options": [
+   "$S=\\{s\\}$",
+   "$S=\\{s,b\\}$",
+   "$S=\\{s,a,b\\}$",
+   "$S=\\{s,a,b,c\\}$"
+  ],
+  "answer": 2,
+  "explain": "The capacity of a cut is the total capacity of the arcs <i>leaving</i> $S$. $\\{s\\}$: $7+3=10$. $\\{s,b\\}$: $s\\to a$ and $b\\to c$: $7+4=11$. $\\{s,a,b\\}$: $a\\to c$, $b\\to c$, $a\\to t$: $2+4+3=9$. $\\{s,a,b,c\\}$: $c\\to t$ and $a\\to t$: $7+3=10$. The minimum, 9, equals the maximum flow value; $\\{s,a,b\\}$ is also the set of nodes reachable from $s$ in the final residual graph of Ford–Fulkerson.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 34-35",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-naive-flow-fails",
+  "topic": "t105c",
+  "type": "short",
+  "q": "A 'naive' max-flow algorithm repeatedly picks any $s$-$t$ path in the network, pushes as much flow as possible along it and lowers the capacities accordingly (no backward arcs). Take the arcs $s\\to a$, $s\\to b$, $a\\to b$, $a\\to t$, $b\\to t$, all of capacity 1. Show that the naive algorithm can stop with a non-maximum flow, and explain how the residual graph repairs this.",
+  "model": "If the first path is $s\\to a\\to b\\to t$ (1 unit), the remaining capacities are only on $s\\to b$ and $a\\to t$, which contain no $s$-$t$ path: the algorithm stops with value 1, while the maximum is 2 (paths $s\\to a\\to t$ and $s\\to b\\to t$).<br>Residual graph $G_f$: for each arc $(i,j)$ with $f(i,j) \\lt u(i,j)$ a forward arc of capacity $u(i,j)-f(i,j)$, and for each arc with $f(i,j) \\gt 0$ a backward arc $(j,i)$ of capacity $f(i,j)$. Here $G_f$ contains $s\\to b$, the backward arc $b\\to a$ and $a\\to t$, i.e. the augmenting path $s\\to b\\to a\\to t$. Augmenting by 1 cancels the flow on $(a,b)$ and gives the maximum flow of value 2.",
+  "rubric": [
+   "Bad first choice $s\\to a\\to b\\to t$ leaves no $s$-$t$ path (value 1)",
+   "States that the maximum flow value is 2",
+   "Defines forward residual capacity $u-f$ and backward arcs of capacity $f$",
+   "Finds the augmenting path $s\\to b\\to a\\to t$ through the backward arc of $(a,b)$",
+   "Result: value 2 with zero flow on $(a,b)$"
+  ],
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 30-31",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-flow-cut-weak-duality",
+  "topic": "t105c",
+  "type": "short",
+  "q": "Let $f$ be an $s$-$t$ flow and $S$ an $s$-$t$ cut ($s\\in S$, $t\\notin S$) in a network with capacities $u$. Prove that $\\text{value}(f)\\le u(\\delta^+(S))$, and state exactly when equality holds.",
+  "model": "$\\text{value}(f)=\\sum_{e\\in\\delta^+(s)}f(e)-\\sum_{e\\in\\delta^-(s)}f(e)=\\sum_{v\\in S}\\Big(\\sum_{e\\in\\delta^+(v)}f(e)-\\sum_{e\\in\\delta^-(v)}f(e)\\Big)$, because by flow conservation the bracket is 0 for every $v\\in S\\setminus\\{s\\}$. Arcs with both ends in $S$ appear once with each sign and cancel, so $$\\text{value}(f)=\\sum_{e\\in\\delta^+(S)}f(e)-\\sum_{e\\in\\delta^-(S)}f(e)\\le\\sum_{e\\in\\delta^+(S)}u(e),$$ using $f(e)\\le u(e)$ on leaving arcs and $f(e)\\ge 0$ on entering arcs.<br>Equality holds iff every arc leaving $S$ is saturated and every arc entering $S$ carries zero flow.",
+  "rubric": [
+   "Writes value($f$) as the sum of net outflows over the nodes of $S$ (flow conservation)",
+   "Arcs inside $S$ cancel: value = flow leaving $S$ minus flow entering $S$",
+   "Uses $f\\le u$ on leaving arcs and $f\\ge 0$ on entering arcs",
+   "Equality iff leaving arcs are saturated and entering arcs carry no flow"
+  ],
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 34-35",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-saturated-cut-not-enough",
+  "topic": "t105c",
+  "type": "tf",
+  "q": "Let $f$ be an $s$-$t$ flow and $S$ an $s$-$t$ cut. <b>Statement:</b> if every arc leaving $S$ is saturated ($f(e)=u(e)$), then $\\text{value}(f)=u(\\delta^+(S))$ and $f$ is a maximum flow.",
+  "answer": false,
+  "explain": "$\\text{value}(f)=f(\\delta^+(S))-f(\\delta^-(S))$. Saturated leaving arcs give $f(\\delta^+(S))=u(\\delta^+(S))$, but if some arc <i>entering</i> $S$ carries positive flow the value is strictly smaller than the cut capacity, and nothing can be concluded. Equality needs both conditions: leaving arcs saturated <i>and</i> entering arcs with zero flow.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 34-35",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-maxflow-mincut-theorem",
+  "topic": "t105c",
+  "type": "card",
+  "q": "State the max-flow min-cut theorem and the optimality criterion in terms of augmenting paths. How does Ford–Fulkerson deliver a minimum cut?",
+  "a": "<b>Theorem (Ford–Fulkerson 1956):</b> the maximum value of an $s$-$t$ flow equals the minimum capacity of an $s$-$t$ cut.<br><b>Criterion:</b> a flow $f$ is maximum iff the residual graph $G_f$ contains no $s$-$t$ path (no $f$-augmenting path).<br><b>Min cut:</b> when the algorithm stops, let $S$ be the set of nodes reachable from $s$ in $G_f$. Arcs leaving $S$ are saturated and arcs entering $S$ carry no flow (otherwise a residual arc would leave $S$), so $\\text{value}(f)=u(\\delta^+(S))$ and $S$ is a minimum cut.<br>With integral capacities all augmentations are integral, so an integral maximum flow exists.",
+  "difficulty": 1,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 35, 37",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-ford-fulkerson-bad-instance",
+  "topic": "t105c",
+  "type": "num",
+  "q": "A network has arcs $s\\to a$, $s\\to b$, $a\\to t$, $b\\to t$, each of capacity $M=1000$, and an arc $a\\to b$ of capacity 1. Ford–Fulkerson is run with the worst possible choice of augmenting paths: it alternates between $s\\to a\\to b\\to t$ and $s\\to b\\to a\\to t$ (the latter uses the backward arc of $a\\to b$). How many augmentations does it perform before the flow is maximum?",
+  "answer": 2000,
+  "explain": "Each of these paths has bottleneck 1 (the middle arc, forward or backward), so every augmentation adds one unit; the maximum flow value is $2M$, hence $2M=2000$ augmentations. Two augmentations ($s\\to a\\to t$ and $s\\to b\\to t$, each by $M$) would suffice. The $O(nmU)$ bound of Ford–Fulkerson is therefore only pseudo-polynomial; Edmonds–Karp avoids the problem by always using a shortest augmenting path.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 35-36",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-edmonds-karp",
+  "topic": "t105c",
+  "type": "card",
+  "q": "What is the Edmonds–Karp algorithm and which bound does it achieve? Sketch why.",
+  "a": "It is Ford–Fulkerson in which every augmentation uses a <b>shortest</b> $s$-$t$ path (fewest arcs) of the residual graph, found by breadth-first search. It needs at most $m\\cdot n$ augmentations, i.e. $O(m^2n)$ time, independent of the capacities.<br><b>Why:</b> (1) the BFS distances $d(s,v)$ in the residual graph never decrease, because the only new residual arcs are reversals of path arcs and they point one layer back; (2) between two iterations in which the same arc $(u,w)$ is the bottleneck, $d(s,u)$ strictly increases. Distances are at most $n-1$, so each arc is the bottleneck at most $n$ times.<br>Consequence: a minimum $s$-$t$ cut can also be found in $O(m^2n)$.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 36-37",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-edmonds-karp-first-path",
+  "topic": "t105c",
+  "type": "mcq",
+  "q": "A network has arcs (capacity) $s\\to a$ (7), $s\\to b$ (3), $a\\to b$ (6), $a\\to c$ (2), $b\\to c$ (4), $c\\to b$ (3), $c\\to t$ (7), $a\\to t$ (3), $t\\to a$ (1), $t\\to b$ (5). Edmonds–Karp starts from the zero flow. Which augmenting path does it use first, and by how much does it augment?",
+  "options": [
+   "$s\\to a\\to b\\to c\\to t$, by 4",
+   "$s\\to a\\to c\\to t$, by 2",
+   "$s\\to b\\to c\\to t$, by 3",
+   "$s\\to a\\to t$, by 3"
+  ],
+  "answer": 3,
+  "explain": "Edmonds–Karp augments along a path with the fewest arcs. The only $s$-$t$ path with two arcs is $s\\to a\\to t$ (there is no arc $b\\to t$), with bottleneck $\\min(7,3)=3$. The 4-arc path $s\\to a\\to b\\to c\\to t$ is a legal Ford–Fulkerson choice but not a shortest path.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 33, 36",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-rv-bipartite-matching-as-flow",
+  "topic": "t105d",
+  "type": "short",
+  "q": "Explain how a maximum-cardinality matching in a bipartite graph $G=(V_1\\cup V_2,E)$ can be computed with a maximum-flow algorithm, and why the answer is correct.",
+  "model": "Build a network: direct every edge from $V_1$ to $V_2$, add a source $s$ with arcs $s\\to u$ for all $u\\in V_1$ and a sink $t$ with arcs $v\\to t$ for all $v\\in V_2$. Capacities: 1 on the arcs out of $s$ and into $t$, $\\infty$ on the original edges.<br>A matching $M$ gives a flow of value $|M|$ (one unit along $s\\to u\\to v\\to t$ for each $\\{u,v\\}\\in M$). Conversely, the capacities are integral, so there is an integral maximum flow; because of the unit capacities at $s$ and $t$ each node carries at most one unit, so $M=\\{(u,v)\\in E: f(u,v)=1\\}$ is a matching with $|M|=\\text{value}(f)$. Hence max matching = max flow. Running time $O(n\\cdot m)$ with Ford–Fulkerson: the flow value is at most $n$ and each augmentation costs $O(m)$.",
+  "rubric": [
+   "Source to $V_1$ and $V_2$ to sink with capacity 1; edges directed from $V_1$ to $V_2$",
+   "A matching yields a flow of the same value",
+   "Integral capacities give an integral maximum flow",
+   "An integral flow yields a matching because each node carries at most one unit",
+   "Running time $O(nm)$ (at most $n$ augmentations)"
+  ],
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 38-39",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-bipartite-max-matching",
+  "topic": "t105d",
+  "type": "num",
+  "q": "A bipartite graph has $V_1=\\{u_1,u_2,u_3\\}$, $V_2=\\{v_1,v_2,v_3\\}$ and edges $u_1v_1,\\ u_1v_2,\\ u_1v_3,\\ u_2v_3,\\ u_3v_3$. What is the size of a maximum matching?",
+  "answer": 2,
+  "explain": "$\\{u_1v_2,\\ u_2v_3\\}$ is a matching of size 2. Three edges are impossible: $u_2$ and $u_3$ can only be matched to $v_3$. Equivalently $\\{u_1,v_3\\}$ is a vertex cover of size 2, and $|M|\\le|U|$ for every matching $M$ and every vertex cover $U$.",
+  "difficulty": 1,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 38-40",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-bipartite-min-vertex-cover",
+  "topic": "t105d",
+  "type": "mcq",
+  "q": "A bipartite graph has $V_1=\\{u_1,u_2,u_3\\}$, $V_2=\\{v_1,v_2,v_3\\}$ and edges $u_1v_1,\\ u_1v_2,\\ u_1v_3,\\ u_2v_3,\\ u_3v_3$. Which of these sets is a <b>minimum</b> vertex cover?",
+  "options": [
+   "$\\{u_1\\}$",
+   "$\\{u_1,v_3\\}$",
+   "$\\{u_1,u_2,u_3\\}$",
+   "$\\{v_1,v_2,v_3\\}$"
+  ],
+  "answer": 1,
+  "explain": "$\\{u_1,v_3\\}$ touches all five edges and has size 2 = the maximum matching size (König). $\\{u_1\\}$ misses $u_2v_3$ and $u_3v_3$. The two sets of size 3 are vertex covers but not minimum. In the flow model the minimum cut is $S=\\{s,u_2,u_3,v_3\\}$ and the cover is $(V_1\\setminus S)\\cup(V_2\\cap S)=\\{u_1,v_3\\}$.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 39-40",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-konig-hall",
+  "topic": "t105d",
+  "type": "card",
+  "q": "State König's theorem and Hall's theorem for bipartite graphs. What remains true in general graphs?",
+  "a": "<b>König:</b> in a bipartite graph the maximum size of a matching equals the minimum size of a vertex cover (a set $U\\subseteq V$ touching every edge).<br><b>Hall:</b> a bipartite graph with $|V_1|=|V_2|=n$ has a perfect matching iff $|N(U)|\\ge|U|$ for every $U\\subseteq V_1$, where $N(U)\\subseteq V_2$ is the set of neighbours of $U$.<br><b>General graphs:</b> only $|M|\\le|U|\\le 2|M|$ holds and the first inequality can be strict (a triangle has $|M|=1$, $|U|=2$). Maximum matching is still polynomially solvable, whereas minimum vertex cover is NP-hard.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 39-41",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-hall-violator",
+  "topic": "t105d",
+  "type": "mcq",
+  "q": "A bipartite graph has $V_1=\\{u_1,u_2,u_3\\}$, $V_2=\\{v_1,v_2,v_3\\}$ and edges $u_1v_1,\\ u_1v_2,\\ u_1v_3,\\ u_2v_3,\\ u_3v_3$. It has no perfect matching. Which set $U\\subseteq V_1$ violates Hall's condition $|N(U)|\\ge|U|$?",
+  "options": [
+   "$\\{u_1\\}$",
+   "$\\{u_1,u_2\\}$",
+   "$\\{u_2,u_3\\}$",
+   "$\\{u_1,u_2,u_3\\}$"
+  ],
+  "answer": 2,
+  "explain": "$N(\\{u_2,u_3\\})=\\{v_3\\}$ has size $1 \\lt 2$. Every set containing $u_1$ has all of $\\{v_1,v_2,v_3\\}$ as neighbourhood, so the other three sets satisfy the condition.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 40-41",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-rv-held-karp-entry",
+  "topic": "t105e",
+  "type": "num",
+  "q": "The Held–Karp dynamic program for the TSP uses $C(S,i,j)$ = length of a shortest path from $i$ to $j$ that visits every node of $S$ exactly once and no other node, with $C(\\{i,j\\},i,j)=c_{ij}$ and $$C(S,i,j)=\\min_{\\ell\\in S\\setminus\\{i,j\\}}\\{C(S\\setminus\\{j\\},i,\\ell)+c_{\\ell j}\\}.$$ Take four cities with symmetric costs $c_{12}=c_{23}=c_{34}=c_{41}=10$, $c_{13}=100$, $c_{24}=1$. Compute $C(\\{1,2,3,4\\},1,3)$.",
+  "answer": 21,
+  "explain": "$C(\\{1,2,4\\},1,2)=c_{14}+c_{42}=11$ and $C(\\{1,2,4\\},1,4)=c_{12}+c_{24}=11$, so $C(V,1,3)=\\min\\{11+c_{23},\\ 11+c_{43}\\}=21$. Closing the tour through $j=3$ costs $21+c_{31}=121$, whereas $j=2$ or $j=4$ gives $30+10=40$, the optimal tour. The table has at most $n^22^n$ entries, each a minimum over at most $n$ choices: $O(n^32^n)$ time instead of enumerating $(n-1)!$ tours.",
+  "difficulty": 3,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 11-12",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-rv-lp-dual-weak-duality",
+  "topic": "t001",
+  "type": "card",
+  "q": "Write the dual of the LP $\\max\\{cx : Ax\\le b\\}$ (no sign restriction on $x$), state weak duality and prove it in one line.",
+  "a": "Dual: $\\min\\{by : yA=c,\\ y\\ge 0\\}$ — one multiplier $y_i\\ge 0$ per constraint, chosen so that the combination $yA$ of the rows equals the objective vector $c$; then $yb$ is an upper bound on the primal value.<br>Weak duality: for feasible $x$ and $y$, $cx=(yA)x=y(Ax)\\le yb$. Hence $\\max(P)\\le\\min(D)$.",
+  "difficulty": 1,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 45",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-dual-multiplier-bound",
+  "topic": "t001",
+  "type": "num",
+  "q": "Consider $\\max\\{x_1+x_2 : x_1+2x_2\\le 6,\\ x_1\\le 2,\\ x_1-x_2\\le 1\\}$. Multiply the three constraints by $y=(\\tfrac23,0,\\tfrac13)$ and add them up. Which upper bound on the optimal value results?",
+  "answer": "13/3",
+  "explain": "$\\tfrac23(x_1+2x_2)+\\tfrac13(x_1-x_2)=x_1+x_2$, so the combination has exactly the objective on the left, and its right-hand side is $\\tfrac23\\cdot 6+\\tfrac13\\cdot 1=\\tfrac{13}{3}\\approx 4.33$. The bound is valid (nonnegative multipliers) but not tight: the optimum is 4 at $x^*=(2,2)$, certified by the multipliers $(\\tfrac12,\\tfrac12,0)$.",
+  "difficulty": 1,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 44-45",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-dual-complementary-slackness",
+  "topic": "t001",
+  "type": "short",
+  "q": "For the LP $\\max\\{x_1+x_2 : x_1+2x_2\\le 6,\\ x_1\\le 2,\\ x_1-x_2\\le 1\\}$ ($x$ free): (a) write the dual; (b) given that $x^*=(2,2)$ is optimal, use complementary slackness to compute an optimal dual solution; (c) verify strong duality.",
+  "model": "(a) $\\min\\ 6y_1+2y_2+y_3$ s.t. $y_1+y_2+y_3=1$ (column of $x_1$), $2y_1-y_3=1$ (column of $x_2$), $y\\ge 0$. The dual constraints are equations because $x$ is free.<br>(b) At $x^*$: $2+2\\cdot 2=6$ (tight), $2=2$ (tight), $2-2=0 \\lt 1$ (slack), so $y_3=0$. Then $2y_1=1$ gives $y_1=\\tfrac12$ and $y_2=1-\\tfrac12=\\tfrac12$.<br>(c) Dual value $6\\cdot\\tfrac12+2\\cdot\\tfrac12+0=4=x_1^*+x_2^*$: both solutions are feasible with equal objective values, hence both are optimal.",
+  "rubric": [
+   "Dual objective $\\min 6y_1+2y_2+y_3$ with $y\\ge 0$",
+   "Equality constraints $y_1+y_2+y_3=1$ and $2y_1-y_3=1$ (because $x$ is free)",
+   "Third constraint slack at $x^*$, hence $y_3=0$",
+   "$y^*=(\\tfrac12,\\tfrac12,0)$",
+   "Both objective values equal 4"
+  ],
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 44-48",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-rv-strong-duality-cs",
+  "topic": "t001",
+  "type": "card",
+  "q": "State strong duality and complementary slackness for the pair $(P)\\ \\max\\{cx : Ax\\le b\\}$ and $(D)\\ \\min\\{by : yA=c,\\ y\\ge 0\\}$. What happens when one of the two problems is unbounded?",
+  "a": "<b>Strong duality:</b> if both $(P)$ and $(D)$ are feasible, their optimal values are equal.<br><b>Complementary slackness:</b> feasible $x^*$ and $y^*$ are both optimal iff for every row $i$: $A_ix^*=b_i$ or $y_i^*=0$ (positive multipliers only on tight constraints); indeed the duality gap is $y^*b-cx^*=\\sum_i y_i^*(b_i-A_ix^*)$.<br><b>Unboundedness:</b> $(P)$ unbounded ⇒ $(D)$ infeasible; $(D)$ unbounded ⇒ $(P)$ infeasible; it is also possible that both are infeasible.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 47-48",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-farkas-certificate",
+  "topic": "t001",
+  "type": "mcq",
+  "q": "Farkas' lemma: exactly one of the systems (i) $\\exists x\\ge 0: Ax=b$, (ii) $\\exists y: y^TA\\ge 0,\\ y^Tb \\lt 0$ has a solution. For $$A=\\begin{pmatrix}1&1\\\\1&1\\end{pmatrix},\\qquad b=\\begin{pmatrix}1\\\\2\\end{pmatrix}$$ (that is, $x_1+x_2=1$ and $x_1+x_2=2$ with $x\\ge 0$), which $y$ certifies that system (i) is infeasible?",
+  "options": [
+   "$y=(1,1)$",
+   "$y=(-1,1)$",
+   "$y=(1,-1)$",
+   "$y=(-1,-1)$"
+  ],
+  "answer": 2,
+  "explain": "$y=(1,-1)$ gives $y^TA=(0,0)\\ge 0$ and $y^Tb=1-2=-1 \\lt 0$. If some $x\\ge 0$ satisfied $Ax=b$ we would get $0\\le (y^TA)x=y^Tb \\lt 0$, a contradiction. For the others: $(-1,1)$ gives $y^Tb=+1$; $(1,1)$ gives $y^Tb=3$; $(-1,-1)$ gives $y^TA=(-2,-2)$, which is not nonnegative.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 46",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-rv-four-cycle-not-extreme",
+  "topic": "t001",
+  "type": "tf",
+  "q": "A point $x$ of a convex set $P$ is an <i>extreme point</i> if there is no $y\\ne 0$ with both $x+y\\in P$ and $x-y\\in P$. Consider the perfect-matching LP $\\{x\\ge 0:\\sum_{e\\in\\delta(v)}x_e=1\\ \\forall v\\}$ on the 4-cycle with vertices $1,2,3,4$ and edges $a=\\{1,2\\}$, $b=\\{3,4\\}$, $c=\\{2,3\\}$, $d=\\{1,4\\}$. <b>Statement:</b> the feasible point $x_a=x_b=0.3$, $x_c=x_d=0.7$ is <b>not</b> an extreme point of this LP.",
+  "answer": true,
+  "explain": "In the order $(a,b,c,d)$, $x=0.3\\cdot(1,1,0,0)+0.7\\cdot(0,0,1,1)$: a proper convex combination of the two perfect matchings $\\{a,b\\}$ and $\\{c,d\\}$. Equivalently $y=(\\varepsilon,\\varepsilon,-\\varepsilon,-\\varepsilon)$ keeps both $x+y$ and $x-y$ feasible. Only the two 0/1 points are extreme; the simplex method always returns an optimal extreme point.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 44, 55-56",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-lp-relaxation-facts",
+  "topic": "t103",
+  "type": "card",
+  "q": "What is the LP relaxation of the integer program $\\max\\{cx : x\\in P\\cap\\mathbb{Z}^n\\}$ ($P$ a polyhedron)? Give three basic facts about it.",
+  "a": "It is the LP $\\max\\{cx : x\\in P\\}$ obtained by dropping the integrality requirement.<br>(1) $\\max\\{cx: x\\in P\\}\\ge\\max\\{cx:x\\in P\\cap\\mathbb{Z}^n\\}$ — the LP optimises over a larger set, so for a maximisation problem it gives an upper bound.<br>(2) The LP can be feasible while the IP is infeasible, and the two values can differ a lot.<br>(3) The same integer program has many different LP relaxations (different polyhedra with the same integer points); the best possible one is the integer hull $P_I=\\text{conv}(P\\cap\\mathbb{Z}^n)$.",
+  "difficulty": 1,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 58",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-2d-integer-optimum",
+  "topic": "t103",
+  "type": "num",
+  "q": "Solve the integer program $\\max 3x_1+4x_2$ s.t. $2x_1+6x_2\\le 21$, $6x_1-x_2\\le 12$, $x_1+x_2\\ge\\tfrac12$, $x_1,x_2\\ge 0$ and integer. What is the optimal value?",
+  "answer": 15,
+  "explain": "$2x_1+6x_2\\le 21$ forces $x_2\\le 3$. With $x_2=3$: $x_1\\le 1.5$, so $x=(1,3)$ with value 15. With $x_2=2$: $6x_1\\le 14$, so $x_1\\le 2$ and the value is 14; smaller $x_2$ is worse. Optimum 15 at $(1,3)$, as stated in the notes. (Caution, recomputed: the notes also quote the LP optimum $(3,2.5)$ with value 19, but that point violates the printed constraint $6x_1-x_2\\le 12$; for the constraints as printed the LP optimum is $(\\tfrac{93}{38},\\tfrac{51}{19})$ with value $\\tfrac{687}{38}\\approx 18.08$. Either way the LP bound is strictly above the integer optimum.)",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 57-58",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-integer-hull",
+  "topic": "t104",
+  "type": "card",
+  "q": "Define the integer hull $P_I$ of a polyhedron $P$ and state the characterisation of $P=P_I$ in terms of objective functions.",
+  "a": "$P_I=\\text{conv}(P\\cap\\mathbb{Z}^n)$: the smallest polyhedron containing all integer points of $P$ — the 'perfect' relaxation, since optimising any linear function over it gives the IP value.<br>For a polytope $P$: $P=P_I$ $\\iff$ for <b>every</b> $c\\in\\mathbb{R}^n$, $\\max\\{cx:x\\in P\\}=\\max\\{cx:x\\in P\\cap\\mathbb{Z}^n\\}$.<br>Proof idea: a linear function over a convex hull is maximised at one of the generating points; conversely a point of $P\\setminus P_I$ can be separated from the convex set $P_I$ by a hyperplane, which yields an objective whose LP value exceeds the IP value.<br>Strategy: show $P=P_I$ (e.g. via total unimodularity); then an optimal extreme point of the LP solves the integer program.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 58-59",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-integer-hull-one-objective",
+  "topic": "t104",
+  "type": "tf",
+  "q": "Let $P$ be a polytope and $c$ a given objective vector. <b>Statement:</b> if $\\max\\{cx:x\\in P\\}=\\max\\{cx:x\\in P\\cap\\mathbb{Z}^n\\}$ for this particular $c$, then $P$ equals its integer hull $P_I$.",
+  "answer": false,
+  "explain": "Equality must hold for <i>every</i> objective $c$ to conclude $P=P_I$. For a single $c$ it can hold by accident (for instance $c=0$, or any $c$ whose LP optimum happens to be an integral vertex) while $P$ still has fractional vertices that another objective would select.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 58-59",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-triangle-matching-lp",
+  "topic": "t106",
+  "type": "num",
+  "q": "On a triangle (three vertices, three edges) consider the matching LP $\\max\\{x_{12}+x_{13}+x_{23} : x_{12}+x_{13}\\le 1,\\ x_{12}+x_{23}\\le 1,\\ x_{13}+x_{23}\\le 1,\\ x\\ge 0\\}$. What is its optimal value?",
+  "answer": "3/2",
+  "explain": "Adding the three constraints gives $2(x_{12}+x_{13}+x_{23})\\le 3$, so the value is at most $\\tfrac32$, attained by $x=(\\tfrac12,\\tfrac12,\\tfrac12)$. A maximum matching of a triangle has only one edge: the constraint matrix (the node–edge incidence matrix of the triangle) has determinant $\\pm 2$ and is not totally unimodular. The dual (fractional vertex cover) also has value $\\tfrac32$ with $y_v=\\tfrac12$, against a minimum vertex cover of size 2.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 55-56, 65-66",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-rv-fractional-extreme-point",
+  "topic": "t106",
+  "type": "short",
+  "q": "Consider the perfect-matching LP $\\{x\\ge 0 : \\sum_{e\\in\\delta(v)}x_e=1\\ \\forall v\\in V\\}$. (a) Show that for a triangle the point $x_e=\\tfrac12$ on all edges is an extreme point. (b) Explain why a fractional extreme point cannot occur when the graph is bipartite.",
+  "model": "(a) The three equations $x_{12}+x_{13}=1$, $x_{12}+x_{23}=1$, $x_{13}+x_{23}=1$ have a nonsingular coefficient matrix (determinant $-2$), so $x=(\\tfrac12,\\tfrac12,\\tfrac12)$ is the unique solution. The feasible set is this single point, which is therefore an extreme point, and it is fractional (three vertices have no perfect matching).<br>(b) Let $x$ be feasible with set of fractional edges $E_f\\ne\\emptyset$. A node incident to one fractional edge is incident to at least two (the values at a node sum to 1), so $E_f$ contains a circuit $C$, which has even length in a bipartite graph. With $\\varepsilon=\\min_{e\\in C}x_e \\gt 0$, alternately add and subtract $\\varepsilon$ along $C$ to obtain $y$, and do the opposite to obtain $z$. Both are feasible (each node of $C$ sees one $+\\varepsilon$ and one $-\\varepsilon$) and $x=\\tfrac12(y+z)$ with $y\\ne z$, so $x$ is not extreme. Hence every extreme point is integral, i.e. a perfect matching.",
+  "rubric": [
+   "Triangle: the degree equations have the unique solution $(\\tfrac12,\\tfrac12,\\tfrac12)$",
+   "A unique feasible point is an extreme point, and it is fractional",
+   "Fractional edges contain a circuit (each touched node has at least two fractional edges)",
+   "Bipartite graph: the circuit is even, so alternating $\\pm\\varepsilon$ preserves the degree equations",
+   "$x=\\tfrac12(y+z)$ with $y\\ne z$ contradicts extremality"
+  ],
+  "difficulty": 3,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 55-57",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-rv-total-unimodularity",
+  "topic": "t106",
+  "type": "card",
+  "q": "Define a totally unimodular (TU) matrix. What does total unimodularity of $A$ imply for $\\{x : Ax\\le b\\}$ with $b$ integral, and for the pair $\\max\\{cx:Ax\\le b,\\ x\\ge 0\\}$, $\\min\\{by:A^Ty\\ge c,\\ y\\ge 0\\}$ with $b,c$ integral?",
+  "a": "$A$ is TU if every square submatrix of $A$ has determinant $0$, $+1$ or $-1$ (so all entries lie in $\\{0,\\pm1\\}$; $A$ need not be square).<br>If $A$ is TU and $b$ is integral, every extreme point of $\\{x:Ax\\le b\\}$ is integral; the same holds for $\\{Ax\\le b,\\ x\\ge 0\\}$, $\\{Ax=b,\\ x\\ge 0\\}$ and $\\{Ax\\le b,\\ \\ell\\le x\\le u\\}$ with integral $\\ell,u$.<br>With $b$ and $c$ integral, both the primal and the dual have integral optimal solutions of equal value (the dual matrix is essentially $A^T$, which is TU as well).<br>Whether a $0,\\pm1$ matrix is TU can be tested in polynomial time (Seymour).",
+  "difficulty": 1,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 62-64",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-tu-integral-vertices-proof",
+  "topic": "t106",
+  "type": "short",
+  "q": "Let $A$ be a totally unimodular $m\\times n$ matrix and $b\\in\\mathbb{Z}^m$. Prove that every extreme point of $P=\\{x\\in\\mathbb{R}^n : Ax\\le b\\}$ is integral.",
+  "model": "An extreme point $x$ of $P$ is the unique solution of a subsystem $A_Ix=b_I$, where $A_I$ consists of $n$ rows of $A$ and is nonsingular. By Cramer's rule $x_i=\\det(A_I^i)/\\det(A_I)$, where $A_I^i$ is $A_I$ with column $i$ replaced by $b_I$. $A_I$ is a square submatrix of $A$ with nonzero determinant, so $\\det(A_I)=\\pm 1$ by total unimodularity. $A_I^i$ has only integer entries, so $\\det(A_I^i)\\in\\mathbb{Z}$. Hence every $x_i$ is an integer.",
+  "rubric": [
+   "Extreme point = unique solution of $n$ tight rows $A_Ix=b_I$ with $A_I$ nonsingular",
+   "Cramer's rule $x_i=\\det(A_I^i)/\\det(A_I)$",
+   "$\\det(A_I)=\\pm1$ because $A$ is TU and $A_I$ is nonsingular",
+   "The numerator is an integer since all entries are integers"
+  ],
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 61-62",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-tu-preserving-operations",
+  "topic": "t106",
+  "type": "card",
+  "q": "Which operations on a matrix $A\\in\\{-1,0,1\\}^{m\\times n}$ preserve total unimodularity, and why do bounds and sign constraints not destroy integrality?",
+  "a": "(a) multiplying a row or a column by $-1$; (b) permuting rows or columns; (c) adding or removing a row or column with at most one nonzero entry ($\\pm1$); (d) duplicating rows; (e) transposing.<br>Reasons: $\\det(B)=\\det(B^T)$; multiplying a row by $-1$ or permuting only changes the sign of determinants; Laplace expansion along a row or column with a single $\\pm1$ reduces to a smaller submatrix.<br>Consequence: if $A$ is TU, so are the stacked matrices $(A;\\,-I)$, $(A;\\,-A;\\,-I)$ and $(A;\\,-I;\\,I)$, which describe $\\{Ax\\le b,x\\ge 0\\}$, $\\{Ax=b,x\\ge 0\\}$ and $\\{Ax\\le b,\\ell\\le x\\le u\\}$.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 62-63",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-triangle-incidence-det",
+  "topic": "t106",
+  "type": "num",
+  "q": "Compute the determinant of $$M=\\begin{pmatrix}1&1&0\\\\0&1&1\\\\1&0&1\\end{pmatrix}$$ (the node–edge incidence matrix of a triangle).",
+  "answer": 2,
+  "explain": "Expanding along the first row: $1\\cdot(1\\cdot1-1\\cdot0)-1\\cdot(0\\cdot1-1\\cdot1)+0=1+1=2$. Since $2\\notin\\{0,\\pm1\\}$, $M$ is not totally unimodular — consistent with the fact that the incidence matrix of an undirected graph is TU iff the graph is bipartite (a triangle is an odd cycle).",
+  "difficulty": 1,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 62, 64-65",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-rv-which-matrix-not-tu",
+  "topic": "t106",
+  "type": "mcq",
+  "q": "Which of the following matrices is <b>not</b> guaranteed to be totally unimodular?",
+  "options": [
+   "The node–arc incidence matrix of a directed graph (one $+1$ and one $-1$ per column)",
+   "The node–edge incidence matrix of a bipartite graph",
+   "A 0/1 matrix in which the ones of every column are consecutive",
+   "The node–edge incidence matrix of an arbitrary undirected graph"
+  ],
+  "answer": 3,
+  "explain": "The incidence matrix of an undirected graph is TU if and only if the graph is bipartite; an odd cycle gives a square submatrix with determinant $\\pm 2$. Incidence matrices of digraphs are always TU (flows), bipartite incidence matrices are TU (matching), and matrices with consecutive ones in each column are TU (interval scheduling).",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 64-68",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-digraph-incidence-tu-proof",
+  "topic": "t106",
+  "type": "short",
+  "q": "Prove that the node–arc incidence matrix $A$ of a directed graph ($A_{v,e}=+1$ if arc $e$ enters $v$, $-1$ if it leaves $v$, and 0 otherwise) is totally unimodular.",
+  "model": "Suppose not, and let $B$ be a smallest square submatrix with $\\det(B)\\notin\\{0,\\pm1\\}$. Every column of $B$ has at most two nonzero entries (at most one $+1$ and one $-1$). A zero column would give $\\det(B)=0$. If some column has exactly one nonzero entry $\\pm1$, Laplace expansion along that column gives $\\det(B)=\\pm\\det(B')$ for a smaller submatrix $B'$, and $\\det(B')\\in\\{0,\\pm1\\}$ by minimality — contradiction. Otherwise every column of $B$ contains exactly one $+1$ and one $-1$; then the rows of $B$ sum to the zero vector, so they are linearly dependent and $\\det(B)=0$ — contradiction. Hence all square subdeterminants lie in $\\{0,\\pm1\\}$.",
+  "rubric": [
+   "Takes a minimal square submatrix with determinant outside $\\{0,\\pm1\\}$",
+   "A column with a single nonzero entry: Laplace expansion reduces to a smaller submatrix",
+   "Otherwise every column has exactly one $+1$ and one $-1$",
+   "Then the rows sum to zero, so the determinant is 0 (contradiction)"
+  ],
+  "difficulty": 3,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 67",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-matching-lp-dual-konig",
+  "topic": "t106",
+  "type": "short",
+  "q": "Let $A$ be the node–edge incidence matrix of a graph $G=(V,E)$. Derive the LP dual of the maximum-cardinality matching LP $\\max\\{\\mathbf{1}^Tx : Ax\\le\\mathbf{1},\\ x\\ge 0\\}$ and interpret it when $G$ is bipartite.",
+  "model": "Primal: one variable $x_e$ per edge and one constraint $\\sum_{e\\ni v}x_e\\le 1$ per node. Dual: one variable $y_v\\ge 0$ per node and one constraint per edge: $$\\min\\Big\\{\\sum_{v\\in V}y_v : y_u+y_v\\ge 1\\ \\ \\forall\\{u,v\\}\\in E,\\ y\\ge 0\\Big\\}.$$ (Formally, write the primal as $\\max\\{\\mathbf 1^Tx:Ax\\le\\mathbf 1,\\ -x\\le 0\\}$; its dual is $\\min\\{y^T\\mathbf 1 : y^TA-z^T=\\mathbf 1^T,\\ y,z\\ge 0\\}$, and eliminating $z$ gives $y^TA\\ge\\mathbf 1^T$.)<br>If $G$ is bipartite, $A$ is totally unimodular, so both LPs have integral optimal solutions: the primal one is a maximum matching; the dual one is a 0/1 vector (a value above 1 could be lowered to 1), i.e. a minimum vertex cover. Strong duality then gives König's theorem: maximum matching = minimum vertex cover.",
+  "rubric": [
+   "Dual variables $y_v\\ge 0$, one per node",
+   "Dual constraints $y_u+y_v\\ge 1$ for every edge, objective $\\min\\sum_v y_v$",
+   "Bipartite graph: $A$ is TU, so primal and dual have integral optimal solutions",
+   "An integral dual optimum is a 0/1 vector, i.e. a vertex cover",
+   "Strong duality gives König's theorem"
+  ],
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 65-66",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-consecutive-ones",
+  "topic": "t106",
+  "type": "card",
+  "q": "What is the consecutive-ones property, why does it imply total unimodularity, and which scheduling problem does it solve?",
+  "a": "A 0/1 matrix has the consecutive-ones property if in every column the ones occupy consecutive rows. Such a matrix is TU: in any square submatrix, subtract row $i-1$ from row $i$, for $i$ from the last row upwards (the determinant does not change); every column then has at most one $+1$ and one $-1$, the structure of a digraph incidence matrix, whose determinant is $0$ or $\\pm1$.<br><b>Interval scheduling:</b> choose a maximum-profit set of pairwise disjoint intervals. With one constraint per endpoint $t_j$, $\\sum_{i:\\,t_j\\in I_i}x_i\\le 1$, the constraint matrix has consecutive ones in each column, so the LP relaxation $\\max\\{cx:Ax\\le\\mathbf 1,\\ 0\\le x\\le\\mathbf 1\\}$ has integral optimal vertices and the problem is solvable in polynomial time.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 68",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-interval-scheduling-optimum",
+  "topic": "t106",
+  "type": "num",
+  "q": "Interval scheduling with time points $t_1 \\lt t_2 \\lt \\dots \\lt t_6$ and intervals $I_1=\\{t_1,\\dots,t_4\\}$, $I_2=\\{t_5,t_6\\}$, $I_3=\\{t_1,t_2\\}$, $I_4=\\{t_3,t_4\\}$, $I_5=\\{t_3,\\dots,t_6\\}$, $I_6=\\{t_2,t_3,t_4\\}$, all with profit 1. The model is $\\max\\sum_i x_i$ s.t. $\\sum_{i:\\,t_j\\in I_i}x_i\\le 1$ for every time point $t_j$, $x\\in\\{0,1\\}^6$. What is the optimal value?",
+  "answer": 3,
+  "explain": "$I_3$, $I_4$, $I_2$ are pairwise disjoint (they cover $t_1t_2$, $t_3t_4$, $t_5t_6$): value 3. Upper bound: add the constraints of $t_2$ ($x_1+x_3+x_6\\le1$), $t_3$ ($x_1+x_4+x_5+x_6\\le1$) and $t_5$ ($x_2+x_5\\le1$); the left-hand side dominates $\\sum_i x_i$, so $\\sum_ix_i\\le 3$. Because the constraint matrix has consecutive ones in every column it is TU, so the LP relaxation has the same value 3.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 68",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-rv-branch-and-bound-rules",
+  "topic": "t102",
+  "type": "card",
+  "q": "For LP-based branch and bound on $\\max\\{cx : Ax\\le b,\\ x\\in\\mathbb{Z}^n\\}$, state the branching step and the three ways a subproblem $P'$ is pruned.",
+  "a": "Solve the LP relaxation over $P'$ to get $\\tilde x$; let $x^*$ be the incumbent (value $-\\infty$ if there is none).<br><b>Prune by infeasibility:</b> $P'=\\emptyset$.<br><b>Prune by bound:</b> $c\\tilde x\\le cx^*$ — the LP value is an upper bound for everything in $P'$, so $P'$ cannot beat the incumbent.<br><b>Prune by optimality:</b> $\\tilde x$ is integral and better than $x^*$: it is the best integer point of $P'$; set $x^*:=\\tilde x$.<br><b>Branch:</b> otherwise choose $i$ with $\\tilde x_i\\notin\\mathbb{Z}$ and replace $P'$ by $P'\\cap\\{x_i\\le\\lfloor\\tilde x_i\\rfloor\\}$ and $P'\\cap\\{x_i\\ge\\lceil\\tilde x_i\\rceil\\}$; no integer point is lost.",
+  "difficulty": 1,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 69-70",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-bb-root-bound",
+  "topic": "t102",
+  "type": "num",
+  "q": "Consider the integer program $\\max\\ -x_1+2x_2$ s.t. $-4x_1+6x_2\\le 9$, $x_1+x_2\\le 4$, $-3x_1+2x_2\\le 3$, $x_2\\ge 0$, $x\\in\\mathbb{Z}^2$. What upper bound on its optimal value does the LP relaxation (the root node of branch and bound) give?",
+  "answer": 3.5,
+  "tol": 0.001,
+  "explain": "The LP optimum is the intersection of $-4x_1+6x_2=9$ and $x_1+x_2=4$: $x=(1.5,2.5)$ (it satisfies $-3x_1+2x_2=0.5\\le 3$), with value $-1.5+5=3.5$. Since $x_2=2.5$ is fractional, the notes branch into $x_2\\le 2$ and $x_2\\ge 3$.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 71",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-bb-child-lp",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "Branch and bound for $\\max\\ -x_1+2x_2$ s.t. $-4x_1+6x_2\\le 9$, $x_1+x_2\\le 4$, $-3x_1+2x_2\\le 3$, $x_2\\ge 0$, $x$ integer. The root LP optimum is $(1.5,2.5)$ and we branch on $x_2$. What is the LP optimum of the child with the extra constraint $x_2\\le 2$?",
+  "options": [
+   "$(1,2)$ with value 3",
+   "$(0.75,2)$ with value 3.25",
+   "$(2,2)$ with value 2",
+   "$(0.5,2)$ with value 3.5"
+  ],
+  "answer": 1,
+  "explain": "With $x_2=2$ the objective $-x_1+4$ wants $x_1$ as small as possible; $-4x_1+12\\le 9$ requires $x_1\\ge 0.75$ (and $-3x_1+4\\le 3$ only requires $x_1\\ge\\tfrac13$). So $\\tilde x=(0.75,2)$ with value 3.25. $(0.5,2)$ violates $-4x_1+6x_2\\le 9$; $(1,2)$ and $(2,2)$ are feasible but not LP-optimal. The next branching is $x_1\\le 0$ / $x_1\\ge 1$.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 71",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-bb-prune-by-bound",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "In a branch-and-bound run for a <b>maximisation</b> integer program the incumbent is $x^*=(1,2)$ with objective value 3. The next subproblem has LP optimum $\\tilde x=(0,1.5)$ with objective value 3. What happens to this node?",
+  "options": [
+   "It is pruned by bound, because its LP value does not exceed the incumbent value",
+   "It is pruned by optimality and $\\tilde x$ becomes the new incumbent",
+   "It must be branched into $x_2\\le 1$ and $x_2\\ge 2$ because $\\tilde x$ is fractional",
+   "It is pruned by infeasibility"
+  ],
+  "answer": 0,
+  "explain": "The LP value 3 is an upper bound on every integer point of this subproblem, and the incumbent already achieves 3, so nothing in the node can be strictly better: prune by bound ($c\\tilde x\\le cx^*$), even though $\\tilde x$ is fractional. Pruning by optimality would require an integral $\\tilde x$.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 70-72",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-bb-round-integer-objective",
+  "topic": "t102",
+  "type": "tf",
+  "q": "For $\\max\\ -x_1+2x_2$ over the integer points of a polyhedron, the LP relaxation has optimal value 3.5. <b>Statement:</b> one can conclude immediately that the integer optimum is at most 3.",
+  "answer": true,
+  "explain": "The objective coefficients are integers, so every integer solution has an integer objective value, and an integer that is at most 3.5 is at most 3. Rounding the LP bound down is valid whenever the objective is integer-valued on all integer solutions; here it lets branch and bound stop as soon as a solution of value 3 (such as $(1,2)$) is found.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 71-72",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-rv-bb-strategies",
+  "topic": "t102",
+  "type": "card",
+  "q": "Branch and bound leaves two choices open: the branching variable and the next node to process. Describe the usual rules mentioned in the notes.",
+  "a": "<b>Branching variable:</b> typically the most fractional one, i.e. the $i$ maximising $\\min\\{\\tilde x_i-\\lfloor\\tilde x_i\\rfloor,\\ \\lceil\\tilde x_i\\rceil-\\tilde x_i\\}$; for $\\tilde x=(0.99,0.5)$ one branches on $x_2$.<br><b>Node selection:</b> <i>depth-first</i> (always take the most recently created subproblem; hope: find a feasible integer solution quickly and use it for pruning) or <i>best bound</i> (in a maximisation problem take the open subproblem with the largest LP value; hope: a good integer solution lies there).<br>Neither has a theoretical guarantee, and pathological instances exist for every strategy.",
+  "difficulty": 1,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 72",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-bb-pathological-values",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "Consider $\\max\\{x_0 : \\tfrac12x_0+\\sum_{i=1}^{6}x_i=3,\\ x\\in\\{0,1\\}^{7}\\}$. What are the optimal values of the integer program and of its LP relaxation ($0\\le x\\le 1$)?",
+  "options": [
+   "IP 0, LP 1",
+   "IP 1, LP 1",
+   "IP 0, LP 0",
+   "IP 0, LP $\\tfrac12$"
+  ],
+  "answer": 0,
+  "explain": "IP: $x_0=1$ would need $\\sum_{i\\ge1}x_i=2.5$, impossible for integers, so $x_0=0$ (take three of the $x_i$ equal to 1): value 0. LP: $x_0=1$ and $x_i=\\tfrac{2.5}{6}$ for all $i\\ge 1$ is feasible: value 1. LP-based branch and bound 'does not realise that a sum of integers is an integer' and needs exponentially many nodes on this family of instances.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 72-73",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-bb-exponential-tree",
+  "topic": "t102",
+  "type": "short",
+  "q": "For even $n\\ge 4$ consider $\\max\\{x_0 : \\tfrac12x_0+\\sum_{i=1}^{n}x_i=\\tfrac n2,\\ x\\in\\{0,1\\}^{n+1}\\}$. Explain why LP-based branch and bound that branches on the variables $x_1,\\dots,x_n$ produces a search tree with at least $2^{n/3}$ leaves.",
+  "model": "Every integer solution has $x_0=0$ (otherwise $\\sum_ix_i=\\tfrac n2-\\tfrac12$ is not an integer), so the IP optimum is 0. Consider a node in which the variables in $I_0$ are fixed to 0 and those in $I_1$ to 1, with $|I_0|+|I_1|\\le n/3$. Set $\\tilde x_0=1$, keep the fixed values, and give all free variables the common value $\\lambda$ solving $\\tfrac12+|I_1|+(n-|I_0|-|I_1|)\\lambda=\\tfrac n2$. The amount to distribute, $\\tfrac n2-\\tfrac12-|I_1|$, is nonnegative (as $|I_1|\\le n/3$) and smaller than $\\tfrac n2$, while at least $\\tfrac23n$ variables are free, so $0\\le\\lambda\\le 1$. Hence the node's LP is feasible with value $1 \\gt 0$: it is neither infeasible nor prunable by bound, and no integer point has value 1, so it is not closed by integrality either. Thus every leaf lies at depth greater than $n/3$, and a binary tree whose leaves all have depth at least $n/3$ has at least $2^{n/3}$ leaves.",
+  "rubric": [
+   "IP optimum is 0 because $x_0=1$ makes the sum of the other variables non-integral",
+   "After fixing at most $n/3$ variables the LP can still set $x_0=1$ by spreading the remainder over the free variables",
+   "So such a node has LP value 1, above the incumbent 0, and cannot be pruned",
+   "All leaves at depth at least $n/3$ implies at least $2^{n/3}$ leaves"
+  ],
+  "difficulty": 3,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 72-73",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-knapsack-profit-dp",
+  "topic": "t105e",
+  "type": "card",
+  "q": "Describe the profit-indexed dynamic program for the 0-1 knapsack problem (weights $w_i$, integral profits $c_i$, capacity $W$): table, recursion, answer and running time.",
+  "a": "Table: $T(j,C')$ = smallest total weight of a subset of the items $1..j$ with profit exactly $C'$ ($\\infty$ if there is none), for $j=0..n$ and $C'=0..C$ with $C=\\sum_ic_i$.<br>Initialisation: $T(0,0)=0$ and $T(0,C')=\\infty$ for $C'\\ne 0$.<br>Recursion: $T(j,C')=\\min\\{T(j-1,C'),\\ T(j-1,C'-c_j)+w_j\\}$ (item $j$ not used / used).<br>Answer: the largest $C^*$ with $T(n,C^*)\\le W$; the item set is recovered by backtracking which case attained each minimum.<br>Running time $O(n\\cdot C)$, which is pseudo-polynomial.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 82-83",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-knapsack-dp-entry",
+  "topic": "t105e",
+  "type": "num",
+  "q": "Knapsack with weights $w=(6,7,4,1)$ and profits $c=(2,3,2,1)$. Let $T(j,C')$ be the minimum weight of a subset of the items $1..j$ with profit exactly $C'$ ($\\infty$ if none), computed by $T(j,C')=\\min\\{T(j-1,C'),\\ T(j-1,C'-c_j)+w_j\\}$. What is $T(3,5)$?",
+  "answer": 11,
+  "explain": "$T(3,5)=\\min\\{T(2,5),\\ T(2,3)+w_3\\}$ with $T(2,5)=13$ (items 1 and 2) and $T(2,3)=7$ (item 2), so $T(3,5)=\\min\\{13,\\ 7+4\\}=11$ (items 2 and 3).",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 83",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-rv-knapsack-dp-readout",
+  "topic": "t105e",
+  "type": "mcq",
+  "q": "Knapsack with weights $w=(6,7,4,1)$, profits $c=(2,3,2,1)$ and capacity $W=9$. The last column of the profit-indexed DP table (minimum weight needed to reach profit exactly $C'$ using all four items) is, for $C'=0,1,\\dots,8$:<br>$0,\\ 1,\\ 4,\\ 5,\\ 8,\\ 11,\\ 12,\\ 17,\\ 18$.<br>What are the optimal profit and an optimal item set?",
+  "options": [
+   "Profit 5 with items $\\{2,3\\}$",
+   "Profit 4 with items $\\{1,3\\}$",
+   "Profit 4 with items $\\{2,4\\}$",
+   "Profit 8 with all items"
+  ],
+  "answer": 2,
+  "explain": "The largest $C'$ whose minimum weight is at most 9 is $C'=4$ (weight 8); $C'=5$ already needs weight 11. Backtracking: $T(4,4)=T(3,3)+w_4=7+1$ and $T(3,3)=T(2,3)=T(1,0)+w_2$, so the set is $\\{2,4\\}$ (weight $7+1=8$, profit $3+1=4$). $\\{1,3\\}$ has profit 4 but weight 10; $\\{2,3\\}$ has weight 11.",
+  "difficulty": 2,
+  "source": {
+   "label": "Rothvoss, Discrete Optimization lecture notes (Spring 2017), p. 81-83",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-ibm-small-ip-optimum",
+  "topic": "t102",
+  "type": "num",
+  "q": "Solve the integer program $\\min 5x+8y$ s.t. $0.9x+y\\ge 1.5$, $x+3.1y\\ge 2.4$, $0\\le x\\le 3.5$, $0\\le y\\le 3.3$, $x,y$ integer. What is the optimal value?",
+  "answer": 13,
+  "explain": "$y=0$ needs $x\\ge 2.4$, so $x=3$: cost 15. $y=1$ needs $0.9x\\ge 0.5$, so $x\\ge 1$: $(1,1)$ costs 13. $y=2$: $(0,2)$ costs 16, and larger $y$ costs more. Optimum 13 at $(1,1)$. The LP relaxation only gives about 9.23, a gap of roughly 29%.",
+  "difficulty": 2,
+  "source": {
+   "label": "Dash, Discrete Optimization at IBM's Mathematical Sciences Department (slides, 2015), p. 22, 35-38",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-ibm-small-ip-lp-bound",
+  "topic": "t103",
+  "type": "num",
+  "q": "For $\\min 5x+8y$ s.t. $0.9x+y\\ge 1.5$, $x+3.1y\\ge 2.4$, $0\\le x\\le 3.5$, $0\\le y\\le 3.3$ (integrality dropped), compute the optimal value of this LP relaxation, to two decimals.",
+  "answer": 9.2346,
+  "tol": 0.01,
+  "explain": "The LP optimum is the vertex where both constraints are tight: substituting $y=1.5-0.9x$ into $x+3.1y=2.4$ gives $1.79x=2.25$, so $x\\approx 1.257$, $y\\approx 0.369$ and $5x+8y=\\tfrac{1653}{179}\\approx 9.23$. The neighbouring vertices $(0,1.5)$ and $(2.4,0)$ both cost 12. The value is a lower bound on the integer optimum 13.",
+  "difficulty": 2,
+  "source": {
+   "label": "Dash, Discrete Optimization at IBM's Mathematical Sciences Department (slides, 2015), p. 36",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-ibm-small-ip-left-child",
+  "topic": "t102",
+  "type": "num",
+  "q": "Branch and bound for $\\min 5x+8y$ s.t. $0.9x+y\\ge 1.5$, $x+3.1y\\ge 2.4$, $0\\le x\\le 3.5$, $0\\le y\\le 3.3$, $x,y$ integer. The root LP optimum has $x\\approx 1.257$, so we branch on $x$. What is the LP bound of the child with $x\\le 1$?",
+  "answer": 9.8,
+  "tol": 0.005,
+  "explain": "On the line $0.9x+y=1.5$ the cost is $5x+8(1.5-0.9x)=12-2.2x$, decreasing in $x$, so take $x=1$, $y=0.6$ (feasible: $1+3.1\\cdot 0.6=2.86\\ge 2.4$): bound 9.8. The other child ($x\\ge 2$) has LP optimum $(2,\\ 0.4/3.1)$ with bound about 11.03. Both are above the root bound 9.23, as they must be for a minimisation problem.",
+  "difficulty": 2,
+  "source": {
+   "label": "Dash, Discrete Optimization at IBM's Mathematical Sciences Department (slides, 2015), p. 37-38",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-ibm-chvatal-gomory-first-cut",
+  "topic": "t204",
+  "type": "short",
+  "q": "All integer solutions of $0.9x+y\\ge 1.5$, $x+3.1y\\ge 2.4$, $x,y\\ge 0$ must be kept. Derive the Gomory–Chvátal cut $x+y\\ge 2$ and show that it cuts off the LP optimum $(x,y)\\approx(1.257,\\ 0.369)$ of $\\min 5x+8y$.",
+  "model": "Add $0.1$ times the valid inequality $x\\ge 0$ to $0.9x+y\\ge 1.5$: this gives $x+y\\ge 1.5$, valid for every feasible point. For integer $x,y$ the left-hand side is an integer, so it is at least $\\lceil 1.5\\rceil=2$: the inequality $x+y\\ge 2$ is valid for all integer solutions. At the LP optimum $x+y\\approx 1.626$, which is smaller than 2, so this fractional point violates the cut and is cut off.",
+  "rubric": [
+   "Nonnegative combination: $(0.9x+y\\ge 1.5)+0.1\\cdot(x\\ge 0)$ gives $x+y\\ge 1.5$",
+   "The left-hand side has integer coefficients, hence is integer for integer $x,y$",
+   "Right-hand side rounded up: $x+y\\ge 2$",
+   "Checks that $1.257+0.369\\approx 1.63$ is below 2, so the LP optimum is cut off"
+  ],
+  "difficulty": 2,
+  "source": {
+   "label": "Dash, Discrete Optimization at IBM's Mathematical Sciences Department (slides, 2015), p. 41",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-ibm-chvatal-gomory-second-cut",
+  "topic": "t204",
+  "type": "mcq",
+  "q": "For integer $x,y\\ge 0$ the inequalities $x+y\\ge 2$ and $x+3.1y\\ge 2.4$ are valid. Taking $0.6$ times the first plus $0.4$ times the second gives $x+1.84y\\ge 2.16$. Which Gomory–Chvátal cut follows from it?",
+  "options": [
+   "$x+y\\ge 3$",
+   "$x+2y\\ge 2$",
+   "$x+1.84y\\ge 3$",
+   "$x+2y\\ge 3$"
+  ],
+  "answer": 3,
+  "explain": "First make the coefficients integral without losing validity: since $y\\ge 0$, $x+2y\\ge x+1.84y\\ge 2.16$ (in a $\\ge$-inequality coefficients are rounded <i>up</i>). Now the left-hand side is an integer, so the right-hand side is rounded up: $x+2y\\ge 3$. The inequalities $x+y\\ge 3$ and $x+1.84y\\ge 3$ are invalid: they cut off the feasible integer point $(1,1)$. $x+2y\\ge 2$ is valid but forgets to round the right-hand side.",
+  "difficulty": 2,
+  "source": {
+   "label": "Dash, Discrete Optimization at IBM's Mathematical Sciences Department (slides, 2015), p. 41",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-ibm-lp-after-two-cuts",
+  "topic": "t204",
+  "type": "num",
+  "q": "Add the cuts $x+y\\ge 2$ and $x+2y\\ge 3$ to the LP relaxation $\\min 5x+8y$ s.t. $0.9x+y\\ge 1.5$, $x+3.1y\\ge 2.4$, $0\\le x\\le 3.5$, $0\\le y\\le 3.3$. What is the optimal value of the strengthened LP?",
+  "answer": 13,
+  "explain": "The two cuts intersect at $(1,1)$, cost 13; the other vertices on the cuts are $(0,2)$ (cost 16) and $(3,0)$ (cost 15). The LP optimum $(1,1)$ is integral, so it solves the integer program: the two cuts close the whole gap between the original LP bound 9.23 and the integer optimum 13 without any branching.",
+  "difficulty": 2,
+  "source": {
+   "label": "Dash, Discrete Optimization at IBM's Mathematical Sciences Department (slides, 2015), p. 40-41",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-ibm-lp-after-one-cut",
+  "topic": "t204",
+  "type": "num",
+  "q": "Add only the cut $x+y\\ge 2$ to the LP relaxation $\\min 5x+8y$ s.t. $0.9x+y\\ge 1.5$, $x+3.1y\\ge 2.4$, $0\\le x\\le 3.5$, $0\\le y\\le 3.3$. What is the optimal value of the strengthened LP?",
+  "answer": "74/7",
+  "explain": "The cut makes $0.9x+y\\ge 1.5$ redundant (for $x,y\\ge 0$, $x+y\\ge 2$ implies $0.9x+y\\ge 1.8$). The optimum is where $x+y=2$ meets $x+3.1y=2.4$: $2.1y=0.4$, so $y=\\tfrac{4}{21}$, $x=\\tfrac{38}{21}$ and the cost is $\\tfrac{190+32}{21}=\\tfrac{74}{7}\\approx 10.57$. The bound rises from 9.23 to 10.57 but the solution is still fractional; the second cut $x+2y\\ge 3$ is needed to reach 13.",
+  "difficulty": 2,
+  "source": {
+   "label": "Dash, Discrete Optimization at IBM's Mathematical Sciences Department (slides, 2015), p. 40-41",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-ibm-cutting-plane-recipe",
+  "topic": "t204",
+  "type": "card",
+  "q": "What is a cutting plane for an integer program, and what is the Gomory–Chvátal recipe for producing one? What is known about solving integer programs with such cuts alone?",
+  "a": "A cutting plane is an inequality satisfied by all <i>integer</i> solutions of a system of linear inequalities but possibly violated by fractional solutions of its LP relaxation.<br><b>Gomory–Chvátal recipe:</b> (1) take a nonnegative combination of valid inequalities; (2) if necessary weaken it, using the bounds on the variables, so that all left-hand coefficients are integers; (3) the left-hand side is then an integer for every integer solution, so round the right-hand side (up for $\\ge$, down for $\\le$). Simplest case: $x\\le 3.5$ gives $x\\le 3$.<br>Every integer program can be solved by Gomory–Chvátal cuts alone (Gomory 1960), but this may take exponentially long in the worst case; solvers therefore combine cuts with branching.",
+  "difficulty": 1,
+  "source": {
+   "label": "Dash, Discrete Optimization at IBM's Mathematical Sciences Department (slides, 2015), p. 40-41",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-ibm-cplex-gap",
+  "topic": "t501",
+  "type": "num",
+  "q": "A CPLEX node log for a minimisation MIP shows Best Integer = 27080 and Best Bound = 2748.3452. Which relative gap, in percent to two decimals, does the log report?",
+  "answer": 89.85,
+  "tol": 0.01,
+  "unit": "%",
+  "explain": "Gap = (Best Integer − Best Bound) / Best Integer $=(27080-2748.3452)/27080=0.8985$, i.e. 89.85%. Best Integer is the value of the incumbent (an upper bound when minimising) and Best Bound the smallest LP bound over all open nodes (a lower bound).",
+  "difficulty": 1,
+  "source": {
+   "label": "Dash, Discrete Optimization at IBM's Mathematical Sciences Department (slides, 2015), p. 39",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-ibm-cplex-log-columns",
+  "topic": "t501",
+  "type": "card",
+  "q": "In a CPLEX branch-and-cut node log (minimisation), what do the columns <i>Objective</i>, <i>IInf</i>, <i>Best Integer</i>, <i>Cuts/Best Bound</i> and <i>Gap</i> mean, and what do a leading <code>*</code>, a <code>+</code> after the node number and the word <code>cutoff</code> indicate?",
+  "a": "<b>Objective</b>: LP relaxation value at the node. <b>IInf</b>: number of integer variables that take fractional values in the node LP (integer infeasibilities). <b>Best Integer</b>: value of the incumbent, i.e. the best feasible solution so far (upper bound when minimising). <b>Cuts/Best Bound</b>: the best remaining LP bound over all open nodes (lower bound when minimising); during the root cut loop it shows which cuts were just added. <b>Gap</b>: (Best Integer − Best Bound)/Best Integer.<br><code>*</code>: a new incumbent was found on this line; <code>+</code>: the incumbent was produced by a heuristic rather than by an integral node LP; <code>cutoff</code>: the node was pruned because its LP value is no better than the incumbent.",
+  "difficulty": 2,
+  "source": {
+   "label": "Dash, Discrete Optimization at IBM's Mathematical Sciences Department (slides, 2015), p. 39, 42",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-ibm-why-cuts-help",
+  "topic": "t202",
+  "type": "mcq",
+  "q": "CPLEX solves the same fixed-charge instance (<code>pp08a</code>, 64 binary variables) twice; the root LP value is 2748.35 in both runs.<br><b>Without cuts:</b> after 846,366 nodes and 143 s the best bound is 5471.68 and the incumbent 7480 (gap 26.85%).<br><b>With cuts:</b> the root cut rounds raise the bound to 7189.95 (gap 4.64% with incumbent 7540) and the whole run takes 0.95 s.<br>What is the main reason for the difference?",
+  "options": [
+   "The cuts remove integer-feasible solutions, so fewer solutions remain to be enumerated",
+   "The cuts tighten the LP relaxation, so the lower bound is close to the optimum before branching and most nodes are pruned by bound",
+   "The cuts turn the problem into a pure LP whose basic solutions are always integral",
+   "With cuts the solver no longer needs an incumbent to prune nodes"
+  ],
+  "answer": 1,
+  "explain": "Cutting planes are valid for all integer solutions (they never remove one) but cut off fractional LP solutions. Here flow cuts, flow-path cuts and Gomory fractional cuts lift the root bound from 2748 to about 7190, so less than 5% gap remains and the branch-and-cut tree stays tiny. Pure branch and bound must raise the bound by enumeration and still has a 27% gap after 846,366 nodes.",
+  "difficulty": 2,
+  "source": {
+   "label": "Dash, Discrete Optimization at IBM's Mathematical Sciences Department (slides, 2015), p. 39, 42",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-ibm-quadratic-relaxation-value",
+  "topic": "t104",
+  "type": "num",
+  "q": "The sets $\\{x\\in\\{0,1\\}^2 : x_1+x_2\\le 1\\}$ and $\\{x\\in\\{0,1\\}^2 : x_1^2+x_2^2\\le 1\\}$ contain the same three points. Relax $x\\in\\{0,1\\}^2$ to $x\\in[0,1]^2$ and maximise $2x_1+x_2$. What is the optimal value over the <b>nonlinear</b> relaxation $\\{x\\in[0,1]^2 : x_1^2+x_2^2\\le 1\\}$, to three decimals?",
+  "answer": 2.236,
+  "tol": 0.002,
+  "explain": "On the quarter disc the maximum of $2x_1+x_2$ is attained on the arc where the gradient $(2,1)$ is normal to the circle: $x=(2,1)/\\sqrt5\\approx(0.894,0.447)$, value $\\sqrt5\\approx 2.236$. The linear relaxation (triangle with vertices $(0,0),(1,0),(0,1)$) gives 2 at the integral vertex $(1,0)$, which is the integer optimum. The triangle is strictly contained in the quarter disc: two formulations of the same integer set can have relaxations of very different strength, and here the linear one is the convex hull.",
+  "difficulty": 2,
+  "source": {
+   "label": "Dash, Discrete Optimization at IBM's Mathematical Sciences Department (slides, 2015), p. 28-29",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-ibm-cutting-stock-formulations",
+  "topic": "t403",
+  "type": "card",
+  "q": "Give two integer programming formulations of the cutting stock problem (item lengths $l_i$, demands $d_i$, stock length $L$): the assignment formulation and the Gilmore–Gomory pattern formulation.",
+  "a": "<b>Assignment formulation</b> ($m$ available stock pieces): $x_{ij}$ = number of copies of item $i$ cut from piece $j$; $y_j=1$ if piece $j$ is used. $\\min\\sum_j y_j$ s.t. $\\sum_i l_ix_{ij}\\le L\\,y_j$ for all $j$; $\\sum_j x_{ij}\\ge d_i$ for all $i$; $x_{ij}\\in\\{0,\\dots,d_i\\}$, $y_j\\in\\{0,1\\}$.<br><b>Pattern formulation (Gilmore–Gomory 1961):</b> a cutting pattern $k$ is a vector $(a_{1k},\\dots,a_{nk})$ of item multiplicities that fits into one stock piece; $x_k$ = number of pieces cut according to pattern $k$. $\\min\\sum_k x_k$ s.t. $\\sum_k a_{ik}x_k\\ge d_i$ for all $i$; $x_k\\ge 0$ and integer.<br>The second model has one column per feasible pattern — far too many to list — so the columns are generated when needed (column generation).",
+  "explain": "The slide prints the capacity constraint of the first model with right-hand side $L$; the factor $y_j$ is added here because without it nothing links $x$ and $y$.",
+  "difficulty": 2,
+  "source": {
+   "label": "Dash, Discrete Optimization at IBM's Mathematical Sciences Department (slides, 2015), p. 30-31, 47",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-ibm-cutting-stock-linking",
+  "topic": "t101",
+  "type": "short",
+  "q": "In the assignment formulation of cutting stock, $x_{ij}$ is the number of copies of item $i$ (length $l_i$, demand $d_i$) cut from stock piece $j$ (length $L$) and $y_j\\in\\{0,1\\}$ indicates that piece $j$ is used. The objective is $\\min\\sum_j y_j$ and the demands are covered by $\\sum_j x_{ij}\\ge d_i$. Suppose the capacity constraint is written $\\sum_i l_i x_{ij}\\le L$ for all $j$. What is wrong with this model, and how is it repaired?",
+  "model": "Nothing links $x$ and $y$: the $x$-variables can cover all demands while every $y_j=0$, so the model reports the optimal value 0 — it does not count the pieces that are actually cut. Repair: write the capacity as $\\sum_i l_i x_{ij}\\le L\\,y_j$ for all $j$. Then $y_j=0$ forces $x_{ij}=0$ for all $i$ (piece $j$ is unused), and $y_j=1$ gives the true capacity $L$. This is a variable-upper-bound (big-M type) linking constraint with the natural constant $M=L$.",
+  "rubric": [
+   "Observes that $y=0$ is feasible together with any feasible $x$, so the objective value is 0",
+   "Capacity must read $\\sum_i l_ix_{ij}\\le L\\,y_j$",
+   "$y_j=0$ forces all $x_{ij}=0$, while $y_j=1$ restores the capacity $L$"
+  ],
+  "difficulty": 2,
+  "source": {
+   "label": "Dash, Discrete Optimization at IBM's Mathematical Sciences Department (slides, 2015), p. 31",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-ibm-flow-rate-binary-model",
+  "topic": "t101",
+  "type": "short",
+  "q": "A pipeline operator must choose for each of $k$ batches one of $n$ possible flow rates. Pumping batch $b$ at rate $r$ costs $c(b,r)$ and takes time $t(b,r)$; the total time must not exceed a deadline $d$. Formulate the minimisation of the total cost as a 0-1 integer linear program.",
+  "model": "Variables $z_{br}\\in\\{0,1\\}$ with $z_{br}=1$ iff batch $b$ is pumped at rate $r$ ($b=1..k$, $r=1..n$). $$\\min\\sum_{b=1}^{k}\\sum_{r=1}^{n}c(b,r)\\,z_{br}\\quad\\text{s.t.}\\quad\\sum_{r=1}^{n}z_{br}=1\\ \\ (b=1..k),\\qquad\\sum_{b=1}^{k}\\sum_{r=1}^{n}t(b,r)\\,z_{br}\\le d,\\qquad z_{br}\\in\\{0,1\\}.$$ The assignment constraints replace the integer choice $x_b\\in\\{1,\\dots,n\\}$ by $n$ binaries (exactly one rate per batch); costs and times, which are arbitrary functions of the chosen rate, become linear in $z$. The structure is a multiple-choice knapsack: one option per batch under a single budget constraint.",
+  "rubric": [
+   "One binary variable per (batch, rate) pair",
+   "Exactly one rate per batch: $\\sum_r z_{br}=1$",
+   "Deadline constraint $\\sum_b\\sum_r t(b,r)z_{br}\\le d$",
+   "Linear objective $\\sum_b\\sum_r c(b,r)z_{br}$"
+  ],
+  "difficulty": 2,
+  "source": {
+   "label": "Dash, Discrete Optimization at IBM's Mathematical Sciences Department (slides, 2015), p. 54",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-mn-most-fractional-variable",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "In branch and bound for binary variables, the rule 'branch on the variable with the largest fractional part', i.e. $\\arg\\min_i|\\hat x_i-0.5|$, is applied to the relaxed solution $\\hat x=[1.0,\\ 0.4,\\ 0.9,\\ 0.0]$. Which variable is selected?",
+  "options": [
+   "$x_1$",
+   "$x_2$",
+   "$x_3$",
+   "$x_4$"
+  ],
+  "answer": 1,
+  "explain": "$|\\hat x_i-0.5|=0.5,\\ 0.1,\\ 0.4,\\ 0.5$, so the minimum is at $x_2=0.4$. $x_1$ and $x_4$ are already integral and are never branched on; $x_3=0.9$ is fractional but closer to an integer.",
+  "difficulty": 1,
+  "source": {
+   "label": "Martins & Ning, Engineering Design Optimization, ch. 8 Discrete Optimization (web print-out), p. 6",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-mn-binary-bb-conclusion",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "Binary program: $\\min -2.5x_1-1.1x_2-0.9x_3-1.5x_4$ s.t. $4.3x_1+3.8x_2+1.6x_3+2.1x_4\\le 9.2$, $4x_1+2x_2+1.9x_3+3x_4\\le 9$, $x\\in\\{0,1\\}^4$. Breadth-first branch and bound has solved these LP relaxations:<br>root: $x=[1,\\,0.5274,\\,0.4975,\\,1]$, $f=-5.0279$;<br>$x_3=0$: $[1,\\,0.74,\\,0,\\,1]$, $f=-4.81$;<br>$x_3=1$: $[1,\\,0.47,\\,1,\\,0.72]$, $f=-5.00$;<br>$x_3=0,x_2=0$: $[1,0,0,1]$, $f=-4$;<br>$x_3=0,x_2=1$: $[0.77,\\,1,\\,0,\\,1]$, $f=-4.52$;<br>$x_3=1,x_2=0$: $[1,0,1,1]$, $f=-4.9$;<br>$x_3=1,x_2=1$: $[0.40,\\,1,\\,1,\\,1]$, $f=-4.49$.<br>What is the correct conclusion?",
+  "options": [
+   "Branch further on $x_1$ in the two fractional nodes, because their solutions are not binary",
+   "Stop: $x=[1,0,1,1]$ with $f=-4.9$ is optimal; the two fractional nodes are pruned by bound",
+   "Stop: the optimal value is $-5.0279$, the root bound",
+   "Stop: $x=[1,0,0,1]$ with $f=-4$ is optimal because it was the first binary solution found"
+  ],
+  "answer": 1,
+  "explain": "This is a minimisation, so each LP value is a <i>lower</i> bound for its subtree. The best binary solution found is $[1,0,1,1]$ with $f=-4.9$. The two fractional nodes have bounds $-4.52$ and $-4.49$, both larger (worse) than $-4.9$, so nothing below them can beat the incumbent and they are pruned. All nodes are closed, hence $-4.9$ is optimal. The root value $-5.0279$ is only a bound; no binary point attains it.",
+  "difficulty": 2,
+  "source": {
+   "label": "Martins & Ning, Engineering Design Optimization, ch. 8 Discrete Optimization (web print-out), p. 7-8",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-mn-prune-depends-on-incumbent",
+  "topic": "t102",
+  "type": "tf",
+  "q": "Minimisation branch and bound. The only incumbent found so far has value $-4$. A node has a fractional LP solution with LP value $-4.52$. <b>Statement:</b> at this point the node cannot be pruned by bound; it has to stay open.",
+  "answer": true,
+  "explain": "For minimisation the node's LP value $-4.52$ is a lower bound on its subtree, and $-4.52 \\lt -4$: the subtree might still contain a solution better than the incumbent, so the node must stay open. It can be pruned only once an incumbent of value at most $-4.52$ is known — in Example 8.4 of the chapter this happens after the solution with $f=-4.9$ is found. Whether a node is pruned therefore depends on the order of exploration.",
+  "difficulty": 2,
+  "source": {
+   "label": "Martins & Ning, Engineering Design Optimization, ch. 8 Discrete Optimization (web print-out), p. 7-8",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-mn-integer-branching",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "Mixed-integer program: $\\min -x_1-2x_2-3x_3-1.5x_4$ s.t. $x_1+x_2+2x_3+2x_4\\le 10$, $7x_1+8x_2+5x_3+x_4=31.5$, $x_1,x_2,x_3$ nonnegative integers, $x_4\\ge 0$ continuous. The root LP solution is $x=[0,\\ 1.1818,\\ 4.4091,\\ 0]$ with $f=-15.59$. Branching on the most fractional integer variable creates which two subproblems?",
+  "options": [
+   "$x_3=0$ and $x_3=1$",
+   "$x_3\\le 4$ and $x_3\\ge 5$",
+   "$x_2\\le 1$ and $x_2\\ge 2$",
+   "$x_3\\le 4.4091$ and $x_3\\ge 4.4091$"
+  ],
+  "answer": 1,
+  "explain": "Fractional parts: $0.18$ for $x_2$ and $0.41$ for $x_3$ (closest to $0.5$), so branch on $x_3$ with the integer bounds $x_3\\le\\lfloor 4.4091\\rfloor=4$ and $x_3\\ge\\lceil 4.4091\\rceil=5$. Fixing to 0/1 is only for binary variables. Here the child $x_3\\ge 5$ turns out to be infeasible, and $x_3\\le 4$ gives $x=[0,1.4,4,0.3]$ with $f=-15.25$.",
+  "difficulty": 2,
+  "source": {
+   "label": "Martins & Ning, Engineering Design Optimization, ch. 8 Discrete Optimization (web print-out), p. 9-10",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-mn-mixed-integer-incumbent",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "Mixed-integer program: $\\min -x_1-2x_2-3x_3-1.5x_4$ s.t. $x_1+x_2+2x_3+2x_4\\le 10$, $7x_1+8x_2+5x_3+x_4=31.5$, $x_1,x_2,x_3$ nonnegative integers, $x_4\\ge 0$ continuous. A node of the branch-and-bound tree has LP solution $x=[0,2,3,0.5]$ with $f=-13.75$. How should this node be treated?",
+  "options": [
+   "Branch on $x_4$ ($x_4\\le 0$ / $x_4\\ge 1$), since $x_4$ is fractional",
+   "Round $x_4$ to 1 and accept the rounded point",
+   "Accept it as a feasible solution (new incumbent if better): only $x_1,x_2,x_3$ must be integer",
+   "Discard it as infeasible"
+  ],
+  "answer": 2,
+  "explain": "$x_4$ is a continuous variable, so $x_4=0.5$ violates nothing; the integer variables take the values $0,2,3$. Check: $0+2+6+1=9\\le 10$ and $0+16+15+0.5=31.5$. So $[0,2,3,0.5]$ is feasible with $f=-4-9-0.75=-13.75$; it is in fact the optimum, since the remaining open nodes have LP bounds worse than $-13.75$. Rounding $x_4$ to 1 would violate the equality constraint.",
+  "difficulty": 2,
+  "source": {
+   "label": "Martins & Ning, Engineering Design Optimization, ch. 8 Discrete Optimization (web print-out), p. 9-10",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-mn-integer-variable-rebranched",
+  "topic": "t102",
+  "type": "tf",
+  "q": "<b>Statement:</b> in branch and bound with general integer variables the same variable may be branched on several times along one path of the tree (e.g. first $x_3\\le 4$, later $x_3\\le 2$ / $x_3\\ge 3$), whereas a binary variable is branched on at most once per path.",
+  "answer": true,
+  "explain": "Branching on a binary variable fixes it to 0 or 1, so it is integral in all descendants. Branching on a general integer variable only tightens a bound; the LP solution of a descendant can again be fractional in that variable within the new range (Example 8.5 of the chapter branches on $x_3$ twice). This is one reason why general-integer problems tend to need larger trees.",
+  "difficulty": 1,
+  "source": {
+   "label": "Martins & Ning, Engineering Design Optimization, ch. 8 Discrete Optimization (web print-out), p. 9-10",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-mn-nonconvex-relaxation-bound",
+  "topic": "t102",
+  "type": "tf",
+  "q": "<b>Statement:</b> for a mixed-integer problem whose continuous relaxation is nonconvex, the solution returned by the (local) solver for the relaxed subproblem at a node is still guaranteed to be a valid lower bound for that branch (minimisation).",
+  "answer": false,
+  "explain": "Pruning by bound relies on the relaxation being solved to <i>global</i> optimality, which is guaranteed for LPs and convex problems. For a nonconvex relaxation the solution found need not be a lower bound for the branch, so branch and bound loses its optimality guarantee, and each subproblem is also more expensive.",
+  "difficulty": 2,
+  "source": {
+   "label": "Martins & Ning, Engineering Design Optimization, ch. 8 Discrete Optimization (web print-out), p. 4, 10",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-mn-exercise2-root-lp",
+  "topic": "t102",
+  "type": "num",
+  "q": "Binary program: $\\max 0.5x_1+2x_2+3.5x_3+4.5x_4$ s.t. $5.5x_1+0.5x_2+3.5x_3+2.3x_4\\le 9.2$, $2x_1+4x_2+2x_4\\le 8$, $x_1+3x_2+3x_3+4x_4\\le 4$, $x\\in\\{0,1\\}^4$. What is the optimal value of its LP relaxation ($0\\le x_i\\le 1$)?",
+  "answer": 4.625,
+  "tol": 0.001,
+  "explain": "Look at the third constraint alone. Profit per unit of that constraint: $x_1$: 0.5, $x_2$: 0.667, $x_3$: 1.167, $x_4$: 1.125. Filling greedily gives $x_3=1$ (uses 3) and $x_4=\\tfrac14$ (uses the remaining 1): value $3.5+4.5\\cdot 0.25=4.625$. This point also satisfies the other two constraints ($3.5+0.575\\le 9.2$ and $0.5\\le 8$), so it is optimal for the whole LP: $x=(0,0,1,0.25)$.",
+  "difficulty": 2,
+  "source": {
+   "label": "Martins & Ning, Engineering Design Optimization, ch. 8 Discrete Optimization (web print-out), p. 24",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-mn-exercise2-finish",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "Binary program: $\\max 0.5x_1+2x_2+3.5x_3+4.5x_4$ s.t. $5.5x_1+0.5x_2+3.5x_3+2.3x_4\\le 9.2$, $2x_1+4x_2+2x_4\\le 8$, $x_1+3x_2+3x_3+4x_4\\le 4$, $x\\in\\{0,1\\}^4$. Its LP relaxation gives $x=(0,0,1,0.25)$ with value $4.625$. Branching on $x_4$: the child $x_4=1$ has LP solution $(0,0,0,1)$ with value $4.5$; the child $x_4=0$ has LP solution $(0,\\tfrac13,1,0)$ with value $\\tfrac{25}{6}\\approx 4.17$. What is the outcome?",
+  "options": [
+   "The optimal value is 4.5 at $(0,0,0,1)$; the node $x_4=0$ is pruned by bound",
+   "Branch on $x_2$ in the node $x_4=0$, because its LP solution is fractional",
+   "The optimal value is 4.625",
+   "The optimal value is $\\tfrac{25}{6}$, the smaller of the two child values"
+  ],
+  "answer": 0,
+  "explain": "Maximisation: LP values are upper bounds. The child $x_4=1$ is integral and gives an incumbent of value 4.5. The child $x_4=0$ has upper bound $4.17 \\lt 4.5$, so it cannot contain a better solution and is pruned although it is fractional. Three LPs suffice; enumeration confirms that the next best feasible point is $(1,0,1,0)$ with value 4.",
+  "difficulty": 2,
+  "source": {
+   "label": "Martins & Ning, Engineering Design Optimization, ch. 8 Discrete Optimization (web print-out), p. 24",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-mn-depth-first-memory",
+  "topic": "t102",
+  "type": "tf",
+  "q": "<b>Statement:</b> in branch and bound, a depth-first exploration of the tree needs less memory than a breadth-first exploration.",
+  "answer": true,
+  "explain": "Depth-first search only has to keep the current path, i.e. storage proportional to the number of levels, and it tends to reach a feasible solution (hence a pruning bound) quickly. Breadth-first search must keep all nodes of a level, a much longer history.",
+  "difficulty": 1,
+  "source": {
+   "label": "Martins & Ning, Engineering Design Optimization, ch. 8 Discrete Optimization (web print-out), p. 6, 23",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-mn-greedy-path-cost",
+  "topic": "t301",
+  "type": "num",
+  "q": "A directed graph has arcs (cost): $1\\to2$ (2), $1\\to3$ (1), $1\\to4$ (5); $2\\to5$ (5), $2\\to7$ (4); $3\\to6$ (4), $3\\to7$ (6); $4\\to7$ (3), $4\\to8$ (5); $5\\to9$ (3), $5\\to10$ (2), $5\\to11$ (1); $6\\to9$ (5), $6\\to10$ (4); $7\\to10$ (7), $7\\to11$ (5); $8\\to10$ (4), $8\\to11$ (2); $9\\to12$ (3), $10\\to12$ (6), $11\\to12$ (2). A greedy algorithm walks from node 1 to node 12, always taking the cheapest arc out of the current node. What is the cost of the path it finds?",
+  "answer": 15,
+  "explain": "Greedy: $1\\to3$ (1), $3\\to6$ (4 rather than 6), $6\\to10$ (4 rather than 5), $10\\to12$ (6): total 15. The optimal path $1\\to2\\to5\\to11\\to12$ costs $2+5+1+2=10$. A greedy rule locks in locally best decisions and ignores their effect on later choices, so it gives no optimality guarantee.",
+  "difficulty": 1,
+  "source": {
+   "label": "Martins & Ning, Engineering Design Optimization, ch. 8 Discrete Optimization (web print-out), p. 11",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-mn-dp-path-cost",
+  "topic": "t105e",
+  "type": "num",
+  "q": "A directed graph has arcs (cost): $1\\to2$ (2), $1\\to3$ (1), $1\\to4$ (5); $2\\to5$ (5), $2\\to7$ (4); $3\\to6$ (4), $3\\to7$ (6); $4\\to7$ (3), $4\\to8$ (5); $5\\to9$ (3), $5\\to10$ (2), $5\\to11$ (1); $6\\to9$ (5), $6\\to10$ (4); $7\\to10$ (7), $7\\to11$ (5); $8\\to10$ (4), $8\\to11$ (2); $9\\to12$ (3), $10\\to12$ (6), $11\\to12$ (2). Use backward dynamic programming, $v(i)=\\min_{(i,j)}\\{c_{ij}+v(j)\\}$ with $v(12)=0$, to find the minimum cost of a path from node 1 to node 12.",
+  "answer": 10,
+  "explain": "$v(9)=3,\\ v(10)=6,\\ v(11)=2$; $v(5)=\\min(3+3,\\,2+6,\\,1+2)=3$, $v(6)=\\min(5+3,\\,4+6)=8$, $v(7)=\\min(7+6,\\,5+2)=7$, $v(8)=\\min(4+6,\\,2+2)=4$; $v(2)=\\min(5+3,\\,4+7)=8$, $v(3)=\\min(4+8,\\,6+7)=12$, $v(4)=\\min(3+7,\\,5+4)=9$; $v(1)=\\min(2+8,\\,1+12,\\,5+9)=10$, with path $1\\to2\\to5\\to11\\to12$.",
+  "difficulty": 2,
+  "source": {
+   "label": "Martins & Ning, Engineering Design Optimization, ch. 8 Discrete Optimization (web print-out), p. 14-16",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-mn-dp-node4-decision",
+  "topic": "t105e",
+  "type": "mcq",
+  "q": "A directed graph has arcs (cost): $1\\to2$ (2), $1\\to3$ (1), $1\\to4$ (5); $2\\to5$ (5), $2\\to7$ (4); $3\\to6$ (4), $3\\to7$ (6); $4\\to7$ (3), $4\\to8$ (5); $5\\to9$ (3), $5\\to10$ (2), $5\\to11$ (1); $6\\to9$ (5), $6\\to10$ (4); $7\\to10$ (7), $7\\to11$ (5); $8\\to10$ (4), $8\\to11$ (2); $9\\to12$ (3), $10\\to12$ (6), $11\\to12$ (2). In the backward dynamic program $v(i)=\\min_{(i,j)}\\{c_{ij}+v(j)\\}$ with $v(12)=0$, what are the value and the optimal successor of node 4?",
+  "options": [
+   "$v(4)=10$, successor 7",
+   "$v(4)=9$, successor 8",
+   "$v(4)=8$, successor 7",
+   "$v(4)=7$, successor 8"
+  ],
+  "answer": 1,
+  "explain": "$v(7)=\\min(7+v(10),\\,5+v(11))=\\min(13,7)=7$ and $v(8)=\\min(4+6,\\,2+2)=4$. From node 4: via 7 the cost is $3+7=10$, via 8 it is $5+4=9$. The cheaper immediate arc $4\\to7$ (cost 3) is not the best decision once the cost-to-go is included — exactly the difference between a greedy rule and dynamic programming.",
+  "difficulty": 2,
+  "source": {
+   "label": "Martins & Ning, Engineering Design Optimization, ch. 8 Discrete Optimization (web print-out), p. 14-16",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-mn-knapsack-capacity-dp",
+  "topic": "t105e",
+  "type": "card",
+  "q": "State the capacity-indexed dynamic program (tabulation) for the 0-1 knapsack problem $\\max\\sum_ic_ix_i$ s.t. $\\sum_iw_ix_i\\le K$ with integer weights, and its complexity.",
+  "a": "State $(k,i)$: capacity $k\\in\\{0,\\dots,K\\}$ available for the first $i$ items; $v(k,i)$ = best achievable value.<br>$v(k,0)=0$ for all $k$. For $i=1..n$ and $k=0..K$: $$v(k,i)=\\begin{cases}v(k,i-1) & \\text{if } w_i \\gt k,\\\\ \\max\\{v(k,i-1),\\ c_i+v(k-w_i,i-1)\\} & \\text{otherwise.}\\end{cases}$$ Set $S(k,i)=1$ when item $i$ is taken. The optimal value is $v(K,n)$; recover the items from $i=n$ down to 1 starting at $k=K$: if $S(k,i)=1$ take item $i$ and set $k\\leftarrow k-w_i$.<br>Complexity $O(Kn)$ instead of $O(2^n)$ — pseudo-polynomial, because it depends on the numerical value of $K$; the weights must be integers (scale them if necessary).",
+  "difficulty": 1,
+  "source": {
+   "label": "Martins & Ning, Engineering Design Optimization, ch. 8 Discrete Optimization (web print-out), p. 16-18",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-mn-knapsack-example-value",
+  "topic": "t105e",
+  "type": "num",
+  "q": "0-1 knapsack with weights $w=[4,5,2,6,1]$, values $c=[4,3,3,7,2]$ and capacity $K=10$. What is the optimal total value?",
+  "answer": 12,
+  "explain": "Items 3, 4 and 5: weight $2+6+1=9\\le 10$, value $3+7+2=12$. The dynamic program confirms $v(10,5)=\\max\\{v(10,4),\\ 2+v(9,4)\\}=\\max\\{11,\\ 2+10\\}=12$, where $v(10,4)=11$ (items 1 and 4) and $v(9,4)=10$ (items 3 and 4).",
+  "difficulty": 2,
+  "source": {
+   "label": "Martins & Ning, Engineering Design Optimization, ch. 8 Discrete Optimization (web print-out), p. 18",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-mn-knapsack-traceback",
+  "topic": "t105e",
+  "type": "mcq",
+  "q": "0-1 knapsack with weights $w=[4,5,2,6,1]$, values $c=[4,3,3,7,2]$ and $K=10$. The dynamic program gives $v(10,5)=12$ with selection flags $S(10,5)=1$, $S(9,4)=1$, $S(3,3)=1$, $S(1,2)=0$, $S(1,1)=0$. Which items are selected?",
+  "options": [
+   "Items 1 and 4",
+   "Items 1, 2 and 5",
+   "Items 2, 3 and 5",
+   "Items 3, 4 and 5"
+  ],
+  "answer": 3,
+  "explain": "Trace back from $k=10$, $i=5$: $S(10,5)=1$, take item 5, $k=10-1=9$; $S(9,4)=1$, take item 4, $k=9-6=3$; $S(3,3)=1$, take item 3, $k=3-2=1$; $S(1,2)=S(1,1)=0$. Items $\\{3,4,5\\}$: weight 9, value 12. Items $\\{1,4\\}$ fill the knapsack exactly but are worth only 11.",
+  "difficulty": 2,
+  "source": {
+   "label": "Martins & Ning, Engineering Design Optimization, ch. 8 Discrete Optimization (web print-out), p. 18",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-mn-knapsack-greedy-value",
+  "topic": "t301",
+  "type": "num",
+  "q": "0-1 knapsack with weights $w=[2,5,3,4,6,1]$, values $c=[5,3,1,5,7,2]$ and capacity $K=12$. A greedy algorithm repeatedly takes, among the items that still fit, the one with the best value-to-weight ratio. What total value does it obtain?",
+  "answer": 15,
+  "explain": "Ratios: $2.5,\\ 0.6,\\ 0.33,\\ 1.25,\\ 1.17,\\ 2.0$. Take item 1 (capacity left 10), item 6 (9), item 4 (5); item 5 (weight 6) no longer fits; item 2 fits (0 left). Value $5+2+5+3=15$. The optimum is 17 (items 1, 4, 5), so the greedy solution is 2 below it.",
+  "difficulty": 2,
+  "source": {
+   "label": "Martins & Ning, Engineering Design Optimization, ch. 8 Discrete Optimization (web print-out), p. 24-25",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-mn-knapsack-exercise-optimum",
+  "topic": "t105e",
+  "type": "num",
+  "q": "0-1 knapsack with weights $w=[2,5,3,4,6,1]$, values $c=[5,3,1,5,7,2]$ and capacity $K=12$. What is the optimal total value (e.g. by dynamic programming)?",
+  "answer": 17,
+  "explain": "Items 1, 4 and 5: weight $2+4+6=12$, value $5+5+7=17$. The last DP column (all six items) is $v(k,6)=0,2,5,7,7,7,10,12,12,14,14,14,17$ for $k=0,\\dots,12$. The ratio-greedy heuristic only reaches 15.",
+  "difficulty": 2,
+  "source": {
+   "label": "Martins & Ning, Engineering Design Optimization, ch. 8 Discrete Optimization (web print-out), p. 24-25",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-mn-annealing-acceptance",
+  "topic": "t301",
+  "type": "num",
+  "q": "Simulated annealing (minimisation) accepts a worse neighbour with probability $\\exp\\!\\big(-(f(x_{new})-f(x))/T\\big)$. The current tour has length 20.0, the proposed neighbour has length 20.5 and the temperature is $T=1$. What is the acceptance probability, to three decimals?",
+  "answer": 0.607,
+  "tol": 0.002,
+  "explain": "$P=\\exp(-(20.5-20.0)/1)=e^{-0.5}\\approx 0.607$. At $T=0.1$ the same move would be accepted with probability $e^{-5}\\approx 0.007$: as the temperature is lowered, uphill moves become rare and the search turns into a pure descent.",
+  "difficulty": 1,
+  "source": {
+   "label": "Martins & Ning, Engineering Design Optimization, ch. 8 Discrete Optimization (web print-out), p. 19-21",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-mn-simulated-annealing",
+  "topic": "t301",
+  "type": "card",
+  "q": "Describe simulated annealing for a discrete minimisation problem: the acceptance rule, the role of the temperature and typical cooling schedules. Which neighbourhood moves does the chapter use for the TSP?",
+  "a": "Repeat: draw a random neighbour $x_{new}$ of the current solution $x$. If $f(x_{new})\\le f(x)$ accept it; otherwise accept it with probability $\\exp(-(f(x_{new})-f(x))/T)$ (Metropolis criterion), else keep $x$. Then lower the temperature.<br><b>Temperature:</b> a high $T$ accepts many uphill moves (exploration, escape from local minima); as $T\\to 0$ only improvements are accepted. Start well above the largest expected change in $f$ and cool slowly.<br><b>Schedules:</b> exponential $T=T_0\\alpha^k$ with $\\alpha$ between about 0.8 and 0.99, or $T=T_0(1-k/k_{max})^\\beta$; often $T$ is kept constant for a fixed number of iterations between decreases.<br><b>TSP moves:</b> (1) reverse the path segment between two random points (a 2-opt-type move); (2) remove the segment between two random points and re-insert it after another random point. There is no guarantee of optimality.",
+  "difficulty": 2,
+  "source": {
+   "label": "Martins & Ning, Engineering Design Optimization, ch. 8 Discrete Optimization (web print-out), p. 19-21",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-mn-rounding-infeasible",
+  "topic": "t301",
+  "type": "mcq",
+  "q": "A company chooses nonnegative integer numbers of barrels $(A,B,C,D)$ to maximise $50A+30B+80C+30D$ subject to<br>chlorine: $0.74A-0.05B+1.0C-0.15D\\le 97$,<br>sodium hydroxide: $0.39A+0.4B+0.91C+0.44D\\le 99$,<br>sulfuric acid: $0.86A+0.89B+0.09C+0.83D\\le 52$,<br>labour: $5A+7B+7C+6D\\le 1000$.<br>The LP relaxation has optimum $(22.82,\\ 0,\\ 84.59,\\ 29.83)$ with value about $8803$. What happens if each component is rounded to the nearest integer, giving $(23,0,85,30)$?",
+  "options": [
+   "The rounded point is feasible and optimal (value 8850)",
+   "The rounded point is feasible but not optimal",
+   "The rounded point violates the three chemical constraints, so it is infeasible",
+   "The rounded point is infeasible only because of the labour constraint"
+  ],
+  "answer": 2,
+  "explain": "Chlorine: $0.74\\cdot 23+85-0.15\\cdot 30=97.52 \\gt 97$; sodium hydroxide: $99.52 \\gt 99$; sulfuric acid: $52.33 \\gt 52$; labour (890) is fine. A warning sign: its value 8850 exceeds the LP bound 8803, which is impossible for a feasible point. Rounding every component down gives $(22,0,84,29)$, feasible but worth only 8690, and the best feasible up/down rounding, $(22,0,85,29)$, is worth 8770. The integer optimum is 8780, attained e.g. at $(21,5,85,26)$ — not a rounding of the LP solution at all.",
+  "difficulty": 2,
+  "source": {
+   "label": "Martins & Ning, Engineering Design Optimization, ch. 8 Discrete Optimization (web print-out), p. 3, 24",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-pg-tour-length",
+  "topic": "t201",
+  "type": "num",
+  "q": "Ten cities $0,\\dots,9$ have symmetric road distances in miles (row $i$, column $j$ gives $d(i,j)$ for $j \\lt i$):<br><table><thead><tr><th></th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr></thead><tbody><tr><th>1</th><td>449</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th>2</th><td>618</td><td>787</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th>3</th><td>504</td><td>937</td><td>722</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th>4</th><td>529</td><td>1004</td><td>950</td><td>219</td><td></td><td></td><td></td><td></td><td></td></tr><tr><th>5</th><td>805</td><td>1132</td><td>842</td><td>195</td><td>256</td><td></td><td></td><td></td><td></td></tr><tr><th>6</th><td>1181</td><td>1441</td><td>1080</td><td>563</td><td>624</td><td>368</td><td></td><td></td><td></td></tr><tr><th>7</th><td>1538</td><td>2045</td><td>2078</td><td>1378</td><td>1229</td><td>1382</td><td>1319</td><td></td><td></td></tr><tr><th>8</th><td>1716</td><td>2165</td><td>2217</td><td>1422</td><td>1244</td><td>1375</td><td>1262</td><td>483</td><td></td></tr><tr><th>9</th><td>2065</td><td>2514</td><td>2355</td><td>1673</td><td>1570</td><td>1507</td><td>1320</td><td>842</td><td>432</td></tr></tbody></table>What is the length of the tour $0\\to1\\to2\\to5\\to6\\to9\\to8\\to7\\to4\\to3\\to0$?",
+  "answer": 6633,
+  "explain": "$449+787+842+368+1320+432+483+1229+219+504=6633$. The optimal tour $0,1,2,3,5,6,9,8,7,4,0$ has length 6514; with the start city fixed there are $9!=362{,}880$ orderings, so brute-force enumeration is still possible for ten cities but hopeless for thirty.",
+  "difficulty": 1,
+  "source": {
+   "label": "Applegate, Cook, Dash & Johnson, A Practical Guide to Discrete Optimization (ch. 1 draft, 2014), PDF p. 8-12",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-pg-nearest-neighbour-tour",
+  "topic": "t301",
+  "type": "num",
+  "q": "Ten cities $0,\\dots,9$ have symmetric road distances in miles (row $i$, column $j$ gives $d(i,j)$ for $j \\lt i$):<br><table><thead><tr><th></th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr></thead><tbody><tr><th>1</th><td>449</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th>2</th><td>618</td><td>787</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th>3</th><td>504</td><td>937</td><td>722</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th>4</th><td>529</td><td>1004</td><td>950</td><td>219</td><td></td><td></td><td></td><td></td><td></td></tr><tr><th>5</th><td>805</td><td>1132</td><td>842</td><td>195</td><td>256</td><td></td><td></td><td></td><td></td></tr><tr><th>6</th><td>1181</td><td>1441</td><td>1080</td><td>563</td><td>624</td><td>368</td><td></td><td></td><td></td></tr><tr><th>7</th><td>1538</td><td>2045</td><td>2078</td><td>1378</td><td>1229</td><td>1382</td><td>1319</td><td></td><td></td></tr><tr><th>8</th><td>1716</td><td>2165</td><td>2217</td><td>1422</td><td>1244</td><td>1375</td><td>1262</td><td>483</td><td></td></tr><tr><th>9</th><td>2065</td><td>2514</td><td>2355</td><td>1673</td><td>1570</td><td>1507</td><td>1320</td><td>842</td><td>432</td></tr></tbody></table>Run the nearest-neighbour heuristic starting at city 0 (always move to the closest city not yet visited, and return to 0 at the end). What is the length of the resulting tour?",
+  "answer": 7107,
+  "explain": "$0\\to1$ (449), $1\\to2$ (787), $2\\to3$ (722), $3\\to5$ (195), $5\\to4$ (256), $4\\to6$ (624), $6\\to8$ (1262), $8\\to9$ (432), $9\\to7$ (842), $7\\to0$ (1538): total 7107, about 9% above the optimum 6514. The long final legs are typical: the greedy rule strands far-away cities. Such a tour is still useful as an initial upper bound for pruning.",
+  "difficulty": 2,
+  "source": {
+   "label": "Applegate, Cook, Dash & Johnson, A Practical Guide to Discrete Optimization (ch. 1 draft, 2014), PDF p. 8, 16",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-pg-two-opt-gain",
+  "topic": "t301",
+  "type": "num",
+  "q": "A two-opt move removes two edges of a tour and reconnects the two resulting paths the other way round. In the tour $0,1,2,3,5,4,6,8,9,7,0$ the edges $\\{6,8\\}$ and $\\{9,7\\}$ are replaced by $\\{6,9\\}$ and $\\{8,7\\}$, giving $0,1,2,3,5,4,6,9,8,7,0$. With symmetric distances $d(6,8)=1262$, $d(7,9)=842$, $d(6,9)=1320$, $d(7,8)=483$, by how many miles does the tour get shorter?",
+  "answer": 301,
+  "explain": "Removed: $1262+842=2104$; added: $1320+483=1803$; gain $2104-1803=301$. The segment between the two removed edges is traversed in reverse, which costs nothing because the distances are symmetric. The two-opt algorithm repeats improving moves until none is left (a local optimum).",
+  "difficulty": 1,
+  "source": {
+   "label": "Applegate, Cook, Dash & Johnson, A Practical Guide to Discrete Optimization (ch. 1 draft, 2014), PDF p. 17-18",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-pg-cheapest-road-bound",
+  "topic": "t103",
+  "type": "num",
+  "q": "Ten cities $0,\\dots,9$ have symmetric road distances in miles (row $i$, column $j$ gives $d(i,j)$ for $j \\lt i$):<br><table><thead><tr><th></th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr></thead><tbody><tr><th>1</th><td>449</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th>2</th><td>618</td><td>787</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th>3</th><td>504</td><td>937</td><td>722</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th>4</th><td>529</td><td>1004</td><td>950</td><td>219</td><td></td><td></td><td></td><td></td><td></td></tr><tr><th>5</th><td>805</td><td>1132</td><td>842</td><td>195</td><td>256</td><td></td><td></td><td></td><td></td></tr><tr><th>6</th><td>1181</td><td>1441</td><td>1080</td><td>563</td><td>624</td><td>368</td><td></td><td></td><td></td></tr><tr><th>7</th><td>1538</td><td>2045</td><td>2078</td><td>1378</td><td>1229</td><td>1382</td><td>1319</td><td></td><td></td></tr><tr><th>8</th><td>1716</td><td>2165</td><td>2217</td><td>1422</td><td>1244</td><td>1375</td><td>1262</td><td>483</td><td></td></tr><tr><th>9</th><td>2065</td><td>2514</td><td>2355</td><td>1673</td><td>1570</td><td>1507</td><td>1320</td><td>842</td><td>432</td></tr></tbody></table>A simple lower bound on the length of any tour: every city must be entered by a road that is at least as long as the shortest road at that city, so sum the shortest road over all ten cities. Compute this bound.",
+  "answer": 3840,
+  "explain": "Shortest road at the cities $0,\\dots,9$: $449,\\ 449,\\ 618,\\ 195,\\ 219,\\ 195,\\ 368,\\ 483,\\ 432,\\ 432$; the sum is 3840. It is valid because a tour uses a distinct entering road for each city. It is weaker than the spanning-tree bound 4497, and both are well below the optimal tour length 6514.",
+  "difficulty": 2,
+  "source": {
+   "label": "Applegate, Cook, Dash & Johnson, A Practical Guide to Discrete Optimization (ch. 1 draft, 2014), PDF p. 8, 14-15",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-pg-mst-pruning-argument",
+  "topic": "t103",
+  "type": "short",
+  "q": "In an enumeration of TSP tours, the current partial tour is a path of length <code>tourlen</code> between two cities $a$ and $b$; $R$ is the set of cities not yet visited and <code>bestlen</code> the length of the best tour found so far. Costs are nonnegative. Explain why the search may be pruned as soon as <code>tourlen</code> $+\\ \\text{MST}(R\\cup\\{a,b\\})\\ \\ge$ <code>bestlen</code>, where MST(·) denotes the length of a minimum spanning tree on the given cities.",
+  "model": "To complete the partial tour one must add a path that starts at one end of the current path, visits every city of $R$ exactly once and ends at the other end. This Hamiltonian path on $R\\cup\\{a,b\\}$ is connected, acyclic and spanning, i.e. it is a spanning tree of these cities, so its length is at least the MST length (the MST is a relaxation: we minimise over all spanning trees instead of only over paths). Hence every completion has total length at least <code>tourlen</code> $+$ MST. If this is already at least <code>bestlen</code>, no completion can improve on the incumbent and the whole subtree of the enumeration is skipped. The MST is used because it is easy to compute, whereas finding the shortest such path is as hard as the TSP itself.",
+  "rubric": [
+   "A completion is a Hamiltonian path through the unvisited cities joining the two ends",
+   "A Hamiltonian path is a spanning tree, so its length is at least the MST length",
+   "Therefore tourlen + MST is a lower bound on every completion",
+   "If the lower bound is at least the incumbent value, the branch cannot improve it and is pruned"
+  ],
+  "difficulty": 2,
+  "source": {
+   "label": "Applegate, Cook, Dash & Johnson, A Practical Guide to Discrete Optimization (ch. 1 draft, 2014), PDF p. 15-16, 37-38",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-pg-one-tree-bound",
+  "topic": "t103",
+  "type": "card",
+  "q": "What is a 1-tree (Held–Karp), and why does the minimum 1-tree give a lower bound on the length of an optimal TSP tour?",
+  "a": "Pick one special city. A <b>1-tree</b> consists of two roads meeting the special city together with a spanning tree on the remaining cities; the minimum 1-tree takes the two cheapest roads at the special city plus a minimum spanning tree of the other cities.<br>Every tour is a 1-tree: it has exactly two roads at the special city, and removing that city leaves a Hamiltonian path, i.e. a spanning tree, on the rest. Minimising over the larger family of 1-trees can only give a smaller value, so the minimum 1-tree is at most the optimal tour (a combinatorial relaxation). If the minimum 1-tree happens to have degree 2 at every city, it is a tour and therefore an optimal one.",
+  "difficulty": 2,
+  "source": {
+   "label": "Applegate, Cook, Dash & Johnson, A Practical Guide to Discrete Optimization (ch. 1 draft, 2014), PDF p. 22",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-pg-one-tree-value",
+  "topic": "t103",
+  "type": "num",
+  "q": "Ten cities $0,\\dots,9$ have symmetric road distances in miles (row $i$, column $j$ gives $d(i,j)$ for $j \\lt i$):<br><table><thead><tr><th></th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr></thead><tbody><tr><th>1</th><td>449</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th>2</th><td>618</td><td>787</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th>3</th><td>504</td><td>937</td><td>722</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th>4</th><td>529</td><td>1004</td><td>950</td><td>219</td><td></td><td></td><td></td><td></td><td></td></tr><tr><th>5</th><td>805</td><td>1132</td><td>842</td><td>195</td><td>256</td><td></td><td></td><td></td><td></td></tr><tr><th>6</th><td>1181</td><td>1441</td><td>1080</td><td>563</td><td>624</td><td>368</td><td></td><td></td><td></td></tr><tr><th>7</th><td>1538</td><td>2045</td><td>2078</td><td>1378</td><td>1229</td><td>1382</td><td>1319</td><td></td><td></td></tr><tr><th>8</th><td>1716</td><td>2165</td><td>2217</td><td>1422</td><td>1244</td><td>1375</td><td>1262</td><td>483</td><td></td></tr><tr><th>9</th><td>2065</td><td>2514</td><td>2355</td><td>1673</td><td>1570</td><td>1507</td><td>1320</td><td>842</td><td>432</td></tr></tbody></table>Compute the 1-tree lower bound on the optimal tour with city 0 as the special city: the two cheapest roads at city 0 plus a minimum spanning tree on the cities $1,\\dots,9$.",
+  "answer": 5388,
+  "explain": "Two cheapest roads at city 0: $449$ (to city 1) and $504$ (to city 3). Minimum spanning tree on $\\{1,\\dots,9\\}$ by Kruskal: $3$-$5$ 195, $3$-$4$ 219, $5$-$6$ 368, $8$-$9$ 432, $7$-$8$ 483, $2$-$3$ 722, $1$-$2$ 787, $4$-$7$ 1229, total 4435. Bound: $953+4435=5388$ — stronger than the plain spanning-tree bound 4497 and still below the optimal tour 6514.",
+  "difficulty": 3,
+  "source": {
+   "label": "Applegate, Cook, Dash & Johnson, A Practical Guide to Discrete Optimization (ch. 1 draft, 2014), PDF p. 8, 22",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x6-pg-node-potential-transformation",
+  "topic": "t401",
+  "type": "short",
+  "q": "In a symmetric TSP with costs $c_{ij}$, choose numbers $\\delta_i$ for the cities and define transformed costs $c'_{ij}=c_{ij}-\\delta_i-\\delta_j$. (a) Show that both instances have the same optimal tours. (b) If the $\\delta_i$ are chosen such that all $c'_{ij}\\ge 0$, which lower bound on the optimal tour length follows? (c) Why can the transformation nevertheless improve spanning-tree-based lower bounds?",
+  "model": "(a) Every tour uses exactly two roads at each city $i$, so $\\delta_i$ is subtracted exactly twice: for every tour $T$, $c'(T)=c(T)-2\\sum_i\\delta_i$. All tour lengths shift by the same constant, so the ranking of the tours, and hence the set of optimal tours, is unchanged.<br>(b) If $c'\\ge 0$ then $c'(T)\\ge 0$, i.e. $c(T)\\ge 2\\sum_i\\delta_i$ for every tour. Flood's choice maximises this bound: $\\max\\sum_i 2\\delta_i$ s.t. $\\delta_i+\\delta_j\\le c_{ij}$ for all pairs $i,j$.<br>(c) A spanning tree (or 1-tree) does not have the same degree at every city, so its cost is <i>not</i> shifted by a constant: the bound (minimum tree in the transformed costs) $+\\,2\\sum_i\\delta_i$ depends on $\\delta$. Well-chosen $\\delta$ make the minimum tree resemble a tour, which strengthens the lower bound and hence the pruning — the idea behind the Held–Karp bound, where the $\\delta_i$ play the role of multipliers attached to the degree-two conditions.",
+  "rubric": [
+   "Each tour has exactly two edges at every city",
+   "So every tour length changes by the same constant $2\\sum_i\\delta_i$ and the ranking is preserved",
+   "Nonnegative transformed costs give the bound $2\\sum_i\\delta_i\\le$ optimal tour length",
+   "Trees have varying degrees, so the tree bound depends on $\\delta$ and can be improved by choosing $\\delta$ well"
+  ],
+  "difficulty": 2,
+  "source": {
+   "label": "Applegate, Cook, Dash & Johnson, A Practical Guide to Discrete Optimization (ch. 1 draft, 2014), PDF p. 20-22",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x6-pg-enumeration-pruning-rule",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "A depth-first enumeration of TSP tours keeps the length <code>tourlen</code> of the current partial tour, a lower bound <code>LB</code> on the cost of completing it, and the length <code>bestlen</code> of the best complete tour found so far. When may the current branch be abandoned?",
+  "options": [
+   "When <code>tourlen + LB</code> ≥ <code>bestlen</code>",
+   "When <code>tourlen + LB</code> ≤ <code>bestlen</code>",
+   "When <code>LB</code> ≥ <code>tourlen</code>",
+   "Only when <code>tourlen</code> alone is ≥ <code>bestlen</code>"
+  ],
+  "answer": 0,
+  "explain": "Every completion costs at least <code>tourlen + LB</code>; if that is already no better than the incumbent, the branch cannot produce an improvement. Testing only <code>tourlen</code> ≥ <code>bestlen</code> (LB = 0) is valid but prunes far less: the text strengthens LB from 0 to the sum of cheapest roads and then to a minimum spanning tree, and improves <code>bestlen</code> with nearest-neighbour and two-opt tours. A strong lower bound together with a good incumbent makes pruning effective.",
+  "difficulty": 1,
+  "source": {
+   "label": "Applegate, Cook, Dash & Johnson, A Practical Guide to Discrete Optimization (ch. 1 draft, 2014), PDF p. 13-16",
+   "url": null,
+   "solution": "source"
+  }
+ }
+]

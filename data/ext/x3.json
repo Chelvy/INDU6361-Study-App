@@ -1,0 +1,2022 @@
+[
+ {
+  "id": "x3-lr-max-form-setup",
+  "topic": "t401",
+  "type": "card",
+  "q": "Lagrangian relaxation, <b>maximisation form</b>. For (P) $Z=\\max\\{cx : Ax\\le b,\\ Dx\\le e,\\ x\\ge 0\\ \\text{integer}\\}$ with $Ax\\le b$ the complicating constraints: define the Lagrangian problem $Z_D(u)$ and the Lagrangian dual, and say why $Z_D(u)$ is a bound on $Z$.",
+  "a": "For multipliers $u\\ge 0$: $$Z_D(u)=\\max\\{cx+u(b-Ax) : Dx\\le e,\\ x\\ge 0\\ \\text{integer}\\}.$$ It is an <b>upper</b> bound on $Z$: every $x$ feasible for (P) stays feasible (constraints were only dropped) and its objective gets the extra term $u(b-Ax)\\ge 0$. Lagrangian dual (best bound): $Z_D=\\min_{u\\ge 0}Z_D(u)$.<br>Three design questions follow: (a) which constraints to relax, (b) how to compute good multipliers, (c) how to turn the relaxed solution into a good feasible one (a Lagrangian heuristic).",
+  "difficulty": 1,
+  "source": {
+   "label": "An Applications Oriented Guide to Lagrangian Relaxation (M. L. Fisher, Interfaces 15:2, 1985 — copy hosted at U. Lethbridge)",
+   "url": "https://www.cs.uleth.ca/~benkoczi/OR/read/lagrange-relax-introduct-fisher85.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-fisher-lagrangian-problem",
+  "topic": "t401",
+  "type": "short",
+  "q": "Consider $$Z=\\max\\ 16x_1+10x_2+0x_3+4x_4$$ subject to (2) $8x_1+2x_2+x_3+4x_4\\le 10$, (3) $x_1+x_2\\le 1$, (4) $x_3+x_4\\le 1$, $x\\in\\{0,1\\}^4$. Dualize constraint (2) with a multiplier $u\\ge 0$. Write the Lagrangian problem $Z_D(u)$ and explain how to solve it by inspection for a given $u$.",
+  "model": "$$Z_D(u)=\\max\\ (16-8u)x_1+(10-2u)x_2+(0-u)x_3+(4-4u)x_4+10u$$ s.t. $x_1+x_2\\le 1$, $x_3+x_4\\le 1$, $x$ binary. The problem separates into the pair $(x_1,x_2)$ and the pair $(x_3,x_4)$: in each pair set to 1 the variable with the larger objective coefficient if that coefficient is positive, otherwise set both to 0. Hence $Z_D(u)=10u+\\max\\{16-8u,\\ 10-2u,\\ 0\\}+\\max\\{4-4u,\\ -u,\\ 0\\}$.",
+  "rubric": [
+   "Objective coefficients $16-8u$, $10-2u$, $-u$, $4-4u$",
+   "Constant term $+10u$ (from $u\\cdot b$)",
+   "Constraints (3), (4) and $x$ binary are kept; (2) is removed",
+   "Inspection rule: in each pair pick the larger coefficient if positive, else zero"
+  ],
+  "explain": "The term added to the objective is $u(10-8x_1-2x_2-x_3-4x_4)\\ge 0$ for every $x$ feasible in (2), so $Z_D(u)\\ge Z$ for all $u\\ge 0$.",
+  "difficulty": 2,
+  "source": {
+   "label": "An Applications Oriented Guide to Lagrangian Relaxation (M. L. Fisher, Interfaces 15:2, 1985 — copy hosted at U. Lethbridge)",
+   "url": "https://www.cs.uleth.ca/~benkoczi/OR/read/lagrange-relax-introduct-fisher85.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-fisher-dual-value",
+  "topic": "t401",
+  "type": "num",
+  "q": "Consider $$Z=\\max\\ 16x_1+10x_2+0x_3+4x_4$$ subject to (2) $8x_1+2x_2+x_3+4x_4\\le 10$, (3) $x_1+x_2\\le 1$, (4) $x_3+x_4\\le 1$, $x\\in\\{0,1\\}^4$. Constraint (2) is dualized with a multiplier $u\\ge 0$, which gives the Lagrangian problem $Z_D(u)=\\max\\{(16-8u)x_1+(10-2u)x_2-u\\,x_3+(4-4u)x_4+10u : (3),\\ (4),\\ x\\ \\text{binary}\\}$. Compute the Lagrangian dual value $Z_D=\\min_{u\\ge 0}Z_D(u)$.",
+  "answer": 18,
+  "explain": "By inspection $Z_D(u)=10u+\\max\\{16-8u,\\,10-2u,\\,0\\}+\\max\\{4-4u,\\,0\\}$. For $0\\le u\\le 1$ this equals $20-2u$ (decreasing), for $1\\le u\\le 5$ it equals $10+8u$ (increasing), so the minimum is at $u=1$: $Z_D=18$. Values from Fisher's table: $Z_D(0)=20$, $Z_D(1/2)=19$, $Z_D(3/4)=18.5$, $Z_D(2)=26$, $Z_D(3)=34$.",
+  "difficulty": 2,
+  "source": {
+   "label": "An Applications Oriented Guide to Lagrangian Relaxation (M. L. Fisher, Interfaces 15:2, 1985 — copy hosted at U. Lethbridge)",
+   "url": "https://www.cs.uleth.ca/~benkoczi/OR/read/lagrange-relax-introduct-fisher85.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-fisher-integer-optimum",
+  "topic": "t401",
+  "type": "num",
+  "q": "Consider $$Z=\\max\\ 16x_1+10x_2+0x_3+4x_4$$ subject to (2) $8x_1+2x_2+x_3+4x_4\\le 10$, (3) $x_1+x_2\\le 1$, (4) $x_3+x_4\\le 1$, $x\\in\\{0,1\\}^4$. Find the optimal value $Z$ of this integer program itself (not of a relaxation).",
+  "answer": 16,
+  "explain": "Constraints (3) and (4) leave 9 combinations. $x=(1,0,0,1)$ would give 20 but uses $8+4=12 \\gt 10$. The best feasible points are $x=(1,0,0,0)$ (uses 8) and $x=(1,0,1,0)$ (uses 9), both worth 16; $(0,1,0,1)$ gives only 14. So $Z=16$, which is 2 below the Lagrangian bound 18 obtained by dualizing (2) (a duality gap).",
+  "difficulty": 1,
+  "source": {
+   "label": "\"Lagrangian Relaxation\" (Jupyter-style lecture page, personal.eur.nl/birbil)",
+   "url": "https://personal.eur.nl/birbil/bolbilim/teaa/02_Lag_Rel.html",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-fisher-subgradient-constant-step",
+  "topic": "t401",
+  "type": "mcq",
+  "q": "Consider $$Z=\\max\\ 16x_1+10x_2+0x_3+4x_4$$ subject to (2) $8x_1+2x_2+x_3+4x_4\\le 10$, (3) $x_1+x_2\\le 1$, (4) $x_3+x_4\\le 1$, $x\\in\\{0,1\\}^4$. Constraint (2) is dualized and the multiplier is updated by the subgradient rule $u^{k+1}=\\max\\{0,\\ u^k-t_k\\,(10-8x_1^k-2x_2^k-x_3^k-4x_4^k)\\}$, where $x^k$ solves the Lagrangian problem $\\max\\{(16-8u)x_1+(10-2u)x_2-u\\,x_3+(4-4u)x_4+10u : (3),\\ (4),\\ x\\ \\text{binary}\\}$ at $u=u^k$. Start from $u^0=0$. Use the constant step size $t_k=1$. Which sequence $u^0,u^1,u^2,\\dots$ results?",
+  "options": [
+   "$0,\\,2,\\,1,\\,1,\\,1,\\dots$ — it reaches the optimal multiplier $u=1$ after two steps",
+   "$0,\\,2,\\,4,\\,6,\\dots$ — it grows without bound",
+   "$0,\\,2,\\,0,\\,2,\\,0,\\dots$ — it oscillates forever and never reaches $u=1$",
+   "$0,\\,2,\\,0,\\,0,\\,0,\\dots$ — it gets stuck at $u=0$"
+  ],
+  "answer": 2,
+  "explain": "At $u=0$: $x=(1,0,0,1)$, $b-Ax=10-12=-2$, so $u^1=0-1\\cdot(-2)=2$. At $u=2$ the coefficients are $(0,6,-2,-4)$, so $x=(0,1,0,0)$, $b-Ax=8$ and $u^2=\\max\\{0,2-8\\}=0$. The two steps then repeat: with a constant step the method does not converge here.",
+  "difficulty": 2,
+  "source": {
+   "label": "An Applications Oriented Guide to Lagrangian Relaxation (M. L. Fisher, Interfaces 15:2, 1985 — copy hosted at U. Lethbridge)",
+   "url": "https://www.cs.uleth.ca/~benkoczi/OR/read/lagrange-relax-introduct-fisher85.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-fisher-subgradient-halving",
+  "topic": "t401",
+  "type": "num",
+  "q": "Consider $$Z=\\max\\ 16x_1+10x_2+0x_3+4x_4$$ subject to (2) $8x_1+2x_2+x_3+4x_4\\le 10$, (3) $x_1+x_2\\le 1$, (4) $x_3+x_4\\le 1$, $x\\in\\{0,1\\}^4$. Constraint (2) is dualized and the multiplier is updated by the subgradient rule $u^{k+1}=\\max\\{0,\\ u^k-t_k\\,(10-8x_1^k-2x_2^k-x_3^k-4x_4^k)\\}$, where $x^k$ solves the Lagrangian problem $\\max\\{(16-8u)x_1+(10-2u)x_2-u\\,x_3+(4-4u)x_4+10u : (3),\\ (4),\\ x\\ \\text{binary}\\}$ at $u=u^k$. Start from $u^0=0$. Use the step sizes $t_k=2^{-k}$, i.e. $1,\\tfrac12,\\tfrac14,\\tfrac18,\\dots$ What is $u^4$?",
+  "answer": "3/4",
+  "explain": "$u^1=0-1\\cdot(-2)=2$ (at $u=0$: $x=(1,0,0,1)$, $b-Ax=-2$). At $u=2$: $x=(0,1,0,0)$, $b-Ax=8$, so $u^2=\\max\\{0,2-\\tfrac12\\cdot 8\\}=0$. For $u \\lt 1$ the Lagrangian solution is again $x=(1,0,0,1)$: $u^3=0+\\tfrac14\\cdot 2=\\tfrac12$, $u^4=\\tfrac12+\\tfrac18\\cdot 2=\\tfrac34$. The sequence continues $7/8,\\ 15/16,\\dots\\to 1$, the optimal multiplier.",
+  "difficulty": 2,
+  "source": {
+   "label": "An Applications Oriented Guide to Lagrangian Relaxation (M. L. Fisher, Interfaces 15:2, 1985 — copy hosted at U. Lethbridge)",
+   "url": "https://www.cs.uleth.ca/~benkoczi/OR/read/lagrange-relax-introduct-fisher85.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-fisher-subgradient-thirds",
+  "topic": "t401",
+  "type": "num",
+  "q": "Consider $$Z=\\max\\ 16x_1+10x_2+0x_3+4x_4$$ subject to (2) $8x_1+2x_2+x_3+4x_4\\le 10$, (3) $x_1+x_2\\le 1$, (4) $x_3+x_4\\le 1$, $x\\in\\{0,1\\}^4$. Constraint (2) is dualized and the multiplier is updated by the subgradient rule $u^{k+1}=\\max\\{0,\\ u^k-t_k\\,(10-8x_1^k-2x_2^k-x_3^k-4x_4^k)\\}$, where $x^k$ solves the Lagrangian problem $\\max\\{(16-8u)x_1+(10-2u)x_2-u\\,x_3+(4-4u)x_4+10u : (3),\\ (4),\\ x\\ \\text{binary}\\}$ at $u=u^k$. Start from $u^0=0$. Use the step sizes $t_k=3^{-k}$, i.e. $1,\\tfrac13,\\tfrac19,\\dots$ To which value does the sequence $u^k$ converge?",
+  "answer": "1/3",
+  "explain": "$u^1=2$, $u^2=\\max\\{0,2-\\tfrac13\\cdot 8\\}=0$, and from then on $u \\lt 1$, so $x=(1,0,0,1)$, $b-Ax=-2$ and step $k$ adds $2\\cdot 3^{-k}$: $u^3=2/9$, $u^4=8/27$, $u^5=26/81,\\dots$ The limit is $2\\sum_{k\\ge 2}3^{-k}=2\\cdot\\frac{1/9}{1-1/3}=\\frac13$. This is <b>not</b> the optimal multiplier ($u^*=1$): the steps shrink too fast, their sum is finite.",
+  "difficulty": 3,
+  "source": {
+   "label": "An Applications Oriented Guide to Lagrangian Relaxation (M. L. Fisher, Interfaces 15:2, 1985 — copy hosted at U. Lethbridge)",
+   "url": "https://www.cs.uleth.ca/~benkoczi/OR/read/lagrange-relax-introduct-fisher85.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-subgradient-step-sum-tf",
+  "topic": "t401",
+  "type": "tf",
+  "q": "Subgradient method for a Lagrangian dual. <i>Claim:</i> a step-size rule whose steps have a finite sum ($\\sum_k t_k \\lt \\infty$) can never lead the method to the optimal multipliers.",
+  "answer": false,
+  "explain": "The conditions $t_k\\to 0$ and $\\sum_k t_k=\\infty$ are <b>sufficient</b> for convergence (Held, Wolfe and Crowder), not necessary. In Fisher's example the rule $t_k=1,\\tfrac12,\\tfrac14,\\dots$ has $\\sum_k t_k=2$ and still converges to $u^*=1$, whereas $t_k=1,\\tfrac13,\\tfrac19,\\dots$ stalls at $u=1/3$.",
+  "difficulty": 2,
+  "source": {
+   "label": "An Applications Oriented Guide to Lagrangian Relaxation (M. L. Fisher, Interfaces 15:2, 1985 — copy hosted at U. Lethbridge)",
+   "url": "https://www.cs.uleth.ca/~benkoczi/OR/read/lagrange-relax-introduct-fisher85.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-subgradient-practical-step",
+  "topic": "t401",
+  "type": "card",
+  "q": "Subgradient method for the Lagrangian dual: which step size is used in practice, and when can the method <i>prove</i> optimality?",
+  "a": "Max form (upper bounds $Z_D(u)$): $$t_k=\\lambda_k\\,\\frac{Z_D(u^k)-Z^*}{\\lVert Ax^k-b\\rVert^2},\\qquad 0 \\lt \\lambda_k\\le 2,$$ with $Z^*$ the value of the best known feasible solution. Start with $\\lambda=2$ and halve it whenever $Z_D(u)$ has failed to improve for a fixed number of iterations.<br>Theory: $t_k\\to 0$ and $\\sum_k t_k=\\infty$ guarantee $Z_D(u^k)\\to Z_D$.<br>Optimality is proven only if some bound $Z_D(u^k)$ equals $Z^*$; otherwise the method is stopped at an iteration limit. Inside branch and bound, the Lagrangian solutions are rarely feasible but often nearly so, and are repaired by a problem-specific heuristic.",
+  "difficulty": 2,
+  "source": {
+   "label": "An Applications Oriented Guide to Lagrangian Relaxation (M. L. Fisher, Interfaces 15:2, 1985 — copy hosted at U. Lethbridge)",
+   "url": "https://www.cs.uleth.ca/~benkoczi/OR/read/lagrange-relax-introduct-fisher85.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-fisher-lp-bound",
+  "topic": "t401",
+  "type": "num",
+  "q": "Consider $$Z=\\max\\ 16x_1+10x_2+0x_3+4x_4$$ subject to (2) $8x_1+2x_2+x_3+4x_4\\le 10$, (3) $x_1+x_2\\le 1$, (4) $x_3+x_4\\le 1$, $x\\in\\{0,1\\}^4$. Compute the optimal value $Z_{LP}$ of its LP relaxation ($x\\in\\{0,1\\}^4$ replaced by $0\\le x\\le 1$).",
+  "answer": 18,
+  "explain": "$x=(1,0,0,\\tfrac12)$ is LP-feasible with value $16+2=18$. The dual solution $u=1$ on (2), $v_1=8$ on (3), $v_2=0$ on (4) is dual feasible ($8u+v_1=16$, $2u+v_1=10$, $u+v_2\\ge 0$, $4u+v_2=4$) with value $10\\cdot 1+8=18$, so $Z_{LP}=18$. It coincides with the Lagrangian bound from dualizing (2), and the LP dual price of (2) equals the optimal multiplier $u^*=1$: the Lagrangian problem over (3), (4) has the integrality property.",
+  "difficulty": 2,
+  "source": {
+   "label": "An Applications Oriented Guide to Lagrangian Relaxation (M. L. Fisher, Interfaces 15:2, 1985 — copy hosted at U. Lethbridge)",
+   "url": "https://www.cs.uleth.ca/~benkoczi/OR/read/lagrange-relax-introduct-fisher85.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-lagrangian-vs-lp-proof-max",
+  "topic": "t401",
+  "type": "short",
+  "q": "Let $Z_D=\\min_{u\\ge 0}\\max\\{cx+u(b-Ax) : Dx\\le e,\\ x\\ge 0\\ \\text{integer}\\}$ be the Lagrangian dual of $Z=\\max\\{cx : Ax\\le b,\\ Dx\\le e,\\ x\\ge 0\\ \\text{integer}\\}$ and let $Z_{LP}$ be the value of the LP relaxation. Prove $Z_D\\le Z_{LP}$ and state exactly when equality is guaranteed.",
+  "model": "$$\\begin{array}{rl} Z_D &=\\displaystyle\\min_{u\\ge 0}\\max\\{cx+u(b-Ax) : Dx\\le e,\\ x\\ge 0\\ \\text{integer}\\}\\\\ &\\le\\displaystyle\\min_{u\\ge 0}\\max\\{cx+u(b-Ax) : Dx\\le e,\\ x\\ge 0\\}\\\\ &=\\min\\{ub+ve : uA+vD\\ge c,\\ u,v\\ge 0\\}\\\\ &=\\max\\{cx : Ax\\le b,\\ Dx\\le e,\\ x\\ge 0\\}=Z_{LP}.\\end{array}$$ The inequality drops integrality in the inner problem (a larger feasible set can only increase a maximum). The next line replaces the inner LP $\\max\\{(c-uA)x : Dx\\le e,\\ x\\ge 0\\}$ by its dual $\\min\\{ve : vD\\ge c-uA,\\ v\\ge 0\\}$ and merges the two minimisations; the last line is LP duality for the LP relaxation. The only inequality is where integrality of the Lagrangian problem is dropped, so $Z_D=Z_{LP}$ whenever the Lagrangian problem is unaffected by removing integrality (integrality property). A strictly better bound requires a Lagrangian problem that is not naturally integral.",
+  "rubric": [
+   "Relaxes integrality of the inner (Lagrangian) problem, giving $\\le$",
+   "LP duality on the inner LP: obtains $\\min\\{ub+ve : uA+vD\\ge c,\\ u,v\\ge 0\\}$",
+   "Recognises this as the dual of the LP relaxation, hence equal to $Z_{LP}$",
+   "Equality under the integrality property of the Lagrangian problem"
+  ],
+  "difficulty": 3,
+  "source": {
+   "label": "An Applications Oriented Guide to Lagrangian Relaxation (M. L. Fisher, Interfaces 15:2, 1985 — copy hosted at U. Lethbridge)",
+   "url": "https://www.cs.uleth.ca/~benkoczi/OR/read/lagrange-relax-introduct-fisher85.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-integrality-property-card",
+  "topic": "t401",
+  "type": "card",
+  "q": "What is the <b>integrality property</b> of a Lagrangian problem, and what does it imply for the Lagrangian bound compared with the LP bound?",
+  "a": "The Lagrangian problem has the integrality property if dropping its integrality requirement never changes its optimal value, i.e. the kept polyhedron $\\{x\\ge 0 : Dx\\le e\\}$ already has integer extreme points.<br>Consequence (Geoffrion): the Lagrangian dual bound then <b>equals</b> the LP-relaxation bound. In general the Lagrangian dual is at least as tight as LP: $Z\\le Z_D\\le Z_{LP}$ for a max problem, $z_{LP}\\le z_D\\le z_{IP}$ for a min problem. To get a strictly better bound, keep a subproblem that is <b>not</b> naturally integral, such as a knapsack.",
+  "difficulty": 2,
+  "source": {
+   "label": "An Applications Oriented Guide to Lagrangian Relaxation (M. L. Fisher, Interfaces 15:2, 1985 — copy hosted at U. Lethbridge)",
+   "url": "https://www.cs.uleth.ca/~benkoczi/OR/read/lagrange-relax-introduct-fisher85.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-fisher-knapsack-relaxation-zd0",
+  "topic": "t401",
+  "type": "num",
+  "q": "Consider $$Z=\\max\\ 16x_1+10x_2+0x_3+4x_4$$ subject to (2) $8x_1+2x_2+x_3+4x_4\\le 10$, (3) $x_1+x_2\\le 1$, (4) $x_3+x_4\\le 1$, $x\\in\\{0,1\\}^4$. This time keep the knapsack constraint (2) and dualize (3) and (4) with multipliers $v_1,v_2\\ge 0$: $$Z_D(v)=\\max\\{(16-v_1)x_1+(10-v_1)x_2-v_2x_3+(4-v_2)x_4+v_1+v_2 : 8x_1+2x_2+x_3+4x_4\\le 10,\\ x\\ \\text{binary}\\}.$$ Compute $Z_D(0,0)$.",
+  "answer": 26,
+  "explain": "With $v=(0,0)$ this is the knapsack $\\max\\ 16x_1+10x_2+4x_4$ with capacity 10. $x_1$ and $x_4$ together weigh 12, so the best choice is $x=(1,1,0,0)$ (weight exactly 10, value 26). It violates (3), so 26 is only an upper bound; the next multiplier update raises $v_1$.",
+  "difficulty": 2,
+  "source": {
+   "label": "An Applications Oriented Guide to Lagrangian Relaxation (M. L. Fisher, Interfaces 15:2, 1985 — copy hosted at U. Lethbridge)",
+   "url": "https://www.cs.uleth.ca/~benkoczi/OR/read/lagrange-relax-introduct-fisher85.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-fisher-knapsack-relaxation-step",
+  "topic": "t401",
+  "type": "mcq",
+  "q": "Consider $$Z=\\max\\ 16x_1+10x_2+0x_3+4x_4$$ subject to (2) $8x_1+2x_2+x_3+4x_4\\le 10$, (3) $x_1+x_2\\le 1$, (4) $x_3+x_4\\le 1$, $x\\in\\{0,1\\}^4$. Keep (2) and dualize (3) and (4) with multipliers $v=(v_1,v_2)\\ge 0$. At $v^0=(0,0)$ the Lagrangian (knapsack) solution is $x^0=(1,1,0,0)$ with $Z_D(v^0)=26$; the best known feasible value is $Z^*=0$ (from $x=0$). Update with $v^{k+1}=\\max\\{0,\\ v^k-t_k\\,g^k\\}$ componentwise, where $g^k=(1-x_1^k-x_2^k,\\ 1-x_3^k-x_4^k)$ and $t_k=(Z_D(v^k)-Z^*)/\\lVert g^k\\rVert^2$. What is $v^1$?",
+  "options": [
+   "$(0,\\ 13)$",
+   "$(13,\\ 0)$",
+   "$(26,\\ 0)$",
+   "$(13,\\ -13)$"
+  ],
+  "answer": 1,
+  "explain": "$g^0=(1-2,\\ 1-0)=(-1,1)$, $\\lVert g^0\\rVert^2=2$, $t_0=(26-0)/2=13$. Then $v^1=\\max\\{0,\\ (0,0)-13(-1,1)\\}=\\max\\{0,\\ (13,-13)\\}=(13,0)$: the violated constraint (3) gets a positive price, the slack constraint (4) stays at 0. $(0,13)$ reverses the sign of the step, $(26,0)$ forgets to divide by $\\lVert g\\rVert^2$, and $(13,-13)$ forgets the projection onto $v\\ge 0$.",
+  "difficulty": 3,
+  "source": {
+   "label": "An Applications Oriented Guide to Lagrangian Relaxation (M. L. Fisher, Interfaces 15:2, 1985 — copy hosted at U. Lethbridge)",
+   "url": "https://www.cs.uleth.ca/~benkoczi/OR/read/lagrange-relax-introduct-fisher85.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-fisher-knapsack-relaxation-solved",
+  "topic": "t401",
+  "type": "mcq",
+  "q": "Consider $$Z=\\max\\ 16x_1+10x_2+0x_3+4x_4$$ subject to (2) $8x_1+2x_2+x_3+4x_4\\le 10$, (3) $x_1+x_2\\le 1$, (4) $x_3+x_4\\le 1$, $x\\in\\{0,1\\}^4$. This time keep the knapsack constraint (2) and dualize (3) and (4) with multipliers $v_1,v_2\\ge 0$: $$Z_D(v)=\\max\\{(16-v_1)x_1+(10-v_1)x_2-v_2x_3+(4-v_2)x_4+v_1+v_2 : 8x_1+2x_2+x_3+4x_4\\le 10,\\ x\\ \\text{binary}\\}.$$ The subgradient method reaches $v=(11,0)$. What is $Z_D(11,0)$ and what does it prove?",
+  "options": [
+   "$Z_D(11,0)=20$; nothing can be concluded yet",
+   "$Z_D(11,0)=5$, a lower bound on $Z$",
+   "$Z_D(11,0)=16$, which is below the LP bound 18, so this relaxation is weaker than the LP relaxation",
+   "$Z_D(11,0)=16$, attained by $x=(1,0,0,0)$, which is feasible for the original problem with value 16: upper bound equals feasible value, so $Z=16$ is proven optimal"
+  ],
+  "answer": 3,
+  "explain": "Coefficients at $v=(11,0)$: $(5,-1,0,4)$ plus the constant 11. $x_1$ and $x_4$ do not fit together ($12 \\gt 10$), so the knapsack optimum takes $x_1=1$: $Z_D=5+11=16$. This $x$ satisfies (3) and (4) and has original value 16, so the upper bound meets a feasible value. For a max problem a <i>smaller</i> upper bound is stronger: 16 beats the LP bound 18, which is possible because the knapsack subproblem lacks the integrality property.",
+  "difficulty": 2,
+  "source": {
+   "label": "An Applications Oriented Guide to Lagrangian Relaxation (M. L. Fisher, Interfaces 15:2, 1985 — copy hosted at U. Lethbridge)",
+   "url": "https://www.cs.uleth.ca/~benkoczi/OR/read/lagrange-relax-introduct-fisher85.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-fisher-feasible-not-optimal",
+  "topic": "t401",
+  "type": "tf",
+  "q": "Consider $$Z=\\max\\ 16x_1+10x_2+0x_3+4x_4$$ subject to (2) $8x_1+2x_2+x_3+4x_4\\le 10$, (3) $x_1+x_2\\le 1$, (4) $x_3+x_4\\le 1$, $x\\in\\{0,1\\}^4$. Dualize (2) with $u=3$: the Lagrangian problem $\\max\\{-8x_1+4x_2-3x_3-8x_4+30 : (3),\\ (4),\\ x\\ \\text{binary}\\}$ has optimal solution $x=(0,1,0,0)$ and $Z_D(3)=34$. <i>Claim:</i> since this $x$ also satisfies the dualized constraint (2), it is optimal for the original problem.",
+  "answer": false,
+  "explain": "A Lagrangian solution that is feasible for the original problem is guaranteed optimal only if it is also complementary, $u(b-Ax)=0$. Here $u(b-Ax)=3\\cdot(10-2)=24\\ne 0$: the bound is 34 but the solution is worth only 10, and $x=(1,0,0,0)$ is feasible with value 16.",
+  "difficulty": 2,
+  "source": {
+   "label": "An Applications Oriented Guide to Lagrangian Relaxation (M. L. Fisher, Interfaces 15:2, 1985 — copy hosted at U. Lethbridge)",
+   "url": "https://www.cs.uleth.ca/~benkoczi/OR/read/lagrange-relax-introduct-fisher85.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-dual-function-shape",
+  "topic": "t401",
+  "type": "card",
+  "q": "Why is the Lagrangian dual function always convex (max problems) or concave (min problems) in the multipliers, even when the primal problem is an integer program?",
+  "a": "Max form: $Z_L(\\lambda)=\\sup_x\\,[f(x)-\\sum_i\\lambda_ig_i(x)]$ is a pointwise supremum of functions that are <b>linear in $\\lambda$</b> (one per $x$), hence convex. Min form: $Z(\\lambda)=\\min_x\\,[c^\\top x+\\lambda^\\top(b-Ax)]$ is a pointwise minimum of linear functions, hence concave. With finitely many candidate $x$ it is piecewise linear and not differentiable at the breakpoints, which is why the dual is solved with <b>subgradients</b>.<br>Weak duality (max form, constraints $g_i(x)\\le 0$): $Z_L(\\lambda)\\ge f(\\bar x)$ for every feasible $\\bar x$ and every $\\lambda\\ge 0$.",
+  "difficulty": 1,
+  "source": {
+   "label": "\"Lagrangian Relaxation\" (Jupyter-style lecture page, personal.eur.nl/birbil)",
+   "url": "https://personal.eur.nl/birbil/bolbilim/teaa/02_Lag_Rel.html",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-lr-min-form-card",
+  "topic": "t401",
+  "type": "card",
+  "q": "Lagrangian relaxation, <b>minimisation form</b>: for $Z_{IP}=\\min\\{c^\\top x : Ax\\ge b,\\ Dx\\ge d,\\ x\\ \\text{integer}\\}$ with $Ax\\ge b$ the complicating constraints, write $Z(\\lambda)$, the weak duality statement and the Lagrangian dual.",
+  "a": "$$Z(\\lambda)=\\min\\{c^\\top x+\\lambda^\\top(b-Ax) : Dx\\ge d,\\ x\\ \\text{integer}\\},\\qquad\\lambda\\ge 0.$$ Weak duality: $Z(\\lambda)\\le Z_{IP}$ for every $\\lambda\\ge 0$ (a feasible $x$ has $b-Ax\\le 0$, so the penalty term is $\\le 0$). Lagrangian dual: $Z_D=\\max_{\\lambda\\ge 0}Z(\\lambda)$. In general $Z_D\\le Z_{IP}$ and the inequality can be strict: there is no strong duality for integer programs.",
+  "difficulty": 1,
+  "source": {
+   "label": "Lagrangian Relaxation: An overview (A. Bockmayr / K. Reinert / G. Klau, FU Berlin, lecture script)",
+   "url": "https://www.mi.fu-berlin.de/wiki/pub/ABI/IntegerLinearOptimizationWS11/lagrange.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-subgradient-definition-card",
+  "topic": "t401",
+  "type": "card",
+  "q": "Define a subgradient of a concave function, give the optimality condition, give a subgradient of the Lagrangian function $Z(\\lambda)=\\min_{x\\in X}\\{c^\\top x+\\lambda^\\top(b-Ax)\\}$ at $\\lambda^t$, and state the basic subgradient iteration.",
+  "a": "$s$ is a subgradient of a concave $f$ at $x^*$ if $f(x)\\le f(x^*)+s^\\top(x-x^*)$ for all $x$; $x^*$ maximises $f$ iff $0$ is a subgradient at $x^*$.<br>If $x^t$ solves the Lagrangian problem at $\\lambda^t$, then $s^t=b-Ax^t$ (the violation of the dualized constraints) is a subgradient of $Z$ at $\\lambda^t$.<br>Iteration: choose $\\lambda^0$ (e.g. 0); compute $x^t$ and $s^t$; stop if $s^t=0$; otherwise $\\lambda^{t+1}=\\max\\{0,\\ \\lambda^t+\\gamma_ts^t\\}$. Convergence to $Z_D$ for any steps with $\\gamma_t\\to 0$ and $\\sum_t\\gamma_t=\\infty$ (e.g. $\\gamma_t=1/(t+1)$, slow in practice). Held–Karp step: $\\gamma_t=\\mu_t\\,(Z^*-Z(\\lambda^t))/\\lVert b-Ax^t\\rVert^2$ with $Z^*$ the best primal value and $0 \\lt \\mu_0\\le 2$, reduced when the bound stalls.",
+  "difficulty": 2,
+  "source": {
+   "label": "Lagrangian Relaxation: An overview (A. Bockmayr / K. Reinert / G. Klau, FU Berlin, lecture script)",
+   "url": "https://www.mi.fu-berlin.de/wiki/pub/ABI/IntegerLinearOptimizationWS11/lagrange.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-multiplier-direction",
+  "topic": "t401",
+  "type": "mcq",
+  "q": "Minimisation IP with dualized constraints $Ax\\ge b$: $Z(\\lambda)=\\min\\{c^\\top x+\\lambda^\\top(b-Ax) : x\\in X\\}$, with subgradient update $\\lambda^{t+1}=\\max\\{0,\\ \\lambda^t+\\gamma_t(b-Ax^t)\\}$, $\\gamma_t \\gt 0$. Suppose the Lagrangian solution $x^t$ <b>violates</b> dualized constraint $i$. What happens to $\\lambda_i$, and why is the $\\max\\{0,\\cdot\\}$ there?",
+  "options": [
+   "$\\lambda_i$ increases, because $b_i-(Ax^t)_i \\gt 0$: violating the constraint becomes more expensive. The projection keeps $\\lambda\\ge 0$, which is needed for $Z(\\lambda)$ to remain a valid lower bound",
+   "$\\lambda_i$ decreases; the projection is only a numerical safeguard",
+   "$\\lambda_i$ increases; the projection is needed only when the dualized constraints are equalities",
+   "$\\lambda_i$ stays the same; only multipliers of over-satisfied constraints are changed"
+  ],
+  "answer": 0,
+  "explain": "The subgradient component is the violation $b_i-(Ax^t)_i$: positive when the constraint is violated (price goes up), negative when it is over-satisfied (price goes down). For inequality constraints the bound $Z(\\lambda)\\le Z_{IP}$ relies on $\\lambda\\ge 0$, hence the projection; multipliers of dualized <i>equalities</i> would be free and need no projection.",
+  "difficulty": 2,
+  "source": {
+   "label": "Lagrangian Relaxation: An overview (A. Bockmayr / K. Reinert / G. Klau, FU Berlin, lecture script)",
+   "url": "https://www.mi.fu-berlin.de/wiki/pub/ABI/IntegerLinearOptimizationWS11/lagrange.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-why-lagrangian-is-relaxation",
+  "topic": "t401",
+  "type": "short",
+  "q": "For $z_{IP}=\\max\\{cx : A_1x\\le b_1,\\ A_2x\\le b_2,\\ x\\in\\mathbb{Z}^n_+\\}$ let $Q=\\{x\\in\\mathbb{Z}^n_+ : A_2x\\le b_2\\}$ and $z_{LR}(\\lambda)=\\max_{x\\in Q}\\ (c-\\lambda A_1)x+\\lambda b_1$. Using the definition of a relaxation (the feasible set contains the original one, and the relaxed objective is at least $cx$ on the original feasible set), show that $LR(\\lambda)$ is a relaxation for every $\\lambda\\ge 0$. What goes wrong if some $\\lambda_i \\lt 0$?",
+  "model": "Let $S=\\{x\\in\\mathbb{Z}^n_+ : A_1x\\le b_1,\\ A_2x\\le b_2\\}$. (i) $S\\subseteq Q$, because $Q$ is obtained by dropping constraints. (ii) For $x\\in S$: $b_1-A_1x\\ge 0$ and $\\lambda\\ge 0$ give $\\lambda(b_1-A_1x)\\ge 0$, hence $(c-\\lambda A_1)x+\\lambda b_1=cx+\\lambda(b_1-A_1x)\\ge cx$. Both conditions hold, so $z_{LR}(\\lambda)\\ge z_{IP}$.<br>If some $\\lambda_i \\lt 0$, a feasible point with slack in row $i$ receives a <i>negative</i> term, condition (ii) can fail and $z_{LR}(\\lambda)$ is no longer guaranteed to be an upper bound.",
+  "rubric": [
+   "$S\\subseteq Q$ (only constraints were dropped)",
+   "For feasible $x$: $\\lambda(b_1-A_1x)\\ge 0$ since both factors are nonnegative",
+   "Hence relaxed objective $\\ge cx$ on $S$, so $z_{LR}(\\lambda)\\ge z_{IP}$",
+   "A negative multiplier breaks the sign argument"
+  ],
+  "difficulty": 2,
+  "source": {
+   "label": "Computational Integer Programming, Lecture 3 (T. Ralphs, Lehigh / Universidad de los Andes)",
+   "url": "https://coral.ise.lehigh.edu/~ted/files/mip/lectures/Lecture3.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-relaxation-definition-card",
+  "topic": "t103",
+  "type": "card",
+  "q": "Give the formal definition of a relaxation of $z_{IP}=\\max\\{cx : x\\in S\\}$, the three basic types of relaxation, and the two standard conclusions drawn from solving one.",
+  "a": "$z_R=\\max\\{z_R(x) : x\\in S_R\\}$ is a relaxation if (i) $S\\subseteq S_R$ and (ii) $cx\\le z_R(x)$ for all $x\\in S$; then $z_R\\ge z_{IP}$. The relaxation must be solved to optimality for the bound to be valid.<br><b>Types:</b> LP relaxation (drop integrality); combinatorial relaxation (drop constraints so that an easy combinatorial problem remains); Lagrangian relaxation (drop constraints and penalise their violation in the objective).<br><b>Conclusions:</b> if the relaxation is infeasible, so is the IP; if the relaxation has the same objective and its optimal solution is feasible for the IP, that solution is optimal for the IP. (For a Lagrangian relaxation the objective differs: a Lagrangian solution that is feasible for the IP is optimal only if it is also complementary, i.e. its penalty term is zero.)",
+  "difficulty": 1,
+  "source": {
+   "label": "Computational Integer Programming, Lecture 3 (T. Ralphs, Lehigh / Universidad de los Andes)",
+   "url": "https://coral.ise.lehigh.edu/~ted/files/mip/lectures/Lecture3.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-tsp-combinatorial-relaxations",
+  "topic": "t103",
+  "type": "mcq",
+  "q": "Which pair consists of two <b>combinatorial relaxations</b> of the TSP that can both be solved in polynomial time?",
+  "options": [
+   "The knapsack problem and the set covering problem",
+   "The shortest path problem and the maximum flow problem",
+   "The LP relaxation (drop integrality) and the feasibility pump",
+   "The assignment problem (drop the subtour elimination constraints) and the minimum 1-tree (a spanning tree on nodes $2,\\dots,n$ plus two edges at node 1)"
+  ],
+  "answer": 3,
+  "explain": "Dropping the subtour constraints leaves an assignment problem; the minimum 1-tree keeps connectivity but drops the degree requirements except at node 1. Every tour is feasible for both and both are solvable in polynomial time. The LP relaxation is a different type of relaxation and the feasibility pump is a heuristic; knapsack, covering, shortest path and max flow do not arise by dropping TSP constraints.",
+  "difficulty": 1,
+  "source": {
+   "label": "Computational Integer Programming, Lecture 3 (T. Ralphs, Lehigh / Universidad de los Andes)",
+   "url": "https://coral.ise.lehigh.edu/~ted/files/mip/lectures/Lecture3.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-which-constraints-to-dualize",
+  "topic": "t401",
+  "type": "card",
+  "q": "Lagrangian relaxation: what makes a group of constraints a good candidate for being dualized?",
+  "a": "Dualize constraints so that what <b>remains</b> is easy: polynomially solvable (spanning tree, assignment, LP), totally unimodular (network), or NP-hard but with good practical algorithms (knapsack). Another reason: the constraints are too many to write down (TSP subtour elimination).<br>Trade-off: if the remaining problem has the integrality property the bound is only the LP bound; keeping a harder subproblem such as a knapsack can give a strictly tighter bound.",
+  "difficulty": 1,
+  "source": {
+   "label": "DM872 Math Optimization at Work — Lagrangian Relaxation slides (M. Chiarandini, University of Southern Denmark)",
+   "url": "https://imada.sdu.dk/u/marco/Teaching/AY2023-2024/DM872/assets/dm872-slides-lagrangian.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-lagrangian-dual-convexification",
+  "topic": "t401",
+  "type": "mcq",
+  "q": "Let $z=\\max\\{cx : Ax\\le b,\\ Dx\\le d,\\ x\\in\\mathbb{Z}^n_+\\}$ and dualize $Dx\\le d$: $z_{LR}(\\lambda)=\\max\\{cx-\\lambda(Dx-d) : Ax\\le b,\\ x\\in\\mathbb{Z}^n_+\\}$, $z_{LD}=\\min_{\\lambda\\ge 0}z_{LR}(\\lambda)$. Which problem has optimal value exactly $z_{LD}$?",
+  "options": [
+   "$\\max\\{cx : x\\in\\operatorname{conv}\\{x\\in\\mathbb{Z}^n_+ : Ax\\le b,\\ Dx\\le d\\}\\}$",
+   "$\\max\\{cx : Ax\\le b,\\ Dx\\le d,\\ x\\ge 0\\}$",
+   "$\\max\\{cx : Dx\\le d,\\ x\\in\\operatorname{conv}\\{x\\in\\mathbb{Z}^n_+ : Ax\\le b\\}\\}$",
+   "$\\max\\{cx : Ax\\le b,\\ x\\in\\operatorname{conv}\\{x\\in\\mathbb{Z}^n_+ : Dx\\le d\\}\\}$"
+  ],
+  "answer": 2,
+  "explain": "The constraints kept in the subproblem are convexified (replaced by the convex hull of their integer points), while the dualized constraints are only imposed linearly. Convexifying all constraints together gives $z$ itself, convexifying nothing gives $z_{LP}$, and convexifying the dualized set $Dx\\le d$ instead of the kept one is the wrong way round. Hence $z\\le z_{LD}\\le z_{LP}$, with $z_{LD}=z_{LP}$ when $\\{x\\ge 0 : Ax\\le b\\}$ is already integral.",
+  "difficulty": 3,
+  "source": {
+   "label": "DM872 Math Optimization at Work — Lagrangian Relaxation slides (M. Chiarandini, University of Southern Denmark)",
+   "url": "https://imada.sdu.dk/u/marco/Teaching/AY2023-2024/DM872/assets/dm872-slides-lagrangian.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-surrogate-bound-example",
+  "topic": "t103",
+  "type": "num",
+  "q": "Consider $\\max\\ 4x_1+x_2$ subject to $3x_1-x_2\\le 6$, $x_2\\le 3$, $5x_1+2x_2\\le 18$, $x\\ge 0$ integer. A <b>surrogate relaxation</b> replaces the first and third constraints by their weighted sum with multipliers $\\lambda_1=2$ and $\\lambda_3=1$ (the constraint $x_2\\le 3$ and integrality are kept). What upper bound does it give?",
+  "answer": 11,
+  "explain": "$2(3x_1-x_2)+(5x_1+2x_2)=11x_1\\le 2\\cdot 6+18=30$, so $x_1\\le 2$ for integer $x_1$; with $x_2\\le 3$ the bound is $4\\cdot 2+3=11$. Here it is tight: $(2,3)$ is feasible for the original problem ($3\\le 6$, $16\\le 18$), so $z_{IP}=11$, while the LP bound is $144/11\\approx 13.1$ at $(30/11,\\ 24/11)$.",
+  "difficulty": 2,
+  "source": {
+   "label": "DM872 Math Optimization at Work — Lagrangian Relaxation slides (M. Chiarandini, University of Southern Denmark)",
+   "url": "https://imada.sdu.dk/u/marco/Teaching/AY2023-2024/DM872/assets/dm872-slides-lagrangian.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-kth09-lagrangian-problem",
+  "topic": "t401",
+  "type": "short",
+  "q": "(IP) $\\min\\ -6x_1-10x_2-11x_3-10x_4$ subject to $-x_1-x_2-x_3\\ge -2$, $-x_2-x_3-x_4\\ge -2$, $-3x_1-4x_2-5x_3-6x_4\\ge -9$, $x\\ge 0$ integer. Relax the first two constraints with multipliers $u_1=u_2=1$. Write the Lagrangian problem and solve it; you may use that the knapsack $\\max\\ 5x_1+8x_2+9x_3+9x_4$ s.t. $3x_1+4x_2+5x_3+6x_4\\le 9$, $x\\ge 0$ integer, has optimal solution $(0,1,1,0)$. Give the dual function value $\\varphi(1,1)$.",
+  "model": "$\\varphi(u)=\\min\\{-6x_1-10x_2-11x_3-10x_4+u_1(-2+x_1+x_2+x_3)+u_2(-2+x_2+x_3+x_4)\\}$ over $3x_1+4x_2+5x_3+6x_4\\le 9$, $x\\ge 0$ integer. For $u=(1,1)$ the coefficients are $-6+1=-5$, $-10+2=-8$, $-11+2=-9$, $-10+1=-9$ and the constant is $-4$: $$\\min\\ -5x_1-8x_2-9x_3-9x_4-4\\quad\\text{s.t. } 3x_1+4x_2+5x_3+6x_4\\le 9,\\ x\\ge 0\\ \\text{integer}.$$ This is minus the given knapsack, so $x(u)=(0,1,1,0)$ and $\\varphi(1,1)=-17-4=-21$.",
+  "rubric": [
+   "Penalty term with the right sign: $u_1(-2+x_1+x_2+x_3)+u_2(-2+x_2+x_3+x_4)$",
+   "Coefficients $-5,\\,-8,\\,-9,\\,-9$ and constant $-4$",
+   "Recognises the knapsack and takes $x(u)=(0,1,1,0)$",
+   "$\\varphi(1,1)=-21$"
+  ],
+  "difficulty": 2,
+  "source": {
+   "label": "KTH SF2812 Applied Linear Optimization — final exam 9 January 2009 (questions), Q3",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t090109.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-kth09-zero-subgradient",
+  "topic": "t401",
+  "type": "mcq",
+  "q": "(IP) $\\min\\ -6x_1-10x_2-11x_3-10x_4$ subject to $-x_1-x_2-x_3\\ge -2$, $-x_2-x_3-x_4\\ge -2$, $-3x_1-4x_2-5x_3-6x_4\\ge -9$, $x\\ge 0$ integer. With $u=(1,1)$ on the first two (relaxed) constraints, the Lagrangian problem has optimal solution $x(u)=(0,1,1,0)$. Which statement about the subgradient of the dual function at $u=(1,1)$ is correct?",
+  "options": [
+   "It is $(-2,-2)$, so both multipliers should be decreased towards 0",
+   "It is $(0,0)$; this only shows that the step length must be reduced and says nothing about (IP)",
+   "It is $(0,0)$: $u=(1,1)$ maximises the dual, there is no duality gap, and $x(u)=(0,1,1,0)$ is optimal for (IP) with value $-21$",
+   "It is $(2,2)$, so both multipliers should be increased"
+  ],
+  "answer": 2,
+  "explain": "A subgradient is $b-Ax(u)=(-2+x_1+x_2+x_3,\\ -2+x_2+x_3+x_4)=(0,0)$ at $x(u)=(0,1,1,0)$. A zero subgradient means $u$ is dual optimal; moreover $x(u)$ satisfies the relaxed constraints (with equality), so it is feasible and its objective $-10-11=-21$ equals the lower bound $\\varphi(1,1)=-21$: it is optimal. $(-2,-2)$ forgets to plug in $x(u)$.",
+  "difficulty": 2,
+  "source": {
+   "label": "KTH SF2812 Applied Linear Optimization — final exam 9 January 2009 (questions), Q3",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t090109.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-kth08-phi-at-1",
+  "topic": "t401",
+  "type": "num",
+  "q": "(IP) $\\min\\ -5x_1-7x_2-10x_3$ subject to $-3x_1-6x_2-7x_3\\ge -8$, $-x_1-2x_2-3x_3\\ge -3$, $x\\in\\{0,1\\}^3$. Relax the <b>first</b> constraint with multiplier $u\\ge 0$ and let $\\varphi(u)$ be the dual function. Compute $\\varphi(1)$.",
+  "answer": -11,
+  "explain": "$\\varphi(1)=\\min\\{-5x_1-7x_2-10x_3+1\\cdot(-8+3x_1+6x_2+7x_3)\\}=\\min\\{-2x_1-x_2-3x_3\\}-8$ over binary $x$ with $x_1+2x_2+3x_3\\le 3$. The feasible points $(0,0,0)$, $(1,0,0)$, $(0,1,0)$, $(1,1,0)$, $(0,0,1)$ have values $0,-2,-1,-3,-3$. So $\\varphi(1)=-3-8=-11$, attained by both $(1,1,0)$ and $(0,0,1)$.",
+  "difficulty": 2,
+  "source": {
+   "label": "KTH SF2812 — final exam 16 January 2008 (questions), Q3",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t080116.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-kth08-two-subgradients",
+  "topic": "t401",
+  "type": "short",
+  "q": "(IP) $\\min\\ -5x_1-7x_2-10x_3$ subject to $-3x_1-6x_2-7x_3\\ge -8$, $-x_1-2x_2-3x_3\\ge -3$, $x\\in\\{0,1\\}^3$. Relax the first constraint with multiplier $u\\ge 0$; $\\varphi$ is the dual function. For $u=1$: (a) find two different optimal solutions of the Lagrangian problem; (b) use them to give two different subgradients of $\\varphi$ at $u=1$; (c) show that a convex combination of the two subgradients is zero and say what this implies.",
+  "model": "(a) Lagrangian problem at $u=1$: $\\min\\ -2x_1-x_2-3x_3\\ (-8)$ s.t. $x_1+2x_2+3x_3\\le 3$, $x$ binary. Enumeration gives two optima, $x=(1,1,0)$ and $x=(0,0,1)$, both with value $-3$ (so $\\varphi(1)=-11$).<br>(b) A subgradient is $b-Ax=-8+3x_1+6x_2+7x_3$ evaluated at an optimal $x$: $s_1=-8+9=1$ for $(1,1,0)$ and $s_2=-8+7=-1$ for $(0,0,1)$.<br>(c) $\\tfrac12s_1+\\tfrac12s_2=0$. Convex combinations of subgradients are subgradients, so $0$ is a subgradient of the concave function $\\varphi$ at $u=1$: $u=1$ is optimal for the dual and $z_D=-11$. (It does <i>not</i> yield a primal optimal solution: $(1,1,0)$ violates the relaxed constraint, and the IP optimum is $-10$.)",
+  "rubric": [
+   "Lagrangian objective $-2x_1-x_2-3x_3-8$ with constraint $x_1+2x_2+3x_3\\le 3$",
+   "Two optima $(1,1,0)$ and $(0,0,1)$",
+   "Subgradients $+1$ and $-1$ from $-8+3x_1+6x_2+7x_3$",
+   "$\\tfrac12s_1+\\tfrac12s_2=0$, hence $0$ is a subgradient",
+   "Conclusion: $u=1$ is dual optimal ($z_D=-11$)"
+  ],
+  "difficulty": 3,
+  "source": {
+   "label": "KTH SF2812 — final exam 16 January 2008 (questions), Q3",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t080116.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-kth08-duality-gap",
+  "topic": "t401",
+  "type": "num",
+  "q": "(IP) $\\min\\ -5x_1-7x_2-10x_3$ subject to $-3x_1-6x_2-7x_3\\ge -8$, $-x_1-2x_2-3x_3\\ge -3$, $x\\in\\{0,1\\}^3$. When the first constraint is relaxed, the Lagrangian dual is maximised at $u=1$ with $z_D=\\varphi(1)=-11$. Compute the duality gap $z_{IP}-z_D$.",
+  "answer": 1,
+  "explain": "Among the binary points satisfying both constraints, $(1,1,0)$ is excluded ($3+6=9 \\gt 8$) and the best is $x=(0,0,1)$ with value $-10$; so $z_{IP}=-10$ and the gap is $-10-(-11)=1$. For comparison the LP relaxation gives $-11.75$ at $x=(1,\\ 0.25,\\ 0.5)$: here $z_{LP}=-11.75$, $z_D=-11$, $z_{IP}=-10$, all different. The Lagrangian bound beats LP because the kept subproblem is a knapsack (no integrality property).",
+  "difficulty": 2,
+  "source": {
+   "label": "KTH SF2812 — final exam 16 January 2008 (questions), Q3",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t080116.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-kth08-bound-ordering-proof",
+  "topic": "t401",
+  "type": "short",
+  "q": "Let $z_{IP}=\\min\\{c^\\top x : Ax\\ge b,\\ Cx\\ge d,\\ x\\ge 0\\ \\text{integer}\\}$, let $z_D=\\max_{u\\ge 0}\\varphi(u)$ with $\\varphi(u)=\\min\\{c^\\top x+u^\\top(b-Ax) : Cx\\ge d,\\ x\\ge 0\\ \\text{integer}\\}$ be its Lagrangian dual, and let $z_{LP}$ be the value of the LP relaxation of the integer program. Show that $z_{IP}\\ge z_D\\ge z_{LP}$.",
+  "model": "(i) $z_{IP}\\ge z_D$: let $x^*$ be optimal for the integer program. For any $u\\ge 0$, $x^*$ is feasible in the Lagrangian problem, so $\\varphi(u)\\le c^\\top x^*+u^\\top(b-Ax^*)\\le c^\\top x^*$ because $b-Ax^*\\le 0$. Maximising over $u$ gives $z_D\\le z_{IP}$.<br>(ii) $z_D\\ge z_{LP}$: dropping integrality in the inner minimisation can only lower it: $\\varphi(u)\\ge\\varphi_{LP}(u):=\\min\\{c^\\top x+u^\\top(b-Ax) : Cx\\ge d,\\ x\\ge 0\\}$. By LP duality the Lagrangian dual of an LP has no gap: $\\max_{u\\ge 0}\\varphi_{LP}(u)=z_{LP}$. Hence $z_D=\\max_u\\varphi(u)\\ge\\max_u\\varphi_{LP}(u)=z_{LP}$.<br>Equality $z_D=z_{LP}$ holds when $\\{x\\ge 0 : Cx\\ge d\\}$ has integral extreme points (integrality property).",
+  "rubric": [
+   "Weak duality: the IP-optimal $x^*$ is feasible for the Lagrangian problem and $u^\\top(b-Ax^*)\\le 0$",
+   "Concludes $\\varphi(u)\\le z_{IP}$ for all $u\\ge 0$, so $z_D\\le z_{IP}$",
+   "Relaxing integrality in the inner problem: $\\varphi(u)\\ge\\varphi_{LP}(u)$",
+   "LP duality: $\\max_{u\\ge 0}\\varphi_{LP}(u)=z_{LP}$",
+   "Combines to $z_D\\ge z_{LP}$"
+  ],
+  "difficulty": 3,
+  "source": {
+   "label": "KTH SF2812 — final exam 16 January 2008 (questions), Q4",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t080116.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-kth10-knapsack-dual-function",
+  "topic": "t401",
+  "type": "short",
+  "q": "Binary knapsack in minimisation form: (KP) $\\min\\ -\\sum_{j=1}^nc_jx_j$ subject to $-\\sum_{j=1}^na_jx_j\\ge -b$, $x\\in\\{0,1\\}^n$, with $a\\ge 0$, $c\\ge 0$, $b\\ge 0$. The constraint is relaxed with a multiplier $\\lambda\\ge 0$. (a) Give an explicit formula for the dual function $\\varphi(\\lambda)$. (b) Give a subgradient of $\\varphi$ at $\\lambda$.",
+  "model": "(a) $\\varphi(\\lambda)=\\min_{x\\in\\{0,1\\}^n}\\ -\\sum_jc_jx_j+\\lambda\\,(-b+\\sum_ja_jx_j)=-\\lambda b+\\sum_j\\min_{x_j\\in\\{0,1\\}}(a_j\\lambda-c_j)x_j=-\\lambda b-\\sum_j(c_j-\\lambda a_j)^+$, where $(t)^+=\\max\\{t,0\\}$.<br>(b) A minimiser is $x_j(\\lambda)=1$ if $a_j\\lambda-c_j \\lt 0$ and $0$ otherwise; a subgradient is the violation of the relaxed constraint at that point: $-b+\\sum_{j\\,:\\,a_j\\lambda \\lt c_j}a_j$.",
+  "rubric": [
+   "Lagrangian $-\\sum_jc_jx_j+\\lambda(-b+\\sum_ja_jx_j)$",
+   "Separates by item: $x_j=1$ exactly when $a_j\\lambda-c_j \\lt 0$",
+   "$\\varphi(\\lambda)=-\\lambda b-\\sum_j(c_j-\\lambda a_j)^+$",
+   "Subgradient $-b+\\sum_{j\\,:\\,a_j\\lambda \\lt c_j}a_j$"
+  ],
+  "difficulty": 2,
+  "source": {
+   "label": "KTH SF2812 — final exam 15 January 2010 (questions), Q2",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t100115.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-kth10-knapsack-dual-value",
+  "topic": "t401",
+  "type": "num",
+  "q": "Binary knapsack (KP) $\\min\\ -(4x_1+5x_2+6x_3)$ subject to $2x_1+3x_2+4x_3\\le 6$, $x\\in\\{0,1\\}^3$. Relaxing the knapsack constraint with a multiplier $\\lambda\\ge 0$ gives the dual function $\\varphi(\\lambda)=-6\\lambda-(4-2\\lambda)^+-(5-3\\lambda)^+-(6-4\\lambda)^+$, where $(t)^+=\\max\\{t,0\\}$. What is the optimal value $\\max_{\\lambda\\ge 0}\\varphi(\\lambda)$ of the Lagrangian dual?",
+  "answer": -10.5,
+  "tol": 0.001,
+  "explain": "Breakpoints are at $c_j/a_j=2,\\ 5/3,\\ 3/2$. For $\\lambda\\le 3/2$ all three terms are active: $\\varphi=3\\lambda-15$ (increasing). For $3/2\\le\\lambda\\le 5/3$: $\\varphi=-9-\\lambda$ (decreasing). So $\\lambda^*=3/2$ and $\\varphi(\\lambda^*)=-10.5$. This equals the LP-relaxation value (LP optimum $x=(1,1,\\tfrac14)$), as expected since the relaxed problem (a box) has the integrality property.",
+  "difficulty": 2,
+  "source": {
+   "label": "KTH SF2812 — final exam 15 January 2010 (questions), Q2",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t100115.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-kth10-knapsack-duality-gap",
+  "topic": "t401",
+  "type": "num",
+  "q": "Binary knapsack (KP) $\\min\\ -(4x_1+5x_2+6x_3)$ subject to $2x_1+3x_2+4x_3\\le 6$, $x\\in\\{0,1\\}^3$. The Lagrangian dual obtained by relaxing the knapsack constraint has optimal value $z_D=-10.5$ (at $\\lambda^*=1.5$). Solve (KP) by inspection and give the duality gap $z_{KP}-z_D$.",
+  "answer": 0.5,
+  "tol": 0.001,
+  "explain": "The best feasible choice is $x=(1,0,1)$: weight $2+4=6$, value $4+6=10$ ($(1,1,0)$ gives 9; $(0,1,1)$ and $(1,1,1)$ are too heavy). So $z_{KP}=-10$ and the gap is $-10-(-10.5)=0.5$. Note: the official brief solution prints objective $-9$ and gap $1.5$ for $x^*=(1,0,1)$, which does not match the data ($4+6=10$); the numbers here were recomputed by enumeration.",
+  "difficulty": 2,
+  "source": {
+   "label": "KTH SF2812 — final exam 15 January 2010 (questions), Q2",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t100115.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-kth11-flat-dual",
+  "topic": "t401",
+  "type": "short",
+  "q": "(IP) $\\min\\ -x_1-3x_3-x_4$ subject to $-4x_1-5x_2-6x_3-7x_4\\ge -10$, $-x_1-x_2\\ge -1$, $-x_3-x_4\\ge -1$, $x\\in\\{0,1\\}^4$. Relax the first constraint with multiplier $u\\ge 0$ and let $\\varphi(u)$ be the dual function. (a) Express $\\varphi(u)$ as an optimisation problem. (b) Show that every $u\\in[0,\\tfrac14]$ is optimal for the dual.",
+  "model": "(a) $\\varphi(u)=\\min\\{-x_1-3x_3-x_4+u(4x_1+5x_2+6x_3+7x_4-10) : x_1+x_2\\le 1,\\ x_3+x_4\\le 1,\\ x\\ \\text{binary}\\}$, i.e. $\\varphi(u)=-10u+\\min\\{(4u-1)x_1+5u\\,x_2+(6u-3)x_3+(7u-1)x_4\\}$ over the same set.<br>(b) For $0\\le u\\le\\tfrac14$: $4u-1\\le 0\\le 5u$, so $x_1=1$, $x_2=0$; and $6u-3 \\lt 7u-1$ with $6u-3 \\lt 0$, so $x_3=1$, $x_4=0$. Thus $x=(1,0,1,0)$ is optimal and $\\varphi(u)=-10u+(4u-1)+(6u-3)=-4$, constant on $[0,\\tfrac14]$. The value $-4$ is the maximum of $\\varphi$: $x=(1,0,1,0)$ is feasible for (IP) with objective $-4$, so $\\varphi(u)\\le -4$ for all $u\\ge 0$ by weak duality (indeed for $u$ just above $\\tfrac14$, $x=(0,0,1,0)$ and $\\varphi(u)=-3-4u \\lt -4$). Hence every $u\\in[0,\\tfrac14]$ is dual optimal, with $z_D=-4$.",
+  "rubric": [
+   "Correct Lagrangian with the term $u(4x_1+5x_2+6x_3+7x_4-10)$ and the two kept constraints",
+   "For $u\\le 1/4$ the minimiser is $x=(1,0,1,0)$",
+   "$\\varphi(u)=-4$ on $[0,1/4]$",
+   "Argument that $-4$ is the maximum (weak duality, or concavity with $\\varphi$ decreasing beyond $1/4$)"
+  ],
+  "difficulty": 3,
+  "source": {
+   "label": "KTH SF2812 — final exam 13 January 2011 (questions), Q4",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t110113.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-kth11-dual-vs-lp",
+  "topic": "t401",
+  "type": "mcq",
+  "q": "(IP) $\\min\\ -x_1-3x_3-x_4$ subject to $-4x_1-5x_2-6x_3-7x_4\\ge -10$, $-x_1-x_2\\ge -1$, $-x_3-x_4\\ge -1$, $x\\in\\{0,1\\}^4$. Relaxing the first constraint gives the Lagrangian dual value $z_D=-4$. How does $z_D$ compare with the LP-relaxation bound $z_{LP}$ of (IP), and why?",
+  "options": [
+   "$z_D=z_{LP}$: the kept constraints $x_1+x_2\\le 1$, $x_3+x_4\\le 1$, $0\\le x\\le 1$ define an integral polytope, so the Lagrangian problem has the integrality property (here both bounds even equal $z_{IP}=-4$)",
+   "$z_D \\gt z_{LP}$ strictly, because a Lagrangian relaxation is always strictly stronger than the LP relaxation",
+   "$z_D \\lt z_{LP}$, because the Lagrangian problem drops a constraint while the LP keeps all of them",
+   "They cannot be compared without knowing the optimal multiplier exactly"
+  ],
+  "answer": 0,
+  "explain": "If removing integrality does not change the Lagrangian problem, the Lagrangian dual bound equals the LP bound (Geoffrion). The kept rows form a totally unimodular system, so $z_D=z_{LP}$; numerically $z_{LP}=-4$ at $x=(1,0,1,0)$, which is integral and feasible, so $z_{IP}=-4$ as well.",
+  "difficulty": 2,
+  "source": {
+   "label": "KTH SF2812 — final exam 13 January 2011 (questions), Q4",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t110113.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-subgradient-zero-stops-tf",
+  "topic": "t401",
+  "type": "tf",
+  "q": "Minimisation IP with dualized constraints $Ax\\ge b$ and Lagrangian function $Z(\\lambda)=\\min\\{c^\\top x+\\lambda^\\top(b-Ax) : x\\in X\\}$. <i>Claim:</i> if, at multipliers $\\lambda^t\\ge 0$, the Lagrangian solution $x^t$ satisfies $b-Ax^t=0$, then $\\lambda^t$ solves the Lagrangian dual and $x^t$ is optimal for the IP.",
+  "answer": true,
+  "explain": "$s^t=b-Ax^t=0$ is a subgradient of the concave function $Z$ at $\\lambda^t$, and a concave function is maximised where $0$ is a subgradient, so the subgradient method stops with $\\lambda^t$ dual optimal. Moreover $x^t$ is feasible ($Ax^t=b$) and $Z(\\lambda^t)=c^\\top x^t+(\\lambda^t)^\\top 0=c^\\top x^t$: the lower bound equals a feasible value, so there is no duality gap and $x^t$ is optimal.",
+  "difficulty": 2,
+  "source": {
+   "label": "Lagrangian Relaxation: An overview (A. Bockmayr / K. Reinert / G. Klau, FU Berlin, lecture script)",
+   "url": "https://www.mi.fu-berlin.de/wiki/pub/ABI/IntegerLinearOptimizationWS11/lagrange.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-lagrangian-of-lp-tf",
+  "topic": "t401",
+  "type": "tf",
+  "q": "Take a pure linear program (no integrality requirements) with a finite optimum and dualize <b>all</b> of its constraints. <i>Claim:</i> the best Lagrangian bound equals the LP optimal value, and the optimal LP dual variables are optimal multipliers.",
+  "answer": true,
+  "explain": "For an LP the Lagrangian dual is the LP dual, so strong LP duality leaves no gap. This is also the reason why a Lagrangian relaxation whose subproblem has the integrality property cannot beat the LP bound.",
+  "difficulty": 1,
+  "source": {
+   "label": "DM872 Math Optimization at Work — Lagrangian Relaxation slides (M. Chiarandini, University of Southern Denmark)",
+   "url": "https://imada.sdu.dk/u/marco/Teaching/AY2023-2024/DM872/assets/dm872-slides-lagrangian.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-benders-optimality-cut-card",
+  "topic": "t402",
+  "type": "card",
+  "q": "Benders decomposition for $\\min\\ c^\\top x+q^\\top y$ s.t. $Ax=b$, $Tx+Wy=h$, $x,y\\ge 0$: define the recourse function, the master problem and the <b>optimality cut</b>. Why is the cut valid for every $x$?",
+  "a": "Recourse function: $f(x)=\\min\\{q^\\top y : Wy=h-Tx,\\ y\\ge 0\\}$ ($+\\infty$ if infeasible); it is piecewise linear and convex. Master: $\\min\\ c^\\top x+\\theta$ s.t. $Ax=b$, $x\\ge 0$, plus cuts that under-estimate $f$.<br>By LP duality $f(\\hat x)=\\max\\{(h-T\\hat x)^\\top u : W^\\top u\\le q\\}$. If $\\hat u$ is dual optimal at $\\hat x$, then $\\hat u$ is still dual <b>feasible</b> for every other $x$ (the dual feasible set does not depend on $x$), so $f(x)\\ge(h-Tx)^\\top\\hat u$. Optimality cut: $$\\theta\\ge\\hat u^\\top(h-Tx).$$ Equivalent gradient form (as in the JuMP tutorial): $\\theta\\ge f(x_k)+\\pi_k^\\top(x-x_k)$, where $\\pi_k$ is a subgradient of the convex function $f$ at $x_k$ (the dual of the constraint fixing the copy of $x$ to $x_k$).",
+  "difficulty": 2,
+  "source": {
+   "label": "An introduction to Benders decomposition (M. Branda, Charles University, slides)",
+   "url": "https://www.karlin.mff.cuni.cz/~branda/download/03_Branda_Benders_en.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-benders-feasibility-cut-card",
+  "topic": "t402",
+  "type": "card",
+  "q": "Benders decomposition: when and how is a <b>feasibility cut</b> generated (recourse constraints $Wy=h-Tx$, $y\\ge 0$)?",
+  "a": "When the subproblem at $\\hat x$ is infeasible, its dual $\\max\\{(h-T\\hat x)^\\top u : W^\\top u\\le q\\}$ is unbounded: there is a ray $\\tilde u$ with $W^\\top\\tilde u\\le 0$ and $(h-T\\hat x)^\\top\\tilde u \\gt 0$. For any $x$ that admits a feasible $y$: $\\tilde u^\\top(h-Tx)=\\tilde u^\\top Wy\\le 0$. So the cut $$\\tilde u^\\top(h-Tx)\\le 0$$ is valid and cuts off $\\hat x$; it does not involve $\\theta$.<br>Full Benders master: one optimality cut $\\theta\\ge(h-Tx)^\\top u^p_j$ per extreme point of the dual region and one feasibility cut $0\\ge(h-Tx)^\\top u^r_i$ per extreme ray; the algorithm generates them on demand.",
+  "difficulty": 2,
+  "source": {
+   "label": "An introduction to Benders decomposition (M. Branda, Charles University, slides)",
+   "url": "https://www.karlin.mff.cuni.cz/~branda/download/03_Branda_Benders_en.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-benders-algorithm-bounds-card",
+  "topic": "t402",
+  "type": "card",
+  "q": "State the Benders algorithm for $\\min\\ c^\\top x+f(y)$ s.t. $Ax+Dy\\ge b$, $x\\ge 0$, $y\\in Y$ (the $y$ variables stay in the master, $z$ is the variable that carries the cuts) and say where the lower and upper bounds come from.",
+  "a": "<ol><li>Start with the relaxed master $\\min\\ f(y)+z$, $y\\in Y$, without Benders cuts (give $z$ a valid finite lower bound, otherwise the master is unbounded).</li><li>Solve the relaxed master $\\to(\\hat y,\\hat z)$. Its value $f(\\hat y)+\\hat z$ is a <b>lower bound</b> (only some of the cuts are present, so it is a relaxation).</li><li>Solve the (dual) subproblem at $\\hat y$. Dual unbounded $\\to$ add a feasibility cut. Dual optimum $\\hat u$ $\\to$ <b>upper bound</b> $f(\\hat y)+(b-D\\hat y)^\\top\\hat u$ (cost of a feasible solution); keep the best one.</li><li>If UB $-$ LB is zero (or below tolerance) stop; otherwise add the optimality cut $z\\ge(b-Dy)^\\top\\hat u$ and go to 2.</li></ol>Finite convergence: the dual polyhedron has finitely many extreme points and extreme rays, so only finitely many different cuts exist.",
+  "difficulty": 2,
+  "source": {
+   "label": "Benders Decomposition (Y. Huang, Q. P. Zheng — West Virginia University, IENG 593G slides, hosted at Szeged)",
+   "url": "https://www.inf.u-szeged.hu/~boglarka/OptFel/Benders/Yuping_Intro_to_BendersDecomp.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-benders-three-outcomes-card",
+  "topic": "t402",
+  "type": "card",
+  "q": "Benders decomposition: what are the three possible outcomes of the subproblem at a master solution $\\hat y$, and what is done in each case?",
+  "a": "<ul><li><b>Primal and dual subproblem both have finite optima</b>: add an optimality cut (or stop if the bounds meet).</li><li><b>Primal subproblem infeasible, dual unbounded</b>: add a feasibility cut built from an extreme ray of the dual.</li><li><b>Primal subproblem unbounded (dual infeasible)</b>: the original problem is unbounded; stop.</li></ul>",
+  "difficulty": 1,
+  "source": {
+   "label": "Benders Decomposition (Y. Huang, Q. P. Zheng — West Virginia University, IENG 593G slides, hosted at Szeged)",
+   "url": "https://www.inf.u-szeged.hu/~boglarka/OptFel/Benders/Yuping_Intro_to_BendersDecomp.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-benders-big-m-card",
+  "topic": "t402",
+  "type": "card",
+  "q": "How can Benders decomposition avoid feasibility cuts altogether?",
+  "a": "Make the subproblem always feasible by adding an artificial variable $w\\ge 0$ with a large penalty $M$: $$\\min\\ c^\\top x+Mw\\quad\\text{s.t. } Ax+ew\\ge b-D\\hat y,\\ x\\ge 0,\\ w\\ge 0$$ ($e$ = vector of ones). Every $\\hat y$ then yields an optimality cut; values of $\\hat y$ with an infeasible original subproblem are penalised through the huge cost instead of being cut off by a feasibility cut.",
+  "difficulty": 1,
+  "source": {
+   "label": "Benders Decomposition (Y. Huang, Q. P. Zheng — West Virginia University, IENG 593G slides, hosted at Szeged)",
+   "url": "https://www.inf.u-szeged.hu/~boglarka/OptFel/Benders/Yuping_Intro_to_BendersDecomp.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-l-shaped-multicut-card",
+  "topic": "t402",
+  "type": "card",
+  "q": "What is the L-shaped method, and what is the multi-cut form of its master problem?",
+  "a": "The L-shaped method is Benders decomposition applied to a two-stage stochastic LP. The deterministic equivalent is block-angular: once the first-stage $x$ is fixed, the problem splits into $|S|$ independent scenario LPs that differ only in their right-hand sides $h_s-T_sx$.<br>For scenario $s$ with dual optimum $\\hat u_s$ at $\\hat x$: $P_s(x)\\ge\\hat u_s^\\top(h_s-T_sx)$, equivalently $P_s(x)\\ge\\hat u_s^\\top T_s(\\hat x-x)+P_s(\\hat x)$. If scenario $s$ is infeasible at $\\hat x$, a dual ray gives the feasibility cut $\\hat u_s^\\top T_sx\\ge\\hat u_s^\\top h_s$.<br><b>Multi-cut</b> master: one variable $z_s$ per scenario, each with its own cuts $z_s\\ge(u_s^j)^\\top T_s(x^j-x)+P_s(x^j)$. Bounds: master value = lower bound; $c^\\top x^k+\\sum_sP_s(x^k)$ for any generated $x^k$ with feasible recourse = upper bound.",
+  "difficulty": 2,
+  "source": {
+   "label": "ISE 347/447 Financial Optimization, Lecture 22 (T. Ralphs, Lehigh)",
+   "url": "https://coral.ise.lehigh.edu/~ted/files/ie447/lectures/Lecture22.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-benders-callback-version-card",
+  "topic": "t402",
+  "type": "card",
+  "q": "JuMP Benders tutorial: how does the <b>callback</b> (single-tree) implementation differ from the iterative loop?",
+  "a": "<b>Iterative loop</b>: solve the first-stage MIP to optimality, solve the subproblem, add a cut with <code>@constraint</code>, re-solve the MIP; repeat until the gap $|UB-LB|/|UB|$ is below tolerance. Lower bound = first-stage objective; upper bound = $c_1(x_k)+V_2(x_k)$.<br><b>Callback version</b>: register a lazy-constraint callback; at integer nodes (<code>callback_node_status(cb_data, model) == MOI.CALLBACK_NODE_STATUS_INTEGER</code>) read the solution with <code>callback_value</code>, solve the subproblem and submit the violated cut with <code>MOI.submit(model, MOI.LazyConstraint(cb_data), con)</code>. Only <b>one</b> branch-and-bound tree is explored. In the tutorial this took 17 subproblem solves instead of 8 loop iterations.<br><b>Feasibility cuts in JuMP</b>: if the subproblem is infeasible and <code>dual_status == INFEASIBILITY_CERTIFICATE</code>, the solver returns a dual ray $u$ with value $v$ = <code>dual_objective_value</code>; add $v+u^\\top(x-x_k)\\le 0$.",
+  "difficulty": 2,
+  "source": {
+   "label": "JuMP tutorial — Benders decomposition",
+   "url": "https://jump.dev/JuMP.jl/stable/tutorials/algorithms/benders_decomposition/",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-branda-first-optimality-cut",
+  "topic": "t402",
+  "type": "mcq",
+  "q": "Benders decomposition of $\\min\\ 2x+2y_1+3y_2$ s.t. $x+y_1+2y_2=3$, $3x+2y_1-y_2=4$, $x,y_1,y_2\\ge 0$, with $x$ kept in the master. The recourse function is $f(x)=\\min\\{2y_1+3y_2 : y_1+2y_2=3-x,\\ 2y_1-y_2=4-3x,\\ y\\ge 0\\}$, with dual $\\max\\{(3-x)u_1+(4-3x)u_2 : u_1+2u_2\\le 2,\\ 2u_1-u_2\\le 3\\}$. At the first master solution $\\hat x=0$ the dual optimum is $\\hat u=(8/5,\\ 1/5)$. Which optimality cut is added to the master?",
+  "options": [
+   "$\\theta\\ge\\tfrac{28}{5}$",
+   "$\\theta\\le\\tfrac{28}{5}-\\tfrac{11}{5}x$",
+   "$\\theta\\ge\\tfrac{28}{5}+\\tfrac{11}{5}x$",
+   "$\\theta\\ge\\tfrac{28}{5}-\\tfrac{11}{5}x$"
+  ],
+  "answer": 3,
+  "explain": "The cut is $\\theta\\ge\\hat u^\\top(h-Tx)=\\tfrac85(3-x)+\\tfrac15(4-3x)=\\tfrac{28}{5}-\\tfrac{11}{5}x$. At $x=0$ it returns $f(0)=28/5$ (primal check: $y=(11/5,\\ 2/5)$, cost $22/5+6/5$). Keeping only the constant forgets that the dual objective depends on $x$ (and would not be valid: $f(11/7)=15/7$); the cut must bound $\\theta$ from <i>below</i>.",
+  "difficulty": 2,
+  "source": {
+   "label": "An introduction to Benders decomposition (M. Branda, Charles University, slides)",
+   "url": "https://www.karlin.mff.cuni.cz/~branda/download/03_Branda_Benders_en.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-branda-theta-lower-bound",
+  "topic": "t402",
+  "type": "mcq",
+  "q": "Benders decomposition of $\\min\\ 2x+2y_1+3y_2$ s.t. $x+y_1+2y_2=3$, $3x+2y_1-y_2=4$, $x,y_1,y_2\\ge 0$, with $x$ kept in the master. After the first cut the master is $\\min\\ 2x+\\theta$ s.t. $\\theta\\ge\\tfrac{28}{5}-\\tfrac{11}{5}x$, $x\\ge 0$. What happens if no lower bound is put on $\\theta$, and what does the master give once a valid one is added?",
+  "options": [
+   "The master is infeasible; adding $\\theta\\ge 0$ restores feasibility",
+   "Nothing changes: the master optimum is $(x,\\theta)=(0,\\ 28/5)$ with or without a bound on $\\theta$",
+   "The master is unbounded (its objective equals $5.6-0.2x$ along the cut). $\\theta\\ge 0$ is valid because the recourse costs $(2,3)$ and $y$ are nonnegative; with it the optimum is $(\\hat x,\\hat\\theta)=(28/11,\\ 0)$, value $56/11$",
+   "The master is unbounded; the remedy is to replace the cut by $\\theta\\ge 28/5$"
+  ],
+  "answer": 2,
+  "explain": "On the cut, $2x+\\theta=2x+5.6-2.2x=5.6-0.2x$, which decreases without limit as $x$ grows, so the master is unbounded. Since $f(x)=\\min\\ 2y_1+3y_2$ with $y\\ge 0$ is never negative, $\\theta\\ge 0$ removes no solution; with it the minimum is where the cut reaches $\\theta=0$: $x=28/11\\approx 2.545$, value $56/11\\approx 5.091$, a lower bound on the optimal value $37/7$. Replacing the cut by $\\theta\\ge 28/5$ would be invalid.",
+  "difficulty": 2,
+  "source": {
+   "label": "An introduction to Benders decomposition (M. Branda, Charles University, slides)",
+   "url": "https://www.karlin.mff.cuni.cz/~branda/download/03_Branda_Benders_en.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-branda-feasibility-cut",
+  "topic": "t402",
+  "type": "short",
+  "q": "Benders decomposition of $\\min\\ 2x+2y_1+3y_2$ s.t. $x+y_1+2y_2=3$, $3x+2y_1-y_2=4$, $x,y_1,y_2\\ge 0$, with $x$ kept in the master. The master with the cut $\\theta\\ge\\tfrac{28}{5}-\\tfrac{11}{5}x$ and $\\theta\\ge 0$ returns $\\hat x=28/11$. (a) Show that the subproblem $y_1+2y_2=3-\\hat x$, $2y_1-y_2=4-3\\hat x$, $y\\ge 0$ is infeasible. (b) Dual variables of equality constraints are free. Verify that $\\tilde u=(-1,-2)$ is a ray of the dual $\\max\\{(3-x)u_1+(4-3x)u_2 : u_1+2u_2\\le 2,\\ 2u_1-u_2\\le 3\\}$ and derive the feasibility cut. (c) Solve the new master and conclude.",
+  "model": "(a) The right-hand sides are $3-\\tfrac{28}{11}=\\tfrac{5}{11}$ and $4-\\tfrac{84}{11}=-\\tfrac{40}{11}$. The $2\\times 2$ system has the unique solution $y_1=-\\tfrac{15}{11}$, $y_2=\\tfrac{10}{11}$; since $y_1 \\lt 0$ there is no feasible $y$. (In general $y_1=(11-7x)/5$ and $y_2=(2+x)/5$.)<br>(b) Ray conditions $W^\\top\\tilde u\\le 0$: $\\tilde u_1+2\\tilde u_2=-5\\le 0$ and $2\\tilde u_1-\\tilde u_2=0\\le 0$. Along it the dual objective is $(3-x)\\tilde u_1+(4-3x)\\tilde u_2=7x-11$, equal to $75/11 \\gt 0$ at $\\hat x$, so the dual is unbounded. Feasibility cut: $7x-11\\le 0$, i.e. $x\\le 11/7$.<br>(c) Master: $\\min\\ 2x+\\theta$ s.t. $\\theta\\ge 5.6-2.2x$, $\\theta\\ge 0$, $0\\le x\\le 11/7$. The objective $5.6-0.2x$ decreases along the cut, so $x=11/7$, $\\theta=15/7$, value $37/7\\approx 5.286$. The subproblem at $x=11/7$ gives $y=(0,\\ 5/7)$ with cost $15/7=\\theta$, so the optimality cut is satisfied: stop. Optimal solution $(x,y_1,y_2)=(11/7,\\ 0,\\ 5/7)$, value $37/7$.",
+  "rubric": [
+   "Infeasibility at $\\hat x=28/11$: $y_1=-15/11 \\lt 0$",
+   "Checks $W^\\top\\tilde u\\le 0$ for $\\tilde u=(-1,-2)$ and positive objective at $\\hat x$",
+   "Feasibility cut $x\\le 11/7$ (from $7x-11\\le 0$)",
+   "New master solution $x=11/7$, $\\theta=15/7$",
+   "Subproblem value $15/7$ confirms optimality; optimal value $37/7$"
+  ],
+  "explain": "The slides print $\\hat u=(1.5,0)$ and the cut $\\theta\\ge 4.5-1.5x$ at this iteration; that is the dual optimum when $u\\ge 0$ is imposed, i.e. for the version of the problem with $\\ge$ constraints. Both versions end at $x=11/7$ with value $37/7$.",
+  "difficulty": 3,
+  "source": {
+   "label": "An introduction to Benders decomposition (M. Branda, Charles University, slides)",
+   "url": "https://www.karlin.mff.cuni.cz/~branda/download/03_Branda_Benders_en.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-branda-optimal-value",
+  "topic": "t402",
+  "type": "num",
+  "q": "Consider $\\min\\ 2x+2y_1+3y_2$ s.t. $x+y_1+2y_2=3$, $3x+2y_1-y_2=4$, $x,y_1,y_2\\ge 0$. Treat $x$ as the first-stage (master) variable: find the recourse function $f(x)=\\min\\{2y_1+3y_2\\}$ on the set of $x$ for which a feasible $y$ exists, and give the optimal value of the whole problem.",
+  "answer": "37/7",
+  "explain": "For fixed $x$ the two equalities determine $y_1=(11-7x)/5$ and $y_2=(2+x)/5$, feasible iff $x\\le 11/7$. So $f(x)=2y_1+3y_2=\\tfrac{28}{5}-\\tfrac{11}{5}x$ on $[0,11/7]$ and the total cost $2x+f(x)=5.6-0.2x$ is minimised at $x=11/7$: value $\\tfrac{37}{7}\\approx 5.286$, with $y=(0,\\ 5/7)$. In Benders terms: one optimality cut $\\theta\\ge\\tfrac{28}{5}-\\tfrac{11}{5}x$ and one feasibility cut $x\\le 11/7$.",
+  "difficulty": 2,
+  "source": {
+   "label": "An introduction to Benders decomposition (M. Branda, Charles University, slides)",
+   "url": "https://www.karlin.mff.cuni.cz/~branda/download/03_Branda_Benders_en.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-wvu-dual-extreme-points",
+  "topic": "t402",
+  "type": "mcq",
+  "q": "Benders decomposition of $\\min\\ 2x_1+3x_2+2y_1$ s.t. $x_1+2x_2+y_1\\ge 3$, $2x_1-x_2+3y_1\\ge 4$, $x_1,x_2,y_1\\ge 0$, with $y_1$ as the master variable. For a fixed $\\bar y_1$ the dual subproblem is $\\max\\ (3-\\bar y_1)u_1+(4-3\\bar y_1)u_2$ s.t. $u_1+2u_2\\le 2$, $2u_1-u_2\\le 3$, $u\\ge 0$; the relaxed master is $\\min\\ 2y_1+z$ over $y_1\\ge 0$ and the cuts found so far (initially only $z\\ge 0$). Which list contains exactly the extreme points of the dual feasible region?",
+  "options": [
+   "$(0,0),\\ (0,1),\\ (2,0)$",
+   "$(0,1),\\ (1.5,0),\\ (1.6,0.2)$ only",
+   "$(0,0),\\ (0,2),\\ (1.5,0),\\ (1.6,0.2)$",
+   "$(0,0),\\ (0,1),\\ (1.5,0),\\ (1.6,0.2)$"
+  ],
+  "answer": 3,
+  "explain": "Vertices come from pairs of tight constraints: $u=0$; $u_1=0$ with $u_1+2u_2=2$ gives $(0,1)$; $u_2=0$ with $2u_1-u_2=3$ gives $(1.5,0)$; both structural constraints tight gives $(1.6,0.2)$. $(2,0)$ violates $2u_1-u_2\\le 3$ and $(0,2)$ violates $u_1+2u_2\\le 2$. Each vertex $u$ corresponds to one possible optimality cut $z\\ge(3-y_1)u_1+(4-3y_1)u_2$.",
+  "difficulty": 1,
+  "source": {
+   "label": "Benders Decomposition (Y. Huang, Q. P. Zheng — West Virginia University, IENG 593G slides, hosted at Szeged)",
+   "url": "https://www.inf.u-szeged.hu/~boglarka/OptFel/Benders/Yuping_Intro_to_BendersDecomp.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-wvu-first-cut",
+  "topic": "t402",
+  "type": "mcq",
+  "q": "Benders decomposition of $\\min\\ 2x_1+3x_2+2y_1$ s.t. $x_1+2x_2+y_1\\ge 3$, $2x_1-x_2+3y_1\\ge 4$, $x_1,x_2,y_1\\ge 0$, with $y_1$ as the master variable. For a fixed $\\bar y_1$ the dual subproblem is $\\max\\ (3-\\bar y_1)u_1+(4-3\\bar y_1)u_2$ s.t. $u_1+2u_2\\le 2$, $2u_1-u_2\\le 3$, $u\\ge 0$; the relaxed master is $\\min\\ 2y_1+z$ over $y_1\\ge 0$ and the cuts found so far (initially only $z\\ge 0$). Iteration 1: the master gives $(\\bar y_1,\\bar z)=(0,0)$ and the dual subproblem optimum is $\\hat u=(1.6,\\ 0.2)$. Which cut is added, and what are the bounds after this iteration?",
+  "options": [
+   "$z\\ge 5.6-2.2\\,y_1$; LB $=0$, UB $=5.6$",
+   "$z\\ge 5.6-1.8\\,y_1$; LB $=0$, UB $=5.6$",
+   "$z\\ge 5.6$; LB $=5.6$, UB $=5.6$",
+   "$z\\le 5.6-2.2\\,y_1$; LB $=5.6$, UB $=0$"
+  ],
+  "answer": 0,
+  "explain": "Cut: $z\\ge(3-y_1)(1.6)+(4-3y_1)(0.2)=5.6-2.2y_1$; the coefficient of $y_1$ is $u^\\top D=1.6\\cdot 1+0.2\\cdot 3=2.2$. LB is the master value $2\\cdot 0+0=0$; UB $=2\\bar y_1+$ subproblem value $=0+5.6$.",
+  "difficulty": 2,
+  "source": {
+   "label": "Benders Decomposition (Y. Huang, Q. P. Zheng — West Virginia University, IENG 593G slides, hosted at Szeged)",
+   "url": "https://www.inf.u-szeged.hu/~boglarka/OptFel/Benders/Yuping_Intro_to_BendersDecomp.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-wvu-iteration2-lower-bound",
+  "topic": "t402",
+  "type": "num",
+  "q": "Benders decomposition of $\\min\\ 2x_1+3x_2+2y_1$ s.t. $x_1+2x_2+y_1\\ge 3$, $2x_1-x_2+3y_1\\ge 4$, $x_1,x_2,y_1\\ge 0$, with $y_1$ as the master variable. For a fixed $\\bar y_1$ the dual subproblem is $\\max\\ (3-\\bar y_1)u_1+(4-3\\bar y_1)u_2$ s.t. $u_1+2u_2\\le 2$, $2u_1-u_2\\le 3$, $u\\ge 0$; the relaxed master is $\\min\\ 2y_1+z$ over $y_1\\ge 0$ and the cuts found so far (initially only $z\\ge 0$). After iteration 1 the relaxed master is $\\min\\ 2y_1+z$ s.t. $z\\ge 0$, $z\\ge 5.6-2.2y_1$, $y_1\\ge 0$. What lower bound does it give?",
+  "answer": 5.0909,
+  "tol": 0.005,
+  "explain": "Along the sloped cut the objective is $2y_1+5.6-2.2y_1=5.6-0.2y_1$, decreasing until $z$ reaches 0 at $y_1=5.6/2.2=28/11\\approx 2.545$; beyond that point it increases with slope 2. So $(\\bar y_1,\\bar z)=(2.545,\\ 0)$ and LB $=56/11\\approx 5.091$.",
+  "difficulty": 2,
+  "source": {
+   "label": "Benders Decomposition (Y. Huang, Q. P. Zheng — West Virginia University, IENG 593G slides, hosted at Szeged)",
+   "url": "https://www.inf.u-szeged.hu/~boglarka/OptFel/Benders/Yuping_Intro_to_BendersDecomp.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-wvu-iteration2-upper-bound",
+  "topic": "t402",
+  "type": "num",
+  "q": "Benders decomposition of $\\min\\ 2x_1+3x_2+2y_1$ s.t. $x_1+2x_2+y_1\\ge 3$, $2x_1-x_2+3y_1\\ge 4$, $x_1,x_2,y_1\\ge 0$, with $y_1$ as the master variable. For a fixed $\\bar y_1$ the dual subproblem is $\\max\\ (3-\\bar y_1)u_1+(4-3\\bar y_1)u_2$ s.t. $u_1+2u_2\\le 2$, $2u_1-u_2\\le 3$, $u\\ge 0$; the relaxed master is $\\min\\ 2y_1+z$ over $y_1\\ge 0$ and the cuts found so far (initially only $z\\ge 0$). In iteration 2 the master solution is $(\\bar y_1,\\bar z)=(28/11,\\ 0)\\approx(2.545,\\ 0)$. Solve the dual subproblem at this point and give the upper bound $2\\bar y_1+(\\text{subproblem value})$ produced by this iterate.",
+  "answer": 5.7727,
+  "tol": 0.005,
+  "explain": "The dual objective is $(3-\\tfrac{28}{11})u_1+(4-\\tfrac{84}{11})u_2=\\tfrac{5}{11}u_1-\\tfrac{40}{11}u_2$: take $u_1$ as large as possible with $u_2=0$, i.e. $\\hat u=(1.5,0)$, value $15/22\\approx 0.682$. UB $=2(2.545)+0.682=127/22\\approx 5.773$. It is worse than the 5.6 found in iteration 1, so the best upper bound remains 5.6. New cut: $z\\ge 4.5-1.5y_1$.",
+  "difficulty": 2,
+  "source": {
+   "label": "Benders Decomposition (Y. Huang, Q. P. Zheng — West Virginia University, IENG 593G slides, hosted at Szeged)",
+   "url": "https://www.inf.u-szeged.hu/~boglarka/OptFel/Benders/Yuping_Intro_to_BendersDecomp.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-wvu-iteration3-lower-bound",
+  "topic": "t402",
+  "type": "num",
+  "q": "Benders decomposition of $\\min\\ 2x_1+3x_2+2y_1$ s.t. $x_1+2x_2+y_1\\ge 3$, $2x_1-x_2+3y_1\\ge 4$, $x_1,x_2,y_1\\ge 0$, with $y_1$ as the master variable. For a fixed $\\bar y_1$ the dual subproblem is $\\max\\ (3-\\bar y_1)u_1+(4-3\\bar y_1)u_2$ s.t. $u_1+2u_2\\le 2$, $2u_1-u_2\\le 3$, $u\\ge 0$; the relaxed master is $\\min\\ 2y_1+z$ over $y_1\\ge 0$ and the cuts found so far (initially only $z\\ge 0$). In iteration 3 the relaxed master contains the cuts $z\\ge 0$, $z\\ge 5.6-2.2y_1$ and $z\\ge 4.5-1.5y_1$. What is its optimal value (the new lower bound)?",
+  "answer": 5.2857,
+  "tol": 0.005,
+  "explain": "The two sloped cuts cross where $5.6-2.2y_1=4.5-1.5y_1$, i.e. $y_1=11/7\\approx 1.571$, $z=15/7\\approx 2.143$. Left of this point the objective $2y_1+z$ has slope $2-2.2 \\lt 0$, right of it slope $2-1.5 \\gt 0$, so this is the minimum: LB $=22/7+15/7=37/7\\approx 5.286$. The subproblem at $y_1=11/7$ has value $15/7$, so UB $=$ LB and the method stops with $(x_1,x_2,y_1)=(0,\\ 5/7,\\ 11/7)$.",
+  "difficulty": 2,
+  "source": {
+   "label": "Benders Decomposition (Y. Huang, Q. P. Zheng — West Virginia University, IENG 593G slides, hosted at Szeged)",
+   "url": "https://www.inf.u-szeged.hu/~boglarka/OptFel/Benders/Yuping_Intro_to_BendersDecomp.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-wvu-full-trace",
+  "topic": "t402",
+  "type": "short",
+  "q": "Solve by Benders decomposition, reporting at each iteration the master solution, the dual subproblem solution, the cut added and the bounds LB / UB: $\\min\\ 2x_1+3x_2+2y_1$ s.t. $x_1+2x_2+y_1\\ge 3$, $2x_1-x_2+3y_1\\ge 4$, $x_1,x_2,y_1\\ge 0$, with $y_1$ as the master variable. For a fixed $\\bar y_1$ the dual subproblem is $\\max\\ (3-\\bar y_1)u_1+(4-3\\bar y_1)u_2$ s.t. $u_1+2u_2\\le 2$, $2u_1-u_2\\le 3$, $u\\ge 0$; the relaxed master is $\\min\\ 2y_1+z$ over $y_1\\ge 0$ and the cuts found so far (initially only $z\\ge 0$).",
+  "model": "<b>Iteration 1.</b> Master: $(\\bar y_1,\\bar z)=(0,0)$, LB $=0$. Dual subproblem $\\max\\ 3u_1+4u_2$: $\\hat u=(1.6,0.2)$, value $5.6$, UB $=5.6$. Cut $z\\ge 5.6-2.2y_1$.<br><b>Iteration 2.</b> Master: $(\\bar y_1,\\bar z)=(28/11,\\ 0)\\approx(2.545,\\ 0)$, LB $=5.091$. Subproblem objective $\\tfrac{5}{11}u_1-\\tfrac{40}{11}u_2$: $\\hat u=(1.5,0)$, value $0.682$, UB of this iterate $=5.773$ (best UB still 5.6). Cut $z\\ge 4.5-1.5y_1$.<br><b>Iteration 3.</b> Master: $(\\bar y_1,\\bar z)=(11/7,\\ 15/7)\\approx(1.571,\\ 2.143)$, LB $=37/7\\approx 5.286$. Subproblem value $15/7$ (both $(1.6,0.2)$ and $(1.5,0)$ are optimal), UB $=5.286=$ LB: stop.<br>Optimal solution: $y_1=11/7$ and, from the primal subproblem, $x=(0,\\ 5/7)$; optimal value $37/7$.",
+  "rubric": [
+   "Iteration 1: $\\hat u=(1.6,0.2)$, UB $5.6$, cut $z\\ge 5.6-2.2y_1$",
+   "Iteration 2: master solution $(2.545,\\ 0)$, LB $5.091$",
+   "Iteration 2: $\\hat u=(1.5,0)$, cut $z\\ge 4.5-1.5y_1$",
+   "Iteration 3: master solution $(1.571,\\ 2.143)$, LB $=$ UB $=5.286$",
+   "Optimal solution $(x_1,x_2,y_1)=(0,\\ 5/7,\\ 11/7)$, value $37/7$"
+  ],
+  "difficulty": 3,
+  "source": {
+   "label": "Benders Decomposition (Y. Huang, Q. P. Zheng — West Virginia University, IENG 593G slides, hosted at Szeged)",
+   "url": "https://www.inf.u-szeged.hu/~boglarka/OptFel/Benders/Yuping_Intro_to_BendersDecomp.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-benders-dual-unbounded",
+  "topic": "t402",
+  "type": "mcq",
+  "q": "In Benders decomposition of $\\min\\ c^\\top x+f(y)$ s.t. $Ax+Dy\\ge b$, $x\\ge 0$, $y\\in Y$, the dual subproblem $\\max\\{(b-D\\hat y)^\\top u : A^\\top u\\le c,\\ u\\ge 0\\}$ turns out to be <b>unbounded</b> along an extreme ray $u^r$. What does this mean and what is added to the master?",
+  "options": [
+   "The primal subproblem is infeasible for $\\hat y$; add the feasibility cut $(b-Dy)^\\top u^r\\le 0$",
+   "The original problem is unbounded; stop",
+   "The primal subproblem is infeasible for $\\hat y$; add the optimality cut $z\\ge(b-Dy)^\\top u^r$",
+   "The master solution $\\hat y$ is optimal; stop"
+  ],
+  "answer": 0,
+  "explain": "An unbounded dual means the primal subproblem $\\min\\{c^\\top x : Ax\\ge b-D\\hat y,\\ x\\ge 0\\}$ has no feasible $x$. Every $y$ with a feasible subproblem satisfies $(b-Dy)^\\top u^r\\le 0$ for each extreme ray of $\\{u\\ge 0 : A^\\top u\\le 0\\}$, and $\\hat y$ violates it. The original problem is unbounded in the other case: primal subproblem unbounded, dual subproblem infeasible.",
+  "difficulty": 2,
+  "source": {
+   "label": "Benders Decomposition (Y. Huang, Q. P. Zheng — West Virginia University, IENG 593G slides, hosted at Szeged)",
+   "url": "https://www.inf.u-szeged.hu/~boglarka/OptFel/Benders/Yuping_Intro_to_BendersDecomp.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-benders-finite-convergence-tf",
+  "topic": "t402",
+  "type": "tf",
+  "q": "Benders decomposition with an LP subproblem terminates after finitely many iterations because the dual feasible polyhedron of the subproblem has finitely many extreme points and extreme rays, so only finitely many distinct cuts can be generated.",
+  "answer": true,
+  "explain": "Each iteration either stops or adds a cut built from an extreme point (optimality cut) or an extreme ray (feasibility cut) of the dual region $\\{u\\ge 0 : A^\\top u\\le c\\}$ that the current master solution violates, hence a new one. That region does not depend on $y$ and has finitely many extreme points and rays.",
+  "difficulty": 1,
+  "source": {
+   "label": "Benders Decomposition (Y. Huang, Q. P. Zheng — West Virginia University, IENG 593G slides, hosted at Szeged)",
+   "url": "https://www.inf.u-szeged.hu/~boglarka/OptFel/Benders/Yuping_Intro_to_BendersDecomp.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-jump-benders-theta-bound",
+  "topic": "t402",
+  "type": "mcq",
+  "q": "In the JuMP Benders tutorial the first-stage model is $\\min\\ c_1(x)+\\theta$ with the extra constraint $\\theta\\ge M$ for a constant $M$ (there: minus the sum of all arc capacities). Why is this constraint needed?",
+  "options": [
+   "It is the optimality cut derived from the first subproblem",
+   "Before any cut exists nothing bounds $\\theta$ from below, so the minimisation would be unbounded; a valid finite lower bound on the second-stage cost fixes this without cutting off any solution",
+   "It forces the second-stage problem to be feasible for every first-stage $x$",
+   "It is a big-$M$ linearisation of the integrality of $x$"
+  ],
+  "answer": 1,
+  "explain": "$\\theta$ is minimised and initially unconstrained, so the first master would be unbounded. $M$ must be a true lower bound on $V_2(x)$ so that no feasible solution is lost; in the tutorial the second-stage objective is minus a flow, which cannot be below minus the total capacity.",
+  "difficulty": 1,
+  "source": {
+   "label": "JuMP tutorial — Benders decomposition",
+   "url": "https://jump.dev/JuMP.jl/stable/tutorials/algorithms/benders_decomposition/",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-jump-benders-first-lower-bound",
+  "topic": "t402",
+  "type": "num",
+  "q": "JuMP Benders tutorial (network design on 8 nodes). Arc capacities (row $i$ to column $j$): $$G=\\begin{pmatrix}0&3&2&2&0&0&0&0\\\\0&0&0&0&5&1&0&0\\\\0&0&0&0&1&3&1&0\\\\0&0&0&0&0&1&0&0\\\\0&0&0&0&0&0&0&4\\\\0&0&0&0&0&0&0&2\\\\0&0&0&0&0&0&0&4\\\\0&0&0&0&0&0&0&0\\end{pmatrix}$$ First stage: binary $x_{ij}$ (open arc $i\\to j$), $\\sum_{i,j}x_{ij}\\le 11$, a variable $\\theta\\ge M$ with $M=-\\sum_{i,j}G_{ij}$, objective $\\min\\ 0.1\\sum_{i,j}x_{ij}+\\theta$. Before any Benders cut has been added, what is the optimal value of this first-stage problem (the first lower bound printed by the algorithm)?",
+  "answer": -29,
+  "explain": "$\\sum G=7+6+5+1+4+2+4=29$, so $M=-29$. With no cuts, $\\theta$ sits at its bound $-29$ and opening arcs only costs $0.1$ each, so $x=0$: value $-29$. This is the first line of the tutorial's log (lower bound $-29.0$, upper bound $0.0$).",
+  "difficulty": 2,
+  "source": {
+   "label": "JuMP tutorial — Benders decomposition",
+   "url": "https://jump.dev/JuMP.jl/stable/tutorials/algorithms/benders_decomposition/",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-jump-benders-log-reading",
+  "topic": "t402",
+  "type": "mcq",
+  "q": "The JuMP Benders tutorial (a minimisation problem) prints this log, where the lower bound is the first-stage objective and the upper bound is $c_1(x_k)+V_2(x_k)$ for the current first-stage solution $x_k$:<br><table><thead><tr><th>iteration</th><th>lower bound</th><th>upper bound</th></tr></thead><tbody><tr><td>1</td><td>-29.0</td><td>0.0</td></tr><tr><td>2</td><td>-6.7</td><td>0.3</td></tr><tr><td>3</td><td>-6.5</td><td>0.5</td></tr><tr><td>4</td><td>-6.2</td><td>-4.2</td></tr><tr><td>5</td><td>-6.1</td><td>-4.1</td></tr><tr><td>6</td><td>-6.1</td><td>-4.1</td></tr><tr><td>7</td><td>-5.1</td><td>-4.1</td></tr><tr><td>8</td><td>-5.1</td><td>-5.1</td></tr></tbody></table>Which statement is correct?",
+  "options": [
+   "The upper-bound column is monotone, so its last entry is always the best feasible value found",
+   "The method could have stopped at iteration 4, because both bounds are negative there",
+   "The lower bound decreased between iterations 4 and 5, which shows that a cut was invalid",
+   "The lower bound never decreases (cuts only tighten the master, which is a relaxation), but the upper bound of the current iterate can get worse, e.g. $-4.2\\to-4.1$; one should keep the best one seen, which is $-4.2$ after iteration 5"
+  ],
+  "answer": 3,
+  "explain": "Lower bounds $-29,-6.7,-6.5,-6.2,-6.1,-6.1,-5.1,-5.1$ are non-decreasing. Upper bounds of the iterates $0,\\ 0.3,\\ 0.5,\\ -4.2,\\ -4.1,\\dots$ are not monotone. The tutorial's gap $|UB-LB|/|UB|$ is $2/4.2\\approx 0.476$ at iteration 4 and reaches 0 only at iteration 8, where both bounds equal the optimal value $-5.1$.",
+  "difficulty": 2,
+  "source": {
+   "label": "JuMP tutorial — Benders decomposition",
+   "url": "https://jump.dev/JuMP.jl/stable/tutorials/algorithms/benders_decomposition/",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-cutting-stock-two-models-card",
+  "topic": "t403",
+  "type": "card",
+  "q": "Cutting stock ($m$ rolls of length $L$, orders $i$ of length $l_i$ and demand $d_i$): write the Kantorovich (assignment) model and the Gilmore–Gomory (pattern) model, and say why the pattern model is used with column generation.",
+  "a": "<b>Kantorovich</b>: $\\min\\sum_jy_j$ s.t. $\\sum_jx_{ij}=d_i\\ \\forall i$; $\\sum_il_ix_{ij}\\le L\\ \\forall j$; $x_{ij}\\le d_iy_j$; $x_{ij}\\in\\mathbb{Z}_+$, $y_j\\in\\{0,1\\}$.<br><b>Gilmore–Gomory</b>: patterns $P=\\{a\\in\\mathbb{Z}^n_+ : \\sum_il_ia_i\\le L\\}$; $\\min\\sum_{p\\in P}\\lambda_p$ s.t. $\\sum_pa_{ip}\\lambda_p=d_i\\ \\forall i$, $\\lambda_p\\in\\mathbb{Z}_+$.<br>The pattern model has a huge number of variables, but (i) it can be stronger than the assignment model (explained by Dantzig–Wolfe reformulation), (ii) it has no symmetry between identical rolls, because it does not say which physical roll is used, and (iii) a basic solution of its LP has at most as many nonzero variables as there are rows, so most columns are never needed and can be generated on demand.",
+  "difficulty": 2,
+  "source": {
+   "label": "Column Generation, Dantzig-Wolfe, Branch-Price-and-Cut (M. Lübbecke, RWTH Aachen, CO@Work 2020 slides — part hosted at Szeged)",
+   "url": "https://www.inf.u-szeged.hu/~boglarka/AdvOpt/cg.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-column-generation-iteration-card",
+  "topic": "t403",
+  "type": "card",
+  "q": "Column generation for a minimisation master LP: describe one iteration and the stopping test.",
+  "a": "<ol><li>Solve the <b>restricted master problem</b> (RMP) over the current subset of columns; get the primal solution $\\lambda$ and the duals $\\pi$.</li><li><b>Pricing</b>: the reduced cost of column $j$ is $\\bar c_j=c_j-\\pi^\\top a_j$. Solve $z=\\min_j\\bar c_j$ implicitly over <i>all</i> columns (an optimisation problem over the set that generates the columns).</li><li>If $z \\lt 0$: add the minimising column and re-solve the RMP. If $z\\ge 0$: no column can improve, so the RMP solution is optimal for the full master LP.</li></ol>Cutting stock: every column costs 1, so pricing is $1-\\max\\{\\sum_i\\pi_ix_i : \\sum_il_ix_i\\le L,\\ x\\in\\mathbb{Z}^n_+\\}$, an integer knapsack problem.",
+  "difficulty": 1,
+  "source": {
+   "label": "Column Generation, Dantzig-Wolfe, Branch-Price-and-Cut (M. Lübbecke, RWTH Aachen, CO@Work 2020 slides — part hosted at Szeged)",
+   "url": "https://www.inf.u-szeged.hu/~boglarka/AdvOpt/cg.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-cutting-stock-pricing-rule",
+  "topic": "t403",
+  "type": "mcq",
+  "q": "In column generation for the cutting-stock pattern model $\\min\\sum_px_p$ s.t. $\\sum_pa_{ip}x_p\\ge d_i$ (roll width $W$, piece widths $w_i$), the restricted master LP returns duals $\\pi_i\\ge 0$ for the demand rows. Which problem is solved to find a new pattern, and when is the pattern added?",
+  "options": [
+   "A shortest-path problem with arc costs $\\pi_i$; add the pattern if its length is below 1",
+   "The LP $\\min\\{\\sum_i\\pi_iy_i : \\sum_iw_iy_i\\ge W,\\ y\\ge 0\\}$; add the pattern if its value is below 1",
+   "The integer knapsack $\\max\\{\\sum_i\\pi_iy_i : \\sum_iw_iy_i\\le W,\\ y\\in\\mathbb{Z}^n_+\\}$; add the pattern if its value is greater than 0",
+   "The integer knapsack $\\max\\{\\sum_i\\pi_iy_i : \\sum_iw_iy_i\\le W,\\ y\\in\\mathbb{Z}^n_+\\}$; add the pattern if its value is greater than 1"
+  ],
+  "answer": 3,
+  "explain": "A pattern $y$ costs one roll, so its reduced cost is $1-\\pi^\\top y$. It can improve the master only if $1-\\pi^\\top y \\lt 0$, i.e. the knapsack value exceeds 1 (the JuMP tutorial tests value $\\gt 1+10^{-8}$). Comparing with 0 forgets the cost of the column.",
+  "difficulty": 2,
+  "source": {
+   "label": "JuMP tutorial — Column generation (cutting stock)",
+   "url": "https://jump.dev/JuMP.jl/stable/tutorials/algorithms/cutting_stock_column_generation/",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-vertex-colouring-pricing",
+  "topic": "t403",
+  "type": "mcq",
+  "q": "Vertex colouring by column generation: master $\\min\\sum_p\\lambda_p$ s.t. $\\sum_pa_{ip}\\lambda_p=1$ for every vertex $i$, where $p$ ranges over the independent sets of the graph $G=(V,E)$ and $a_{ip}=1$ if vertex $i$ belongs to set $p$. With duals $\\pi_i$, what is the pricing problem?",
+  "options": [
+   "A maximum-weight clique problem: $1-\\max\\{\\sum_i\\pi_ix_i : x_i+x_j\\ge 1\\ \\forall ij\\in E,\\ x\\ \\text{binary}\\}$",
+   "A minimum-cost flow problem with node prices $\\pi$",
+   "An integer knapsack problem: $1-\\max\\{\\sum_i\\pi_ix_i : \\sum_ix_i\\le |V|,\\ x\\in\\mathbb{Z}^n_+\\}$",
+   "A maximum-weight independent set problem: $1-\\max\\{\\sum_i\\pi_ix_i : x_i+x_j\\le 1\\ \\forall ij\\in E,\\ x\\ \\text{binary}\\}$"
+  ],
+  "answer": 3,
+  "explain": "Each column is an independent set (a colour class) with cost 1, so its reduced cost is $1-\\sum_i\\pi_ia_{ip}$. Minimising it over all independent sets means finding a maximum-weight independent set with vertex weights $\\pi_i$; the edge constraints $x_i+x_j\\le 1$ describe exactly the feasible columns.",
+  "difficulty": 2,
+  "source": {
+   "label": "Column Generation, Dantzig-Wolfe, Branch-Price-and-Cut (M. Lübbecke, RWTH Aachen, CO@Work 2020 slides — part hosted at Szeged)",
+   "url": "https://www.inf.u-szeged.hu/~boglarka/AdvOpt/cg.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-restricted-master-ip-heuristic-tf",
+  "topic": "t403",
+  "type": "tf",
+  "q": "Cutting stock by column generation: once no column has negative reduced cost, solving the final restricted master problem <i>with integrality</i> on the generated columns is guaranteed to give an optimal solution of the integer pattern model.",
+  "answer": false,
+  "explain": "Column generation only proves optimality for the LP relaxation. The columns generated are the ones the LP needed; an optimal <i>integer</i> solution may need patterns that were never generated. Solving the restricted master as a MIP is a heuristic: in the JuMP tutorial it gave 299 rolls, better than the 306 obtained by rounding the LP solution up, but without a proof of optimality. Generating columns at every node of the tree is branch and price.",
+  "difficulty": 2,
+  "source": {
+   "label": "JuMP tutorial — Column generation (cutting stock)",
+   "url": "https://jump.dev/JuMP.jl/stable/tutorials/algorithms/cutting_stock_column_generation/",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-column-generation-bounds-short",
+  "topic": "t403",
+  "type": "short",
+  "q": "Cutting stock by column generation: the LP relaxation of the pattern model converges with value $z_{LP}$. You then solve the restricted master with integrality on the generated columns and obtain $z_H$ rolls. What do $z_{LP}$ and $z_H$ tell you about the true integer optimum $z^*$, and when is $z_H$ proven optimal?",
+  "model": "$z_{LP}$ is the LP-relaxation value of the <i>full</i> pattern model (no column prices out), so $z_{LP}\\le z^*$; since the number of rolls is an integer, $\\lceil z_{LP}\\rceil\\le z^*$. $z_H$ is the value of a feasible integer solution, so $z^*\\le z_H$. Hence $\\lceil z_{LP}\\rceil\\le z^*\\le z_H$. If $z_H=\\lceil z_{LP}\\rceil$ the heuristic solution is optimal; otherwise the remaining gap can only be closed by branch and price (column generation at every node), because columns not yet generated might be needed.",
+  "rubric": [
+   "$z_{LP}$ is a valid lower bound: pricing proved LP optimality over all columns",
+   "Rounding up: $\\lceil z_{LP}\\rceil\\le z^*$ (integer objective)",
+   "$z_H$ is an upper bound (feasible solution)",
+   "Optimal if $z_H=\\lceil z_{LP}\\rceil$; otherwise branch and price is needed"
+  ],
+  "difficulty": 2,
+  "source": {
+   "label": "JuMP tutorial — Column generation (cutting stock)",
+   "url": "https://jump.dev/JuMP.jl/stable/tutorials/algorithms/cutting_stock_column_generation/",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-branch-and-price-card",
+  "topic": "t403",
+  "type": "card",
+  "q": "What is branch and price, and why is 'column generation at the root, then a MIP on the generated columns' not an exact method?",
+  "a": "Branch and price is branch and bound in which the LP relaxation at <b>every</b> node is solved by column generation. Solving the final restricted master as an integer program is only a heuristic: new columns could still be needed inside the tree, i.e. a column that the root LP did not need may be part of an optimal integer solution.",
+  "difficulty": 1,
+  "source": {
+   "label": "JuMP tutorial — Column generation (cutting stock)",
+   "url": "https://jump.dev/JuMP.jl/stable/tutorials/algorithms/cutting_stock_column_generation/",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-column-generation-lower-bound-card",
+  "topic": "t403",
+  "type": "card",
+  "q": "Column generation before convergence (minimisation): how do you obtain a valid <b>lower bound</b> on the master LP value from the current duals and the pricing result?",
+  "a": "<b>Dantzig–Wolfe master with a convexity constraint</b> (duals $y_1$ on the complicating rows $Ax=b$, $y_2$ on convexity): the Lagrangian bound is $$LB=y_1^\\top b+\\min_{x\\in X}(c-y_1^\\top A)x=z_{RMP}+\\bar c_{\\min},$$ where $\\bar c_{\\min}\\le 0$ is the minimum reduced cost found by pricing. So $z_{RMP}+\\bar c_{\\min}\\le z^*\\le z_{RMP}$, and the bounds meet when $\\bar c_{\\min}=0$.<br><b>Cutting stock</b> (every column costs 1, no convexity row): if the best pricing value is $\\kappa=\\max_p\\pi^\\top a_p$, then $\\pi/\\kappa$ satisfies every dual constraint $\\pi^\\top a_p\\le 1$, so $z_{RMP}/\\kappa$ is a lower bound on the LP optimum.<br>Example (KTH 2008, Q5): $z_{RMP}=-2$ and $\\bar c_{\\min}=-2$ give $-4\\le z^*\\le -2$ after the first iteration; at the second, $-8/3+0$ and the bounds meet.",
+  "difficulty": 3,
+  "source": {
+   "label": "KTH SF2812 — final exam 16 January 2008 (questions), Q5",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t080116.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-kth09-cutting-stock-lp-value",
+  "topic": "t403",
+  "type": "num",
+  "q": "Cutting stock: rolls of width $W=11$, item widths $w=(3,4,5)$, demands $b=(20,15,10)$ (demand must be met; overproduction is allowed). A cutting pattern $(a_1,a_2,a_3)$ gives the number of items of each width cut from one roll. Consider the LP relaxation restricted to the three patterns $(0,0,2)$, $(1,2,0)$, $(2,0,1)$, used $x_1,x_2,x_3$ times. Its basic solution meets all three demands with equality. How many rolls does it use in total?",
+  "answer": 15.625,
+  "tol": 0.001,
+  "unit": "rolls",
+  "explain": "Width 4: $2x_2=15\\Rightarrow x_2=7.5$. Width 3: $x_2+2x_3=20\\Rightarrow x_3=6.25$. Width 5: $2x_1+x_3=10\\Rightarrow x_1=1.875$. Total $1.875+7.5+6.25=15.625$ rolls; pricing shows this is the LP optimum over all patterns.",
+  "difficulty": 2,
+  "source": {
+   "label": "KTH SF2812 Applied Linear Optimization — final exam 9 January 2009 (questions), Q5",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t090109.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-kth09-cutting-stock-duals",
+  "topic": "t403",
+  "type": "mcq",
+  "q": "Cutting stock: rolls of width $W=11$, item widths $w=(3,4,5)$, demands $b=(20,15,10)$ (demand must be met; overproduction is allowed). A cutting pattern $(a_1,a_2,a_3)$ gives the number of items of each width cut from one roll. The LP basis consists of the patterns $(0,0,2)$, $(1,2,0)$, $(2,0,1)$. What are the dual prices $y=(y_1,y_2,y_3)$ of the three demand rows?",
+  "options": [
+   "$(1/4,\\ 3/8,\\ 1/2)$",
+   "$(1/2,\\ 3/8,\\ 1/4)$",
+   "$(3/11,\\ 4/11,\\ 5/11)$",
+   "$(1/4,\\ 1/2,\\ 1/2)$"
+  ],
+  "answer": 0,
+  "explain": "Every basic pattern has reduced cost zero, $y^\\top a=1$. From $(0,0,2)$: $2y_3=1$; from $(2,0,1)$: $2y_1+y_3=1\\Rightarrow y_1=1/4$; from $(1,2,0)$: $y_1+2y_2=1\\Rightarrow y_2=3/8$. Check: $y^\\top b=5+5.625+5=15.625$, the LP value. $(3/11,4/11,5/11)$ is the naive width share $w_i/W$, which is not what the basis gives.",
+  "difficulty": 2,
+  "source": {
+   "label": "KTH SF2812 Applied Linear Optimization — final exam 9 January 2009 (questions), Q5",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t090109.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-kth09-cutting-stock-pricing",
+  "topic": "t403",
+  "type": "short",
+  "q": "Cutting stock: rolls of width $W=11$, item widths $w=(3,4,5)$, demands $b=(20,15,10)$ (demand must be met; overproduction is allowed). A cutting pattern $(a_1,a_2,a_3)$ gives the number of items of each width cut from one roll. The LP basis formed by the patterns $(0,0,2)$, $(1,2,0)$, $(2,0,1)$ has dual prices $y=(1/4,\\ 3/8,\\ 1/2)$ and value $15.625$. Set up the pricing problem and show that this basic solution is optimal for the LP relaxation over <b>all</b> patterns.",
+  "model": "A pattern $\\alpha$ has reduced cost $1-y^\\top\\alpha=1-\\tfrac18(2\\alpha_1+3\\alpha_2+4\\alpha_3)$. Pricing problem: $\\max\\ 2\\alpha_1+3\\alpha_2+4\\alpha_3$ s.t. $3\\alpha_1+4\\alpha_2+5\\alpha_3\\le 11$, $\\alpha\\ge 0$ integer. Its LP bound is $11\\cdot\\tfrac45=8.8$, so the integer optimum is at most 8, and 8 is attained (by $(2,0,1)$, $(1,2,0)$ and $(0,0,2)$). Hence the minimum reduced cost is $1-8/8=0$: no pattern prices out and the LP optimum is $15.625$.",
+  "rubric": [
+   "Reduced cost of a pattern: $1-y^\\top\\alpha$",
+   "Knapsack $\\max\\ 2\\alpha_1+3\\alpha_2+4\\alpha_3$ s.t. $3\\alpha_1+4\\alpha_2+5\\alpha_3\\le 11$, $\\alpha$ integer",
+   "Maximum equals 8 (bound argument or enumeration)",
+   "Minimum reduced cost 0, so the LP is solved with value $15.625$"
+  ],
+  "difficulty": 2,
+  "source": {
+   "label": "KTH SF2812 Applied Linear Optimization — final exam 9 January 2009 (questions), Q5",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t090109.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-kth09-cutting-stock-integer",
+  "topic": "t403",
+  "type": "mcq",
+  "q": "Cutting stock: rolls of width $W=11$, item widths $w=(3,4,5)$, demands $b=(20,15,10)$ (demand must be met; overproduction is allowed). A cutting pattern $(a_1,a_2,a_3)$ gives the number of items of each width cut from one roll. The LP relaxation of the pattern model has optimal value $15.625$, attained by using the patterns $(0,0,2)$, $(1,2,0)$, $(2,0,1)$ respectively $1.875$, $7.5$ and $6.25$ times. Which statement about integer solutions is correct?",
+  "options": [
+   "Rounding down to $(1,7,6)$ gives a feasible solution with 14 rolls",
+   "Rounding up to $(2,8,7)$ gives 17 rolls, which must be optimal because the LP solution is fractional",
+   "At least 16 rolls are needed; rounding up gives $(2,8,7)$ with 17 rolls (at most one too many), and $(2,8,6)$ is feasible with 16 rolls, hence optimal",
+   "The integer optimum is 15, the LP value rounded down"
+  ],
+  "answer": 2,
+  "explain": "$\\lceil 15.625\\rceil=16$ is a lower bound. Rounding up is always feasible: 17 rolls, within one of optimal. Lowering the third count to 6 still covers demand: width 3: $8+2\\cdot 6=20$; width 4: $2\\cdot 8=16\\ge 15$; width 5: $2\\cdot 2+6=10$. So 16 rolls is optimal (a lucky special case, as the official solution stresses). Rounding down under-produces (width 3: $7+12=19 \\lt 20$).",
+  "difficulty": 2,
+  "source": {
+   "label": "KTH SF2812 Applied Linear Optimization — final exam 9 January 2009 (questions), Q5",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t090109.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-kth08-dw-initial-master",
+  "topic": "t403",
+  "type": "mcq",
+  "q": "Dantzig–Wolfe decomposition of $\\min\\ x_1-x_2+x_3+x_4$ s.t. $-x_1+2x_2+x_3-3x_4=1$ (complicating constraint), $-1\\le x_j\\le 1$ for $j=1,\\dots,4$ (easy set: a box). The restricted master starts with the extreme points $v_1=(-1,1,-1,1)$ and $v_2=(-1,1,1,-1)$, with weights $\\alpha_1,\\alpha_2\\ge 0$. What are the weights in the solution of the initial restricted master problem?",
+  "options": [
+   "$\\alpha=(1/2,\\ 1/2)$",
+   "$\\alpha=(1/4,\\ 3/4)$",
+   "$\\alpha=(3/4,\\ 1/4)$",
+   "$\\alpha=(7/8,\\ 1/8)$"
+  ],
+  "answer": 2,
+  "explain": "Column data: $c^\\top v_1=-2$, $c^\\top v_2=-2$; complicating-row values $a^\\top v_1=1+2-1-3=-1$, $a^\\top v_2=1+2+1+3=7$. Master: $-\\alpha_1+7\\alpha_2=1$ and $\\alpha_1+\\alpha_2=1$ (convexity) give $\\alpha_2=1/4$, $\\alpha_1=3/4$; master value $-2$. $(1/2,1/2)$ ignores the complicating row ($-0.5+3.5=3\\ne 1$).",
+  "difficulty": 2,
+  "source": {
+   "label": "KTH SF2812 — final exam 16 January 2008 (questions), Q5",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t080116.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-kth08-dw-reduced-cost",
+  "topic": "t403",
+  "type": "num",
+  "q": "Dantzig–Wolfe decomposition of $\\min\\ x_1-x_2+x_3+x_4$ s.t. $-x_1+2x_2+x_3-3x_4=1$ (complicating constraint), $-1\\le x_j\\le 1$ for $j=1,\\dots,4$ (easy set: a box). The restricted master starts with the extreme points $v_1=(-1,1,-1,1)$ and $v_2=(-1,1,1,-1)$, with weights $\\alpha_1,\\alpha_2\\ge 0$. With $c=(1,-1,1,1)$ and complicating row $a=(-1,2,1,-3)$, the initial master has basis $\\{\\alpha_1,\\alpha_2\\}$ with $c^\\top v_1=c^\\top v_2=-2$, $a^\\top v_1=-1$, $a^\\top v_2=7$. Compute the dual multipliers $(y_1,y_2)$ of the complicating row and the convexity row, solve the pricing subproblem, and give the minimum reduced cost.",
+  "answer": -2,
+  "explain": "Duals: $-y_1+y_2=-2$ and $7y_1+y_2=-2$ give $y_1=0$, $y_2=-2$. Pricing: $\\min_{-1\\le x\\le 1}(c-y_1a)^\\top x-y_2=\\min(x_1-x_2+x_3+x_4)+2$. The box minimiser is $v_3=(-1,1,-1,-1)$ with value $-4$, so the minimum reduced cost is $-4+2=-2 \\lt 0$. The new master column is $(a^\\top v_3,\\ 1)=(5,\\ 1)$ with cost $c^\\top v_3=-4$.",
+  "difficulty": 3,
+  "source": {
+   "label": "KTH SF2812 — final exam 16 January 2008 (questions), Q5",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t080116.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-kth08-dw-second-iteration",
+  "topic": "t403",
+  "type": "short",
+  "q": "Dantzig–Wolfe decomposition of $\\min\\ x_1-x_2+x_3+x_4$ s.t. $-x_1+2x_2+x_3-3x_4=1$ (complicating constraint), $-1\\le x_j\\le 1$ for $j=1,\\dots,4$ (easy set: a box). The restricted master starts with the extreme points $v_1=(-1,1,-1,1)$ and $v_2=(-1,1,1,-1)$, with weights $\\alpha_1,\\alpha_2\\ge 0$. After the first pricing step the column of $v_3=(-1,1,-1,-1)$ enters (cost $c^\\top v_3=-4$, complicating-row value $a^\\top v_3=5$; recall $c^\\top v_1=-2$, $a^\\top v_1=-1$) and $\\alpha_2$ leaves the basis. Carry out the next iteration: new master solution, dual multipliers, pricing, and the optimal $x$.",
+  "model": "Basis $\\{\\alpha_1,\\alpha_3\\}$: $-\\alpha_1+5\\alpha_3=1$, $\\alpha_1+\\alpha_3=1\\Rightarrow\\alpha=(2/3,\\ 1/3)$, master value $-2\\cdot\\tfrac23-4\\cdot\\tfrac13=-\\tfrac83$.<br>Duals: $-y_1+y_2=-2$, $5y_1+y_2=-4\\Rightarrow y_1=-\\tfrac13$, $y_2=-\\tfrac73$.<br>Pricing: $c-y_1a=(1,-1,1,1)+\\tfrac13(-1,2,1,-3)=(\\tfrac23,\\ -\\tfrac13,\\ \\tfrac43,\\ 0)$; its minimum over the box is $-\\tfrac23-\\tfrac13-\\tfrac43=-\\tfrac73$; reduced cost $-\\tfrac73-y_2=0$. No column prices out: optimal.<br>$x^*=\\tfrac23v_1+\\tfrac13v_3=(-1,\\ 1,\\ -1,\\ \\tfrac13)$ with value $-\\tfrac83$ (check: $-x_1+2x_2+x_3-3x_4=1+2-1-1=1$).",
+  "rubric": [
+   "$\\alpha=(2/3,\\ 1/3)$, master value $-8/3$",
+   "$y=(-1/3,\\ -7/3)$",
+   "Modified costs $(2/3,\\ -1/3,\\ 4/3,\\ 0)$, box minimum $-7/3$",
+   "Minimum reduced cost $0$, so stop",
+   "$x^*=(-1,\\ 1,\\ -1,\\ 1/3)$"
+  ],
+  "difficulty": 3,
+  "source": {
+   "label": "KTH SF2812 — final exam 16 January 2008 (questions), Q5",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t080116.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-kth08-dw-optimal-value",
+  "topic": "t403",
+  "type": "num",
+  "q": "Solve the LP $\\min\\ x_1-x_2+x_3+x_4$ s.t. $-x_1+2x_2+x_3-3x_4=1$, $-1\\le x_j\\le 1$ ($j=1,\\dots,4$), for example by Dantzig–Wolfe decomposition with the equality as the complicating constraint. What is the optimal objective value?",
+  "answer": "-8/3",
+  "explain": "Dantzig–Wolfe started from $v_1=(-1,1,-1,1)$, $v_2=(-1,1,1,-1)$ generates $v_3=(-1,1,-1,-1)$ and stops with weights $(2/3,\\ 0,\\ 1/3)$: $x^*=(-1,\\ 1,\\ -1,\\ 1/3)$, value $-1-1-1+\\tfrac13=-\\tfrac83$. Direct check: with the dual $y_1=-1/3$ on the equality, the reduced costs are $(2/3,\\ -1/3,\\ 4/3,\\ 0)$, so $x_1=-1$, $x_2=1$, $x_3=-1$ sit at their bounds and $x_4$ is fixed by the equality: $1+2-1-3x_4=1\\Rightarrow x_4=1/3$.",
+  "difficulty": 2,
+  "source": {
+   "label": "KTH SF2812 — final exam 16 January 2008 (questions), Q5",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t080116.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-kth08-dw-lagrangian-bound",
+  "topic": "t403",
+  "type": "num",
+  "q": "Dantzig–Wolfe decomposition of $\\min\\ x_1-x_2+x_3+x_4$ s.t. $-x_1+2x_2+x_3-3x_4=1$ (complicating constraint), $-1\\le x_j\\le 1$ for $j=1,\\dots,4$ (easy set: a box). The restricted master starts with the extreme points $v_1=(-1,1,-1,1)$ and $v_2=(-1,1,1,-1)$, with weights $\\alpha_1,\\alpha_2\\ge 0$. The first restricted master has value $-2$ and dual multiplier $y_1=0$ on the complicating row (right-hand side $b=1$); the pricing subproblem $\\min\\{(c-y_1a)^\\top x : -1\\le x\\le 1\\}$ has value $-4$. Which lower bound on the optimal value of the LP does the Lagrangian bound $y_1b+\\min_x(c-y_1a)^\\top x$ give at this point?",
+  "answer": -4,
+  "explain": "$LB=0\\cdot 1+(-4)=-4$. Equivalently $LB=z_{RMP}+(\\text{minimum reduced cost})=-2+(-2)$. So $-4\\le z^*\\le -2$ after the first iteration; after the second, $y_1b+\\min=-\\tfrac13-\\tfrac73=-\\tfrac83$ equals the master value and the bounds meet.",
+  "difficulty": 1,
+  "source": {
+   "label": "KTH SF2812 — final exam 16 January 2008 (questions), Q5",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t080116.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-kth10-cutting-stock-first-basis",
+  "topic": "t403",
+  "type": "mcq",
+  "q": "Cutting stock: roll width $W=11$, item widths $w=(3,5,9)$, demands $b=(60,50,40)$. Column generation on the LP relaxation of the pattern model starts from the pure patterns $(3,0,0)$, $(0,2,0)$, $(0,0,1)$ (a pattern $(\\alpha_1,\\alpha_2,\\alpha_3)$ gives the number of items of each width cut from one roll). What are the first basic solution and its dual prices?",
+  "options": [
+   "$x_B=(20,25,40)$, 85 rolls, $y=(1/3,\\ 1/2,\\ 1)$",
+   "$x_B=(20,25,40)$, 85 rolls, $y=(3/11,\\ 5/11,\\ 9/11)$",
+   "$x_B=(60,50,40)$, 150 rolls, $y=(1,\\ 1,\\ 1)$",
+   "$x_B=(180,100,40)$, 320 rolls, $y=(3,\\ 2,\\ 1)$"
+  ],
+  "answer": 0,
+  "explain": "$B=\\operatorname{diag}(3,2,1)$, so $x_B=B^{-1}b=(60/3,\\ 50/2,\\ 40/1)=(20,25,40)$, in total 85 rolls. Duals from $y^\\top B=(1,1,1)$: $y=(1/3,\\ 1/2,\\ 1)$, i.e. one over the number of copies per roll. Check: $y^\\top b=20+25+40=85$.",
+  "difficulty": 1,
+  "source": {
+   "label": "KTH SF2812 — final exam 15 January 2010 (questions), Q5",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t100115.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-kth10-cutting-stock-reduced-cost",
+  "topic": "t403",
+  "type": "num",
+  "q": "Cutting stock: roll width $W=11$, item widths $w=(3,5,9)$, demands $b=(60,50,40)$. Column generation on the LP relaxation of the pattern model starts from the pure patterns $(3,0,0)$, $(0,2,0)$, $(0,0,1)$ (a pattern $(\\alpha_1,\\alpha_2,\\alpha_3)$ gives the number of items of each width cut from one roll). The first basis gives dual prices $y=(1/3,\\ 1/2,\\ 1)$. Solve the pricing problem and give the minimum reduced cost $1-\\max_\\alpha y^\\top\\alpha$ over all feasible patterns $\\alpha$.",
+  "answer": "-1/6",
+  "explain": "Pricing: $\\max\\ \\tfrac13\\alpha_1+\\tfrac12\\alpha_2+\\alpha_3=\\tfrac16\\max(2\\alpha_1+3\\alpha_2+6\\alpha_3)$ s.t. $3\\alpha_1+5\\alpha_2+9\\alpha_3\\le 11$, $\\alpha\\ge 0$ integer. Candidates: $(2,1,0)\\to 7$; $(3,0,0)$, $(0,2,0)$, $(0,0,1)\\to 6$. The best is $(2,1,0)$ with value $7/6$, so the reduced cost is $1-7/6=-1/6 \\lt 0$ and this pattern enters.",
+  "difficulty": 2,
+  "source": {
+   "label": "KTH SF2812 — final exam 15 January 2010 (questions), Q5",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t100115.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-kth10-cutting-stock-ratio-test",
+  "topic": "t403",
+  "type": "mcq",
+  "q": "Cutting stock: roll width $W=11$, item widths $w=(3,5,9)$, demands $b=(60,50,40)$. Column generation on the LP relaxation of the pattern model starts from the pure patterns $(3,0,0)$, $(0,2,0)$, $(0,0,1)$ (a pattern $(\\alpha_1,\\alpha_2,\\alpha_3)$ gives the number of items of each width cut from one roll). The first basic solution uses the patterns $(3,0,0)$, $(0,2,0)$, $(0,0,1)$ respectively $20$, $25$ and $40$ times. Pricing proposes the pattern $a_4=(2,1,0)$. Which pattern leaves the basis, and what is the new solution?",
+  "options": [
+   "$(0,2,0)$ leaves; the new solution uses 50 rolls of $(2,1,0)$",
+   "$(3,0,0)$ leaves; the new basic solution uses $(0,2,0)$ 25 times, $(0,0,1)$ 40 times and $(2,1,0)$ 20 times: 85 rolls",
+   "$(0,0,1)$ leaves; the new solution uses 40 rolls of $(2,1,0)$",
+   "$(3,0,0)$ leaves; the new basic solution uses $(0,2,0)$ 10 times, $(0,0,1)$ 40 times and $(2,1,0)$ 30 times: 80 rolls"
+  ],
+  "answer": 3,
+  "explain": "$B^{-1}a_4=(2/3,\\ 1/2,\\ 0)$. Ratio test: $\\min\\{20/(2/3),\\ 25/(1/2)\\}=\\min\\{30,\\ 50\\}=30$, so $(3,0,0)$ leaves and $(2,1,0)$ enters at level 30. Then $(0,2,0)$ is used $25-30\\cdot\\tfrac12=10$ times and $(0,0,1)$ stays at 40: $10+40+30=80$ rolls. Check: width 3: $2\\cdot 30=60$; width 5: $2\\cdot 10+30=50$; width 9: $40$.",
+  "difficulty": 2,
+  "source": {
+   "label": "KTH SF2812 — final exam 15 January 2010 (questions), Q5",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t100115.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-kth10-cutting-stock-lp-optimum",
+  "topic": "t403",
+  "type": "num",
+  "q": "Cutting stock: roll width $W=11$, item widths $w=(3,5,9)$, demands $b=(60,50,40)$. Column generation on the LP relaxation of the pattern model starts from the pure patterns $(3,0,0)$, $(0,2,0)$, $(0,0,1)$ (a pattern $(\\alpha_1,\\alpha_2,\\alpha_3)$ gives the number of items of each width cut from one roll). What is the optimal value of the LP relaxation (number of rolls)?",
+  "answer": 80,
+  "unit": "rolls",
+  "explain": "Iteration 1: 85 rolls, $y=(1/3,1/2,1)$; pattern $(2,1,0)$ has reduced cost $-1/6$ and replaces $(3,0,0)$. Iteration 2: basis $(0,2,0)$, $(0,0,1)$, $(2,1,0)$ at levels $10,40,30$: 80 rolls; duals from $2y_2=1$, $y_3=1$, $2y_1+y_2=1$: $y=(1/4,\\ 1/2,\\ 1)$. Pricing: $\\tfrac14\\max(\\alpha_1+2\\alpha_2+4\\alpha_3)=\\tfrac14\\cdot 4=1$, so the minimum reduced cost is 0 and the LP optimum is 80. The LP solution is integral, so 80 rolls is also the integer optimum.",
+  "difficulty": 2,
+  "source": {
+   "label": "KTH SF2812 — final exam 15 January 2010 (questions), Q5",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t100115.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-kth10-cutting-stock-full",
+  "topic": "t403",
+  "type": "short",
+  "q": "Cutting stock: roll width $W=11$, item widths $w=(3,5,9)$, demands $b=(60,50,40)$. Column generation on the LP relaxation of the pattern model starts from the pure patterns $(3,0,0)$, $(0,2,0)$, $(0,0,1)$ (a pattern $(\\alpha_1,\\alpha_2,\\alpha_3)$ gives the number of items of each width cut from one roll). Solve the LP relaxation by column generation (give the basis, the solution, the duals and the pricing result at each iteration), then give an integer solution and a bound on its deviation from the optimum.",
+  "model": "<b>Iteration 1.</b> $B=\\operatorname{diag}(3,2,1)$, $x_B=(20,25,40)$: 85 rolls. Duals $y=(1/3,\\ 1/2,\\ 1)$. Pricing: $1-\\tfrac16\\max\\{2\\alpha_1+3\\alpha_2+6\\alpha_3 : 3\\alpha_1+5\\alpha_2+9\\alpha_3\\le 11,\\ \\alpha\\in\\mathbb{Z}^3_+\\}$; the best pattern is $(2,1,0)$ with value 7, reduced cost $-1/6 \\lt 0$. Entering column $a_4=(2,1,0)$: $B^{-1}a_4=(2/3,\\ 1/2,\\ 0)$, ratio test $\\min\\{30,\\ 50\\}=30$, so $(3,0,0)$ leaves.<br><b>Iteration 2.</b> Basis $(0,2,0)$, $(0,0,1)$, $(2,1,0)$ with levels $10,\\ 40,\\ 30$: 80 rolls. Duals $y=(1/4,\\ 1/2,\\ 1)$. Pricing: $1-\\tfrac14\\max\\{\\alpha_1+2\\alpha_2+4\\alpha_3\\}=1-\\tfrac44=0$: LP optimal, value 80.<br><b>Integer solution.</b> The LP solution is already integral (10 rolls of $(0,2,0)$, 40 of $(0,0,1)$, 30 of $(2,1,0)$), so 80 rolls is optimal: deviation 0. This is a special case: in general the LP solution is fractional, one rounds it up and compares with the lower bound $\\lceil z_{LP}\\rceil$.",
+  "rubric": [
+   "Start: $x_B=(20,25,40)$, 85 rolls, $y=(1/3,1/2,1)$",
+   "Pricing finds $(2,1,0)$ with reduced cost $-1/6$",
+   "Ratio test: $(3,0,0)$ leaves, new levels $(10,40,30)$, 80 rolls",
+   "New duals $y=(1/4,1/2,1)$; pricing value 1, reduced cost 0, LP optimal",
+   "LP solution integral, hence 80 rolls is the integer optimum"
+  ],
+  "difficulty": 3,
+  "source": {
+   "label": "KTH SF2812 — final exam 15 January 2010 (questions), Q5",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t100115.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-kth10-cutting-stock-early-bound",
+  "topic": "t403",
+  "type": "num",
+  "q": "Cutting stock: roll width $W=11$, item widths $w=(3,5,9)$, demands $b=(60,50,40)$. Column generation on the LP relaxation of the pattern model starts from the pure patterns $(3,0,0)$, $(0,2,0)$, $(0,0,1)$ (a pattern $(\\alpha_1,\\alpha_2,\\alpha_3)$ gives the number of items of each width cut from one roll). At the first iteration the restricted master has value $z_{RMP}=85$ with duals $\\pi=(1/3,\\ 1/2,\\ 1)$, and the best pattern found by pricing has value $\\kappa=\\max_p\\pi^\\top a_p=7/6$. Because $\\pi/\\kappa$ satisfies every dual constraint $\\pi^\\top a_p\\le 1$, the number $z_{RMP}/\\kappa$ is a lower bound on the LP optimum. How many rolls are therefore needed <b>at least</b> (give an integer)?",
+  "answer": 73,
+  "unit": "rolls",
+  "explain": "$85/(7/6)=510/7\\approx 72.86$; the number of rolls is an integer, so at least 73 are needed. At the second iteration $\\kappa=1$ and the bound is $80/1=80$, equal to the master value: the LP is solved.",
+  "difficulty": 3,
+  "source": {
+   "label": "KTH SF2812 — final exam 15 January 2010 (questions), Q5",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t100115.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-kth11-l1-ball-subproblem",
+  "topic": "t403",
+  "type": "short",
+  "q": "Show that the problem $\\min\\ \\sum_{j=1}^nv_jx_j$ s.t. $\\sum_{j=1}^n|x_j|\\le 1$ is solved by choosing an index $k$ with the largest $|v_k|$ and setting $x_k=-\\operatorname{sign}(v_k)$, $x_j=0$ for $j\\ne k$ (assume $v\\ne 0$). What are the extreme points of the feasible set, and why does this matter for a Dantzig–Wolfe decomposition that uses this set as the easy set?",
+  "model": "For any feasible $x$: $\\sum_jv_jx_j\\ge-\\sum_j|v_j||x_j|\\ge-\\max_j|v_j|\\sum_j|x_j|\\ge-\\max_j|v_j|$. The proposed point is feasible ($\\sum_j|x_j|=1$) and attains $v_kx_k=-|v_k|=-\\max_j|v_j|$, so it is optimal.<br>The feasible set is the polytope with extreme points $\\pm e_j$ ($2n$ of them), and a linear objective attains its minimum at one of them. In Dantzig–Wolfe every master column is therefore one of the points $\\pm e_j$, and the pricing subproblem $\\min\\{(c-y_1a)^\\top x : x\\in S\\}$ is solved in closed form: its value is $-\\max_j|c_j-y_1a_j|$.",
+  "rubric": [
+   "Lower bound $\\sum_jv_jx_j\\ge-\\max_j|v_j|$ for every feasible $x$",
+   "The proposed point is feasible and attains the bound",
+   "Extreme points are $\\pm e_j$",
+   "Pricing subproblem solved in closed form; columns are the points $\\pm e_j$"
+  ],
+  "difficulty": 2,
+  "source": {
+   "label": "KTH SF2812 — final exam 13 January 2011 (questions), Q5",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t110113.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-kth11-dw-first-master",
+  "topic": "t403",
+  "type": "num",
+  "q": "(P) $\\min\\ 3x_1+4x_2+5x_3+4x_4$ s.t. $4x_1+x_2+3x_3+2x_4=2$ (hard constraint), $|x_1|+|x_2|+|x_3|+|x_4|\\le 1$ (easy set $S$). Dantzig–Wolfe decomposition starts from the extreme points $v_1=(1,0,0,0)$ and $v_2=(0,-1,0,0)$ of $S$. What is the optimal value of the first restricted master problem?",
+  "answer": "1/5",
+  "explain": "Costs: $c^\\top v_1=3$, $c^\\top v_2=-4$; hard-row values $a^\\top v_1=4$, $a^\\top v_2=-1$. Master: $4\\alpha_1-\\alpha_2=2$, $\\alpha_1+\\alpha_2=1\\Rightarrow\\alpha=(3/5,\\ 2/5)$; value $3\\cdot\\tfrac35-4\\cdot\\tfrac25=\\tfrac15$.",
+  "difficulty": 2,
+  "source": {
+   "label": "KTH SF2812 — final exam 13 January 2011 (questions), Q5",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t110113.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-kth11-dw-pricing-conclusion",
+  "topic": "t403",
+  "type": "mcq",
+  "q": "(P) $\\min\\ 3x_1+4x_2+5x_3+4x_4$ s.t. $4x_1+x_2+3x_3+2x_4=2$ (hard constraint), $|x_1|+|x_2|+|x_3|+|x_4|\\le 1$ (easy set $S$). Dantzig–Wolfe starts from $v_1=(1,0,0,0)$ and $v_2=(0,-1,0,0)$; the first master has weights $\\alpha=(3/5,\\ 2/5)$ and value $1/5$. For any vector $v$, $\\min\\{v^\\top x : x\\in S\\}=-\\max_j|v_j|$. What does the pricing step conclude?",
+  "options": [
+   "Multipliers $(y_1,y_2)=(7/5,\\ -13/5)$; minimum reduced cost $-13/5 \\lt 0$, so a new column must be added",
+   "Multipliers $(y_1,y_2)=(3/4,\\ 0)$; minimum reduced cost $-2$, so the column of $(0,0,-1,0)$ enters",
+   "Multipliers $(y_1,y_2)=(7/5,\\ -13/5)$; modified costs $c-y_1a=(-13/5,\\ 13/5,\\ 4/5,\\ 6/5)$; minimum reduced cost $-13/5+13/5=0$, so the first master is already optimal and $x^*=(3/5,\\ -2/5,\\ 0,\\ 0)$",
+   "Multipliers $(y_1,y_2)=(7/5,\\ 13/5)$; minimum reduced cost $-26/5$, so the column of $(0,-1,0,0)$ enters again"
+  ],
+  "answer": 2,
+  "explain": "Duals: $4y_1+y_2=3$, $-y_1+y_2=-4\\Rightarrow y_1=7/5$, $y_2=-13/5$. Then $c-y_1a=(3,4,5,4)-\\tfrac75(4,1,3,2)=(-\\tfrac{13}{5},\\ \\tfrac{13}{5},\\ \\tfrac45,\\ \\tfrac65)$, subproblem value $-\\tfrac{13}{5}$, reduced cost $-\\tfrac{13}{5}-y_2=0$ (forgetting to subtract the convexity dual $y_2$ gives the wrong $-13/5$). No column prices out: $x^*=\\tfrac35v_1+\\tfrac25v_2=(\\tfrac35,\\ -\\tfrac25,\\ 0,\\ 0)$, value $\\tfrac15$.",
+  "difficulty": 3,
+  "source": {
+   "label": "KTH SF2812 — final exam 13 January 2011 (questions), Q5",
+   "url": "https://www.math.kth.se/optsyst/utbildning/kurser/SF2812/t110113.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-column-generation-stop-tf",
+  "topic": "t403",
+  "type": "tf",
+  "q": "Column generation for a minimisation master LP with $m$ constraints and a huge number of columns. <i>Claim:</i> if the pricing problem returns a minimum reduced cost $z\\ge 0$, the current restricted master solution is optimal for the full master LP, although most columns were never generated.",
+  "answer": true,
+  "explain": "$z=\\min_j(c_j-\\pi^\\top a_j)\\ge 0$ says that no column, generated or not, can improve the solution: the restricted master optimum is optimal for the full master LP. Generating only a few columns suffices because a basic solution has at most $m$ nonzero variables.",
+  "difficulty": 1,
+  "source": {
+   "label": "Column Generation, Dantzig-Wolfe, Branch-Price-and-Cut (M. Lübbecke, RWTH Aachen, CO@Work 2020 slides — part hosted at Szeged)",
+   "url": "https://www.inf.u-szeged.hu/~boglarka/AdvOpt/cg.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-jump-submit-lazy-constraint",
+  "topic": "t501",
+  "type": "mcq",
+  "q": "Inside a JuMP solver-independent lazy-constraint callback with argument <code>cb_data</code>, the current solution violates $x\\le 2$. Which code correctly adds this constraint?",
+  "options": [
+   "<code>@constraint(model, x &lt;= 2)</code>",
+   "<code>con = @build_constraint(x &lt;= 2)</code> followed by <code>MOI.submit(model, MOI.UserCut(cb_data), con)</code>",
+   "<code>con = @build_constraint(x &lt;= 2)</code> followed by <code>MOI.submit(model, MOI.LazyConstraint(cb_data), con)</code>",
+   "<code>set_upper_bound(x, 2)</code>"
+  ],
+  "answer": 2,
+  "explain": "The constraint object is built with <code>@build_constraint</code> and submitted as <code>MOI.LazyConstraint(cb_data)</code>; the callback itself is registered with <code>set_attribute(model, MOI.LazyConstraintCallback(), f)</code>. Calling <code>@constraint</code> or changing bounds inside a callback is undefined behaviour, and a user cut is not allowed to remove integer-feasible points.",
+  "difficulty": 1,
+  "source": {
+   "label": "JuMP manual — Solver-independent Callbacks",
+   "url": "https://jump.dev/JuMP.jl/stable/manual/callbacks/",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-jump-callback-allowed-api-tf",
+  "topic": "t501",
+  "type": "tf",
+  "q": "Inside a JuMP solver-independent callback it is safe to call <code>@constraint(model, ...)</code> or to change a variable bound, provided the model stays feasible.",
+  "answer": false,
+  "explain": "Inside a callback only <code>callback_node_status</code>, <code>callback_value</code>, <code>@build_constraint</code> and <code>MOI.submit</code> may be used. Any other use of the JuMP API there is undefined behaviour and may cause errors, wrong answers or a crash. Also, each callback type can be set only once (a second <code>set_attribute</code> overwrites the first).",
+  "difficulty": 1,
+  "source": {
+   "label": "JuMP manual — Solver-independent Callbacks",
+   "url": "https://jump.dev/JuMP.jl/stable/manual/callbacks/",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-lazy-versus-user-cut-subtours",
+  "topic": "t501",
+  "type": "short",
+  "q": "In a branch-and-cut code for the TSP (JuMP with Gurobi) the model initially contains only the degree constraints. Explain why the subtour-elimination separator must be registered as a <b>lazy constraint</b> callback and not (only) as a <b>user cut</b> callback.",
+  "model": "User cuts are only allowed to remove fractional LP points: they must not cut off any integer-feasible point of the model as stated, and the solver is free to ignore them or not to call the callback at every solution. Subtour constraints do change the set of integer-feasible points: an integer solution made of several subtours satisfies the degree constraints and would be accepted as feasible. They are part of the problem definition, so they must be submitted as lazy constraints, which are checked for candidate integer solutions. (Subtour inequalities may <i>additionally</i> be separated at fractional points to strengthen the bound.)",
+  "rubric": [
+   "User cuts may only cut off fractional points, never integer-feasible points of the current model",
+   "Integer solutions consisting of several subtours are feasible for the initial model",
+   "Subtour constraints define feasibility, hence lazy constraints",
+   "The solver may ignore user cuts, so correctness cannot depend on them"
+  ],
+  "difficulty": 2,
+  "source": {
+   "label": "JuMP manual — Solver-independent Callbacks",
+   "url": "https://jump.dev/JuMP.jl/stable/manual/callbacks/",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-user-cut-integer-point-tf",
+  "topic": "t501",
+  "type": "tf",
+  "q": "In JuMP and Gurobi, a <b>user cut</b> is allowed to remove an integer-feasible solution of the model, as long as that solution is not optimal.",
+  "answer": false,
+  "explain": "User cuts must not remove <i>any</i> integer-feasible point, optimal or not; they may only cut off fractional LP solutions. A constraint that removes integer points must be submitted as a lazy constraint; otherwise the solver can return wrong answers.",
+  "difficulty": 1,
+  "source": {
+   "label": "JuMP manual — Solver-independent Callbacks",
+   "url": "https://jump.dev/JuMP.jl/stable/manual/callbacks/",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-jump-lazy-readd",
+  "topic": "t501",
+  "type": "mcq",
+  "q": "In a JuMP lazy-constraint callback, a point shows up that violates a lazy constraint you already submitted earlier in the same solve. According to the JuMP manual, what is the right reaction?",
+  "options": [
+   "Submit the violated constraint again: the solver may revisit such a point (for example because the constraint was removed during presolve)",
+   "Ignore it: a lazy constraint submitted once is guaranteed to stay in the model",
+   "Stop the solve, because this indicates a bug in the solver",
+   "Submit it as a user cut instead, since a lazy constraint can only be added once"
+  ],
+  "answer": 0,
+  "explain": "There is no guarantee that an earlier lazy constraint is still active, so the callback must cut off a violating point every time it sees one. Conversely, a lazy constraint should only be submitted when the current callback solution actually violates it; the callback may be invoked at fractional or integer nodes (query <code>callback_node_status</code>).",
+  "difficulty": 2,
+  "source": {
+   "label": "JuMP manual — Solver-independent Callbacks",
+   "url": "https://jump.dev/JuMP.jl/stable/manual/callbacks/",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-jump-solution-queries-card",
+  "topic": "t501",
+  "type": "card",
+  "q": "JuMP: after <code>optimize!(model)</code>, which functions tell you (a) why the solver stopped, (b) whether a solution is available, (c) the incumbent value, the best bound and the gap?",
+  "a": "(a) <code>termination_status(model)</code>: <code>OPTIMAL</code>, <code>INFEASIBLE</code>, <code>DUAL_INFEASIBLE</code> (unbounded if a primal feasible point exists), <code>INFEASIBLE_OR_UNBOUNDED</code>, or a limit such as <code>TIME_LIMIT</code>, <code>NODE_LIMIT</code>, <code>SOLUTION_LIMIT</code>; <code>raw_status(model)</code> gives the solver's own message.<br>(b) <code>primal_status(model)</code> (e.g. <code>FEASIBLE_POINT</code>), <code>dual_status(model)</code>, <code>result_count(model)</code>; shortcut <code>is_solved_and_feasible(model)</code>.<br>(c) <code>objective_value(model)</code> = value of the best primal solution (incumbent); <code>objective_bound(model)</code> = best known bound on the optimum (the dual bound of branch and bound); <code>relative_gap(model)</code>. Work counters: <code>solve_time</code>, <code>node_count</code>, <code>simplex_iterations</code>.<br>Values: <code>value(x)</code>, <code>dual(c)</code>, <code>shadow_price(c)</code>, <code>reduced_cost(x)</code>. Query everything before modifying the model: a modification resets it to <code>OPTIMIZE_NOT_CALLED</code>.",
+  "difficulty": 1,
+  "source": {
+   "label": "JuMP manual — Solutions (querying status, bounds, gap)",
+   "url": "https://jump.dev/JuMP.jl/stable/manual/solutions/",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-jump-time-limit-interpretation",
+  "topic": "t501",
+  "type": "mcq",
+  "q": "A JuMP/Gurobi run of a <b>minimisation</b> MIP stops with <code>termination_status == TIME_LIMIT</code>, <code>primal_status == FEASIBLE_POINT</code>, <code>objective_value = 120</code> and <code>objective_bound = 100</code>. What can you conclude?",
+  "options": [
+   "The optimal value is 100; the solution of cost 120 only needs to be rounded",
+   "Nothing: after a time limit neither number is meaningful",
+   "A feasible solution of cost 100 is known and no solution can cost more than 120",
+   "A feasible solution of cost 120 is known and the optimal value lies in $[100,120]$: the incumbent is at most 20 above optimal"
+  ],
+  "answer": 3,
+  "explain": "<code>objective_value</code> is the incumbent (primal bound, an upper bound for a min problem) and <code>objective_bound</code> the best dual (lower) bound from branch and bound. So $100\\le z^*\\le 120$; the absolute gap is 20 and the relative gap is $|120-100|/|120|\\approx 0.167$ (16.7 percent) with the usual solver definition.",
+  "difficulty": 2,
+  "source": {
+   "label": "JuMP manual — Solutions (querying status, bounds, gap)",
+   "url": "https://jump.dev/JuMP.jl/stable/manual/solutions/",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-jump-time-limit-primal-status-tf",
+  "topic": "t501",
+  "type": "tf",
+  "q": "In JuMP, if <code>termination_status(model)</code> is <code>TIME_LIMIT</code>, a feasible solution is always available, so <code>value(x)</code> can be called without further checks.",
+  "answer": false,
+  "explain": "A limit status only says why the solver stopped; it does not say whether an incumbent exists. Check <code>primal_status(model) == FEASIBLE_POINT</code> before calling <code>value</code>.",
+  "difficulty": 1,
+  "source": {
+   "label": "JuMP manual — Solutions (querying status, bounds, gap)",
+   "url": "https://jump.dev/JuMP.jl/stable/manual/solutions/",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-jump-tsp-callback-vs-loop",
+  "topic": "t501",
+  "type": "mcq",
+  "q": "The JuMP TSP tutorial solves the same instance twice: (1) iteratively: <code>optimize!</code>, find a subtour, add it with <code>@constraint</code>, re-optimize, repeat; (2) with a lazy-constraint callback. Both reach the same optimal tour, but in the tutorial's run (2) was about 1.85 times faster. Why?",
+  "options": [
+   "The callback version uses a stronger formulation with MTZ constraints",
+   "In (1) the MIP is solved again from scratch after every added constraint, while in (2) a single branch-and-bound search keeps its tree, cuts and incumbent",
+   "The callback version adds all subtour elimination constraints before the solve starts",
+   "The iterative version only solves LP relaxations and therefore needs more iterations"
+  ],
+  "answer": 1,
+  "explain": "Row generation by re-solving restarts branch and bound each time. The lazy callback checks integer nodes (<code>callback_node_status(cb_data, model) == MOI.CALLBACK_NODE_STATUS_INTEGER</code>), reads the point with <code>callback_value</code>, extracts the shortest cycle and, if it is shorter than $n$, submits $\\sum_{i \\lt j,\\ i,j\\in S}x_{ij}\\le |S|-1$ inside the one running search.",
+  "difficulty": 2,
+  "source": {
+   "label": "JuMP tutorial — Traveling Salesperson Problem (lazy constraints)",
+   "url": "https://jump.dev/JuMP.jl/stable/tutorials/algorithms/tsp_lazy_constraints/",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-jump-mip-start",
+  "topic": "t301",
+  "type": "mcq",
+  "q": "You have computed a nearest-neighbour tour and want Gurobi, called through JuMP, to start from it. How do you pass it to the solver?",
+  "options": [
+   "Add <code>@constraint(model, x[i,j] == 1)</code> for every edge of the tour",
+   "Call <code>fix(x[i,j], 1.0)</code> for every edge of the tour",
+   "Call <code>set_start_value(x[i,j], 1.0)</code> (or <code>0.0</code>) on the model variables before <code>optimize!</code>; Gurobi receives it as a MIP start",
+   "Set the parameter <code>Cutoff</code> to the tour length; this loads the tour as incumbent"
+  ],
+  "answer": 2,
+  "explain": "Start values, given with <code>@variable(model, y, start = 1)</code> or <code>set_start_value</code>, are passed to a MIP solver as a MIP start: a candidate incumbent that the solver checks and, if necessary, completes. Fixing variables or adding equalities would force the tour instead of suggesting it; a cutoff only declares worse solutions uninteresting, it does not supply a solution.",
+  "difficulty": 1,
+  "source": {
+   "label": "JuMP manual — Variables (start values, fixing, integrality)",
+   "url": "https://jump.dev/JuMP.jl/stable/manual/variables/",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-jump-gurobi-parameters-card",
+  "topic": "t501",
+  "type": "card",
+  "q": "JuMP with Gurobi: how do you create the model, set a time limit of 100 seconds and a 1 percent relative MIP gap, and what extra steps does a Gurobi-specific lazy-constraint callback need?",
+  "a": "<code>model = Model(Gurobi.Optimizer)</code><br><code>set_attribute(model, \"TimeLimit\", 100)</code><br><code>set_attribute(model, \"MIPGap\", 0.01)</code> (similarly <code>set_attribute(model, \"Presolve\", 0)</code>)<br>Solver-specific callback: <code>MOI.set(model, MOI.RawOptimizerAttribute(\"LazyConstraints\"), 1)</code>, then <code>MOI.set(model, Gurobi.CallbackFunction(), f)</code> with <code>f(cb_data, cb_where::Cint)</code>; inside, test <code>cb_where == GRB_CB_MIPSOL</code> and call <code>Gurobi.load_callback_variable_primal(cb_data, cb_where)</code> before <code>callback_value(cb_data, x)</code>, then <code>MOI.submit(model, MOI.LazyConstraint(cb_data), con)</code>. With the solver-independent <code>MOI.LazyConstraintCallback</code> this bookkeeping is done for you.",
+  "difficulty": 1,
+  "source": {
+   "label": "Gurobi.jl package page in the JuMP documentation",
+   "url": "https://jump.dev/JuMP.jl/stable/packages/Gurobi/",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-gurobi-log-gap",
+  "topic": "t501",
+  "type": "num",
+  "q": "A Gurobi log for a <b>minimisation</b> MIP shows at the root node <code>Incumbent = 157344.610</code> and <code>BestBd = 38893.9036</code>. What value, in percent, is printed in the <code>Gap</code> column?",
+  "answer": 75.3,
+  "tol": 0.1,
+  "unit": "%",
+  "explain": "Gap $=|\\text{Incumbent}-\\text{BestBd}|/|\\text{Incumbent}|=(157344.610-38893.9036)/157344.610=0.7528$, printed as 75.3%. The incumbent is the primal (upper) bound; BestBd is the dual (lower) bound, here the root LP value.",
+  "difficulty": 1,
+  "source": {
+   "label": "Gurobi Optimizer reference — MIP Logging (v13.0)",
+   "url": "https://docs.gurobi.com/projects/optimizer/en/13.0/concepts/logging/mip.html",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-gurobi-log-heuristic-line",
+  "topic": "t501",
+  "type": "mcq",
+  "q": "Two consecutive lines of a Gurobi log for a minimisation MIP (columns: Expl Unexpl | Obj Depth IntInf | Incumbent BestBd Gap | It/Node Time):<br><pre>     0     0 38893.9036    0   11 157344.610 38893.9036  75.3%     -    0s<br>H    0     0                    80297.610430 38893.9036  51.6%     -    0s</pre>What happened between the two lines?",
+  "options": [
+   "Branching produced an integral node and the bound improved to 80297.61",
+   "A MIP heuristic found a new incumbent of value 80297.61; the bound is unchanged, so the gap drops to $(80297.61-38893.90)/80297.61\\approx 0.516$",
+   "A cutting plane raised the lower bound from 38893.90 to 80297.61",
+   "The solver halted (H) after exploring 51.6% of the nodes"
+  ],
+  "answer": 1,
+  "explain": "A leading <code>H</code> marks a new incumbent found by a heuristic; a leading <code>*</code> marks one found by branching (an integral node relaxation). Only the Incumbent column changes; BestBd stays at the root LP value 38893.90, where 11 integer variables were still fractional (IntInf = 11).",
+  "difficulty": 2,
+  "source": {
+   "label": "Gurobi Optimizer reference — MIP Logging (v13.0)",
+   "url": "https://docs.gurobi.com/projects/optimizer/en/13.0/concepts/logging/mip.html",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-gurobi-log-columns-card",
+  "topic": "t501",
+  "type": "card",
+  "q": "Gurobi MIP log: what do the columns <code>Expl</code>, <code>Unexpl</code>, <code>Obj</code>, <code>Depth</code>, <code>IntInf</code>, <code>Incumbent</code>, <code>BestBd</code>, <code>Gap</code>, <code>It/Node</code> mean, and what are the three parts of the log?",
+  "a": "<ul><li><code>Expl</code>: nodes explored so far; <code>Unexpl</code>: leaf nodes still open.</li><li><code>Obj</code>: relaxation objective of the current node; <code>Depth</code>: its depth in the tree; <code>IntInf</code>: number of integer variables with fractional values in that relaxation.</li><li><code>Incumbent</code>: objective of the best feasible solution (primal bound); <code>BestBd</code>: bound given by the open nodes (dual bound); <code>Gap</code>: relative gap between the two.</li><li><code>It/Node</code>: average simplex iterations per node; <code>Time</code>: elapsed seconds.</li></ul>A leading <code>H</code> = incumbent found by a heuristic, <code>*</code> = incumbent found by branching. The log has a presolve section, a progress (branch-and-cut) section and a summary section; the 'Cutting planes' block lists by type (Gomory, MIR, cover, ...) the cuts still present in the LP relaxation at the end of the search.",
+  "difficulty": 1,
+  "source": {
+   "label": "Gurobi Optimizer reference — MIP Logging (v13.0)",
+   "url": "https://docs.gurobi.com/projects/optimizer/en/13.0/concepts/logging/mip.html",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-gurobi-log-tolerance",
+  "topic": "t501",
+  "type": "mcq",
+  "q": "A Gurobi log ends with:<br><pre>Optimal solution found (tolerance 1.00e-04)<br>Best objective 4.000505414200e+04, best bound 4.000505414200e+04, gap 0.0000%</pre>What does 'tolerance 1.00e-04' refer to?",
+  "options": [
+   "The relative MIP gap (parameter <code>MIPGap</code>): the search stops, and the incumbent is reported as optimal, once the gap between best objective and best bound falls below $10^{-4}$",
+   "The integrality tolerance: values within $10^{-4}$ of an integer count as integral",
+   "The feasibility tolerance of the simplex method",
+   "The fraction of the runtime spent in heuristics"
+  ],
+  "answer": 0,
+  "explain": "Gurobi stops when the relative gap between incumbent and best bound is below <code>MIPGap</code>. 'Optimal' therefore means optimal within this tolerance; in this log the two values happen to coincide (gap 0.0000%). <code>MIPGapAbs</code> plays the same role for the absolute gap.",
+  "difficulty": 2,
+  "source": {
+   "label": "Gurobi Optimizer reference — MIP Logging (v13.0)",
+   "url": "https://docs.gurobi.com/projects/optimizer/en/13.0/concepts/logging/mip.html",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-gurobi-termination-parameters-card",
+  "topic": "t501",
+  "type": "card",
+  "q": "Gurobi: which parameters control when a MIP solve stops, and what do <code>Cutoff</code>, <code>MIPFocus</code>, <code>ImproveStartTime</code> and <code>Cuts</code> do?",
+  "a": "<b>Stopping</b>: <code>TimeLimit</code> (wall clock; can make runs non-deterministic) or <code>WorkLimit</code> (deterministic); <code>MIPGap</code> (relative) and <code>MIPGapAbs</code> (absolute) gap between best solution and best bound; <code>NodeLimit</code>, <code>IterationLimit</code>, <code>SolutionLimit</code>; <code>BestObjStop</code> / <code>BestBdStop</code> (stop on the primal or the dual bound alone).<br><code>Cutoff</code>: solutions with objective worse than the given value are of no interest.<br><code>MIPFocus</code>: 1 = find good feasible solutions quickly; 2 = concentrate on proving optimality; 3 = concentrate on the bound.<br><code>ImproveStartGap</code> / <code>ImproveStartTime</code>: at a chosen gap or time, give up on moving the bound and devote all effort to finding better feasible solutions.<br><code>Cuts</code>: aggressiveness of cutting planes (very easy models may gain from turning cuts off, very hard ones from aggressive cuts).",
+  "difficulty": 2,
+  "source": {
+   "label": "Gurobi Optimizer reference — Parameter guidelines",
+   "url": "https://docs.gurobi.com/projects/optimizer/en/current/concepts/parameters/guidelines.html",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-gurobi-mipfocus-choice",
+  "topic": "t501",
+  "type": "mcq",
+  "q": "Gurobi finds a good incumbent early, but the best bound hardly moves and the gap stays large. Which <code>MIPFocus</code> setting does Gurobi's parameter guideline recommend trying in this situation?",
+  "options": [
+   "<code>MIPFocus = 1</code>",
+   "<code>MIPFocus = 3</code>",
+   "<code>MIPFocus = 0</code> together with a larger <code>Heuristics</code> value",
+   "<code>MIPFocus = 1</code> together with <code>ImproveStartTime = 0</code>"
+  ],
+  "answer": 1,
+  "explain": "<code>MIPFocus = 3</code> concentrates on the bound and is the setting recommended when the best bound moves very slowly or not at all. <code>MIPFocus = 1</code> favours finding feasible solutions quickly (2 favours proving optimality). More heuristic effort or the improvement mode only help the primal side, which is not the problem here.",
+  "difficulty": 1,
+  "source": {
+   "label": "Gurobi Optimizer reference — Parameter guidelines",
+   "url": "https://docs.gurobi.com/projects/optimizer/en/current/concepts/parameters/guidelines.html",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-gurobi-heuristics-parameter",
+  "topic": "t501",
+  "type": "mcq",
+  "q": "What does Gurobi's <code>Heuristics</code> parameter control, and what is its default?",
+  "options": [
+   "The desired fraction of total MIP runtime spent in primal heuristics; default 0.05 (5 percent)",
+   "The number of heuristic solutions kept in the solution pool; default 10",
+   "Which single heuristic (RINS, feasibility pump, ...) is used; default automatic",
+   "The relative gap at which heuristics are switched off; default $10^{-4}$"
+  ],
+  "answer": 0,
+  "explain": "Raising <code>Heuristics</code> can produce more and better feasible solutions, at the expense of progress on the bound. Related parameters: <code>NoRelHeurTime</code> (a heuristic that searches for good solutions without solving the LP relaxation), and <code>MinRelNodes</code>, <code>PumpPasses</code> (feasibility pump), <code>ZeroObjNodes</code>: expensive heuristics to try when no feasible solution is being found.",
+  "difficulty": 1,
+  "source": {
+   "label": "Gurobi Optimizer reference — Parameters (reference page)",
+   "url": "https://docs.gurobi.com/projects/optimizer/en/current/reference/parameters.html",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-gurobi-callback-where",
+  "topic": "t501",
+  "type": "mcq",
+  "q": "Gurobi callbacks are invoked with a <code>where</code> code: <code>MIPSOL</code> (a new integer solution was found) or <code>MIPNODE</code> (a node of the tree is being explored), among others. From which of them may user cuts (<code>addCut</code>) and lazy constraints (<code>addLazy</code>) be added?",
+  "options": [
+   "<code>addCut</code>: MIPSOL only; <code>addLazy</code>: MIPNODE only",
+   "Both from any callback, including PRESOLVE and SIMPLEX",
+   "Both only from MIPSOL",
+   "<code>addCut</code>: MIPNODE only; <code>addLazy</code>: MIPNODE or MIPSOL"
+  ],
+  "answer": 3,
+  "explain": "User cuts tighten the LP relaxation of a node, so they are added at <code>MIPNODE</code>; they must be true cutting planes that never cut off an integer solution feasible for the original model (Gurobi advises <code>PreCrush = 1</code> when adding your own cuts). Lazy constraints can be added at <code>MIPNODE</code> or <code>MIPSOL</code> and require the parameter <code>LazyConstraints</code> to be set. The point is read with <code>getSolution()</code> in MIPSOL and with <code>getNodeRel()</code> in MIPNODE (only when the node status is optimal).",
+  "difficulty": 2,
+  "source": {
+   "label": "Gurobi Optimizer reference — C++ API, GRBCallback",
+   "url": "https://docs.gurobi.com/projects/optimizer/en/current/reference/cpp/callback.html",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-gurobi-tsp-callback-design",
+  "topic": "t501",
+  "type": "short",
+  "q": "You implement subtour elimination for the TSP in a Gurobi callback. (a) Which <code>where</code> code must be handled, and which parameter must be set? (b) May you additionally separate subtour inequalities at fractional node solutions, and how? (c) Could you drop the integer-solution check and rely on fractional separation with user cuts only?",
+  "model": "(a) Handle <code>MIPSOL</code>: every new integer solution must be checked for subtours (read it with <code>getSolution</code>) and a violated subtour constraint added with <code>addLazy</code>; the parameter <code>LazyConstraints = 1</code> must be set.<br>(b) Yes, optionally at <code>MIPNODE</code> when the node relaxation has been solved to optimality (read it with <code>getNodeRel</code>): submit the violated inequalities as lazy constraints or, since subtour inequalities are valid for all tours, as user cuts with <code>addCut</code> (then <code>PreCrush = 1</code> is advised).<br>(c) No. User cuts are not allowed to define the feasible set, so integer solutions containing subtours would still be accepted; the <code>MIPSOL</code> check with lazy constraints cannot be dropped.",
+  "rubric": [
+   "MIPSOL callback checks every new integer solution",
+   "<code>LazyConstraints = 1</code> and <code>addLazy</code>",
+   "Fractional separation at MIPNODE is optional (lazy constraints, or user cuts via <code>addCut</code> with PreCrush)",
+   "User cuts alone cannot define feasibility, so the MIPSOL check is mandatory"
+  ],
+  "difficulty": 3,
+  "source": {
+   "label": "Gurobi Optimizer reference — C++ API, GRBCallback",
+   "url": "https://docs.gurobi.com/projects/optimizer/en/current/reference/cpp/callback.html",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-gurobi-mip-start-log-message",
+  "topic": "t301",
+  "type": "mcq",
+  "q": "You give Gurobi a MIP start and the log prints <code>User MIP start produced solution with objective 1250</code>. What does this message mean?",
+  "options": [
+   "The start was infeasible and was discarded",
+   "The start was feasible exactly as given",
+   "Gurobi had to repair or complete the start (for example only some variables had values) and obtained a feasible solution of objective 1250",
+   "Gurobi proved that 1250 is the optimal value"
+  ],
+  "answer": 2,
+  "explain": "<code>Loaded user MIP start with objective ...</code> is printed when the start is feasible as given; <code>User MIP start produced solution with objective ...</code> when Gurobi had to repair or complete it; <code>User MIP start did not produce a new incumbent solution</code> when that fails. A MIP start only supplies an incumbent; it proves nothing about optimality.",
+  "difficulty": 1,
+  "source": {
+   "label": "Gurobi Optimizer reference — Warm Start Options (v13.0)",
+   "url": "https://docs.gurobi.com/projects/optimizer/en/13.0/features/warmstart.html",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-gurobi-partial-mip-start",
+  "topic": "t301",
+  "type": "mcq",
+  "q": "A MIP start passed to Gurobi specifies values for only some of the integer variables. What does Gurobi do with it?",
+  "options": [
+   "It rejects the start: every variable must have a value",
+   "It sets every unspecified variable to 0",
+   "It fixes the specified variables for the whole search",
+   "It tries to complete the start by solving a sub-MIP over the unspecified variables, with effort limited by the parameter <code>StartNodeLimit</code>"
+  ],
+  "answer": 3,
+  "explain": "Partial starts are allowed; the completion is a possibly expensive sub-MIP whose node budget is <code>StartNodeLimit</code> (by default the same as <code>SubMIPNodes</code>). A start is a suggestion used to build <b>one</b> feasible solution, not a fixing. Variable hints (<code>VarHintVal</code>, <code>VarHintPri</code>) are different: they guide heuristics and branching during the whole search.",
+  "difficulty": 2,
+  "source": {
+   "label": "Gurobi Optimizer reference — Warm Start Options (v13.0)",
+   "url": "https://docs.gurobi.com/projects/optimizer/en/13.0/features/warmstart.html",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-gurobi-mip-start-continuous-tf",
+  "topic": "t301",
+  "type": "tf",
+  "q": "Gurobi's guidance on MIP starts: it is enough to supply start values for (some of) the binary/integer variables; also supplying values for the continuous variables is generally discouraged.",
+  "answer": true,
+  "explain": "Gurobi completes the start by computing the remaining variables itself. Values for continuous variables are discouraged because small numerical inconsistencies can cause the start to be rejected. Also, a MIP start can reduce solve time but there is no guarantee that it does.",
+  "difficulty": 1,
+  "source": {
+   "label": "Gurobi Help Center — \"How do I use MIP starts?\"",
+   "url": "https://support.gurobi.com/hc/en-us/articles/360043834831",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-heuristics-start-heuristic",
+  "topic": "t301",
+  "type": "mcq",
+  "q": "Which of these large-neighbourhood-search heuristics is a <b>start</b> heuristic, i.e. can run before any feasible solution is known?",
+  "options": [
+   "RINS",
+   "RENS",
+   "Local branching",
+   "Crossover"
+  ],
+  "answer": 1,
+  "explain": "RENS uses only the LP optimum $\\bar x$: it fixes every integer variable that is already integral in $\\bar x$, restricts each fractional one to $\\{\\lfloor\\bar x_j\\rfloor,\\lceil\\bar x_j\\rceil\\}$ and solves the resulting sub-MIP. RINS needs the incumbent as a second reference point, local branching searches around the incumbent, and crossover combines several feasible solutions: all three are improvement heuristics.",
+  "difficulty": 2,
+  "source": {
+   "label": "Primal Heuristics — \"When MIP solvers roll dice\" (T. Berthold, CO@Work 2024 slides)",
+   "url": "https://co-at-work.zib.de/slides/COatWork2024_Berthold_Heuristics.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-heuristics-rins",
+  "topic": "t301",
+  "type": "mcq",
+  "q": "What does the RINS heuristic (Danna et al. 2005) do?",
+  "options": [
+   "It rounds every fractional variable of the LP optimum to the nearest integer",
+   "It fixes the variables whose values agree in the LP optimum $\\bar x$ and in the incumbent $\\tilde x$, and solves the remaining sub-MIP",
+   "It fixes the variables whose values agree in all of several known integer solutions, and solves the remaining sub-MIP",
+   "It adds the constraint $\\sum_j|x_j-\\tilde x_j|\\le k$ around the incumbent $\\tilde x$ and solves the resulting MIP"
+  ],
+  "answer": 1,
+  "explain": "RINS uses two reference points: being close to the LP optimum suggests good quality, being close to the incumbent suggests feasibility. Fixing what several integer solutions share is crossover, a distance constraint around the incumbent is local branching, and rounding without solving a sub-MIP is a plain rounding heuristic.",
+  "difficulty": 1,
+  "source": {
+   "label": "Primal Heuristics — \"When MIP solvers roll dice\" (T. Berthold, CO@Work 2024 slides)",
+   "url": "https://co-at-work.zib.de/slides/COatWork2024_Berthold_Heuristics.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-heuristics-local-branching",
+  "topic": "t301",
+  "type": "mcq",
+  "q": "Local branching (Fischetti and Lodi 2003) searches a neighbourhood of the incumbent $\\tilde x$. How is this neighbourhood defined?",
+  "options": [
+   "By the constraint $\\Delta(x,\\tilde x)=\\sum_j|x_j-\\tilde x_j|\\le k$ (the 1-norm distance to the incumbent is at most $k$)",
+   "By fixing all variables that are integral in the LP optimum",
+   "By fixing the variables on which the LP optimum and the incumbent agree",
+   "By fixing the variables on which several incumbents agree"
+  ],
+  "answer": 0,
+  "explain": "Local branching adds a bound on the 1-norm distance to the incumbent and lets the MIP solver search that neighbourhood; it was originally proposed as a branching strategy. Fixing LP-integral variables is RENS, fixing what LP optimum and incumbent share is RINS, fixing what several solutions share is crossover.",
+  "difficulty": 1,
+  "source": {
+   "label": "Primal Heuristics — \"When MIP solvers roll dice\" (T. Berthold, CO@Work 2024 slides)",
+   "url": "https://co-at-work.zib.de/slides/COatWork2024_Berthold_Heuristics.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-heuristics-crossover-quiz",
+  "topic": "t301",
+  "type": "mcq",
+  "q": "What is the idea of the Crossover heuristic in MIP solvers?",
+  "options": [
+   "Fix the variables that coincide in the incumbent and in the LP optimum, then solve the sub-MIP",
+   "Add one constraint per fractional variable of the LP optimum",
+   "Fix the variables that take the same value in all of several feasible integer solutions, then solve the sub-MIP"
+  ],
+  "answer": 2,
+  "explain": "Crossover (Rothberg 2007) comes from a genetic algorithm: several feasible solutions are combined by fixing what they all agree on and optimising over the rest (paired with a mutation step). Fixing what the incumbent and the LP optimum share is RINS.",
+  "difficulty": 1,
+  "source": {
+   "label": "Primal Heuristics — \"When MIP solvers roll dice\" (T. Berthold, CO@Work 2024 slides)",
+   "url": "https://co-at-work.zib.de/slides/COatWork2024_Berthold_Heuristics.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-heuristics-feasibility-pump-card",
+  "topic": "t301",
+  "type": "card",
+  "q": "Describe the feasibility pump heuristic step by step.",
+  "a": "<ol><li>Solve the LP relaxation.</li><li>Round the LP optimum to an integer point $\\tilde x$.</li><li>If $\\tilde x$ is feasible, stop.</li><li>If the procedure is cycling, perturb.</li><li>Replace the objective by the distance $\\Delta(x,\\tilde x)=\\sum_j|x_j-\\tilde x_j|$.</li><li>Solve this LP (a projection of $\\tilde x$ back onto the LP polyhedron).</li><li>Go to step 2.</li></ol>It alternates between a point that is integral but possibly infeasible and a point that is LP-feasible but possibly fractional. Variants: auxiliary distance variables for general integers; the objective feasibility pump mixes the original objective with the distance; FP 2.0 adds propagation after each rounding.",
+  "difficulty": 2,
+  "source": {
+   "label": "Primal Heuristics — \"When MIP solvers roll dice\" (T. Berthold, CO@Work 2024 slides)",
+   "url": "https://co-at-work.zib.de/slides/COatWork2024_Berthold_Heuristics.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-heuristics-diving-quiz",
+  "topic": "t301",
+  "type": "mcq",
+  "q": "Diving heuristics in a MIP solver ...",
+  "options": [
+   "simulate a depth-first search in the branch-and-bound tree: fix variables, re-solve the LP, repeat",
+   "change the objective function",
+   "manipulate the simplex algorithm"
+  ],
+  "answer": 0,
+  "explain": "A dive repeatedly fixes (rounds) a variable and re-solves the LP, like one root-to-leaf path of the tree. Variants differ in the variable chosen: fractional diving (least fractional variable), guided diving (round towards the incumbent), coefficient diving (direction with fewer locks), vector-length diving. Changing the objective is the feasibility-pump idea. Rule of thumb from the slides: good branching rules make bad diving rules.",
+  "difficulty": 1,
+  "source": {
+   "label": "Primal Heuristics — \"When MIP solvers roll dice\" (T. Berthold, CO@Work 2024 slides)",
+   "url": "https://co-at-work.zib.de/slides/COatWork2024_Berthold_Heuristics.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-heuristics-no-guarantee-quiz",
+  "topic": "t301",
+  "type": "mcq",
+  "q": "Which statement about primal heuristics inside a MIP solver is correct?",
+  "options": [
+   "They typically come with an approximation ratio",
+   "They might terminate unsuccessfully, without finding any solution",
+   "They always improve the primal bound when they are called"
+  ],
+  "answer": 1,
+  "explain": "Primal heuristics are incomplete methods: they often find good solutions quickly but give no guarantee of success or quality. Their role inside an exact solver: proving feasibility, providing near-optimal solutions that often suffice in practice, and supplying an incumbent that prunes the rest of the search.",
+  "difficulty": 1,
+  "source": {
+   "label": "Primal Heuristics — \"When MIP solvers roll dice\" (T. Berthold, CO@Work 2024 slides)",
+   "url": "https://co-at-work.zib.de/slides/COatWork2024_Berthold_Heuristics.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-heuristics-primal-dual-integral-quiz",
+  "topic": "t301",
+  "type": "mcq",
+  "q": "The primal-dual integral, used to measure how well a solver (and its heuristics) performs over time, ...",
+  "options": [
+   "takes every update of the incumbent (and of the bound) over time into account, rewarding good solutions found early",
+   "depends on the number of processed branch-and-bound nodes",
+   "measures only the time needed to find a first feasible solution"
+  ],
+  "answer": 0,
+  "explain": "It accounts for each improvement of the incumbent and of the dual bound at the moment it happens, so finding good solutions early is rewarded. It is neither a node count nor just the time to the first solution.",
+  "difficulty": 2,
+  "source": {
+   "label": "Primal Heuristics — \"When MIP solvers roll dice\" (T. Berthold, CO@Work 2024 slides)",
+   "url": "https://co-at-work.zib.de/slides/COatWork2024_Berthold_Heuristics.pdf",
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x3-heuristics-local-search-vs-lns-card",
+  "topic": "t301",
+  "type": "card",
+  "q": "Classic local search versus large neighbourhood search (LNS): what is the difference? Name the main classes of primal heuristics in MIP solvers.",
+  "a": "<b>Local search</b> explores a small neighbourhood explicitly (a $k$-exchange neighbourhood costs about $O(n^k)$ to scan; Lin–Kernighan is the classic TSP example), accepts improving moves and stops in a local optimum unless some worsening moves are allowed.<br><b>LNS</b> defines a neighbourhood too large to enumerate (fix variables or add a constraint) and searches it by partially solving a sub-MIP: RENS, RINS, local branching, crossover.<br><b>Classes in MIP solvers</b>: rounding (make an LP solution integral without re-optimising), diving (fix variables, re-solve the LP), feasibility-pump / objective diving (change the objective to reduce fractionality), large neighbourhood search, pivoting.<br><b>Start</b> heuristics need no incumbent and usually run early from the LP optimum; <b>improvement</b> heuristics need a feasible solution and try to improve it.",
+  "difficulty": 2,
+  "source": {
+   "label": "Primal Heuristics — \"When MIP solvers roll dice\" (T. Berthold, CO@Work 2024 slides)",
+   "url": "https://co-at-work.zib.de/slides/COatWork2024_Berthold_Heuristics.pdf",
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x3-jump-dual-sign-card",
+  "topic": "t501",
+  "type": "card",
+  "q": "JuMP: what is the difference between <code>dual(c)</code> and <code>shadow_price(c)</code>, and what is <code>reduced_cost(x)</code> used for in the Benders tutorial?",
+  "a": "<code>dual(c)</code> uses JuMP's own sign convention, which depends on the direction of the constraint ($\\le$, $\\ge$, $=$) and <b>not</b> on whether the model is a minimisation or a maximisation. <code>shadow_price(c)</code> returns the dual with the textbook sensitivity sign.<br><code>reduced_cost(x)</code> is the reduced cost of a variable; in the JuMP Benders tutorial the subproblem contains copy variables fixed to the first-stage values, and their reduced costs are used as the subgradient $\\pi$ in the cut $\\theta\\ge V_2(x_k)+\\pi^\\top(x-x_k)$.<br>All of these need a dual solution: check <code>dual_status(model)</code>, or use <code>is_solved_and_feasible(model; dual = true)</code>.",
+  "difficulty": 2,
+  "source": {
+   "label": "JuMP manual — Solutions (querying status, bounds, gap)",
+   "url": "https://jump.dev/JuMP.jl/stable/manual/solutions/",
+   "solution": "source"
+  }
+ }
+]

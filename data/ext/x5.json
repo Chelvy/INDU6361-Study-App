@@ -1,0 +1,1918 @@
+[
+ {
+  "id": "x5-jl-index",
+  "topic": "t501",
+  "type": "mcq",
+  "q": "In Julia, let <code>a = [[3 6 8]; [7 9 2]; [-1 0 4]]</code> (a $3\\times 3$ matrix). What does <code>a[[1, end], 2]</code> return?",
+  "difficulty": 1,
+  "options": [
+   "The vector [7, 9, 2]: the whole second row",
+   "The vector [2, 4]: a 0-based reading (rows 2 and 3 of the third column)",
+   "The scalar 6 only",
+   "The vector [6, 0]: the entries of column 2 in the first and last rows"
+  ],
+  "answer": 3,
+  "explain": "Julia indexing is 1-based; the first index selects rows and the second columns. <code>[1, end]</code> picks rows 1 and 3, and column 2 of the matrix is $(6, 9, 0)$, so the result is the vector $[6, 0]$ (the book's answer; <code>a[[1, 3], 2]</code> is equivalent).",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 1.1.4 (p. 6)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-rel-ip142",
+  "topic": "t103",
+  "type": "num",
+  "q": "Solve $\\min\\ x+y$ subject to $x\\ge 8.2\\,y$, $y\\ge 2$ when $x\\in\\mathbb{Z}$ and $y\\in\\mathbb{N}$ (nonnegative integers). What is the optimal objective value?",
+  "difficulty": 1,
+  "answer": 19,
+  "explain": "With $y=2$ we need $x\\ge 16.4$, i.e. $x=17$: objective $19$ (and $x+4y=25$). Any $y\\ge 3$ needs $x\\ge 24.6$ and costs at least $28$. The continuous version of the model is the LP relaxation: its value $18.4$ is a lower bound, and since its optimum $x=16.4$ is fractional the integer optimum is strictly larger.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 1.4.2 (p. 10)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-mod-lot143",
+  "topic": "t101",
+  "type": "num",
+  "q": "Consider the production model with periods $T=\\{1,2,3,4\\}$: $$\\min \\sum_{t\\in T}(c_t y_t+d_t x_t)\\quad\\text{s.t.}\\quad x_t\\le 50\\,y_t\\ \\ \\forall t,\\qquad z_1=x_1-e_1,\\qquad z_t=z_{t-1}+x_t-e_t\\ \\ (t=2,3,4),$$ with $x_t\\ge 0$, $z_t\\ge 0$, $y_t\\in\\{0,1\\}$ and data $c=(15.2,\\ 14.8,\\ 15.9,\\ 14.3)$, $d=(0.2,\\ 0.2,\\ 0.1,\\ 0.6)$, $e=(5,\\ 40,\\ 20,\\ 50)$. What is the optimal objective value?",
+  "difficulty": 2,
+  "answer": 63.9,
+  "tol": 0.01,
+  "explain": "$x_t$ is the production (at most 50, only if $y_t=1$), $z_t$ the stock and $e_t$ the demand. Cumulative demands are $5, 45, 65, 115$, so period 1 must produce and at least three set-ups are needed ($2\\cdot 50\\lt 115$). Pattern $y=(1,1,1,0)$: fixed cost $45.9$; produce 50 in period 3 (unit cost 0.1) and 65 in periods 1-2 (unit cost 0.2): $5+13=18$, total $63.9$. The other feasible patterns cost more: $(1,0,1,1)$: $69.4$; $(1,1,0,1)$: $73.3$; $(1,1,1,1)$: $78.2$. (Recomputed by enumerating $y$ and solving the LP in $x,z$.)",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 1.4.3 (p. 10)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-mod-nurse-cover",
+  "topic": "t101",
+  "type": "mcq",
+  "q": "Nurse scheduling. A day has 12 two-hour periods $1,\\dots,12$ (period 1 = 0h-2h) and the same schedule repeats every day. A nurse starting in period $t$ works periods $t$ and $t+1$, has a break in period $t+2$, then works periods $t+3$ and $t+4$ (indices cyclic modulo 12). Let $x_t$ be the number of nurses starting in period $t$ and $r_t$ the number of nurses required in period $t$. Which constraint guarantees the coverage of period 5 (8h-10h)?",
+  "difficulty": 2,
+  "options": [
+   "$x_5+x_4+x_3+x_2\\ge r_5$",
+   "$x_5+x_6+x_8+x_9\\ge r_5$",
+   "$x_5+x_4+x_2+x_1\\ge r_5$",
+   "$x_5+x_4+x_3+x_2+x_1\\ge r_5$"
+  ],
+  "answer": 2,
+  "explain": "A nurse who starts in period $s$ is on duty in period 5 exactly when $5\\in\\{s,\\ s+1,\\ s+3,\\ s+4\\}$, i.e. $s\\in\\{5,4,2,1\\}$. The nurse starting in period 3 is on break in period 5, so $x_3$ must not appear; the option with $x_6,x_8,x_9$ looks forward instead of backward. The full model is $\\min\\sum_t x_t$ s.t. $x_t+x_{t-1}+x_{t-3}+x_{t-4}\\ge r_t$ for all $t$ (indices modulo 12), $x_t\\in\\mathbb{Z}_+$. The formulation is not printed in the book; for its requirement table $r=(15,14,14,17,22,20,10,20,18,15,20,20)$ this cyclic model needs 57 nurses (solver check), consistent with the book's remark that 55 are not enough.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 2.1.2 (p. 15)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-mod-or",
+  "topic": "t101",
+  "type": "mcq",
+  "q": "Let $a$, $b$, $c$ be binary variables. Which set of linear constraints enforces $c=a\\lor b$ (logical OR)?",
+  "difficulty": 1,
+  "options": [
+   "$c\\le a,\\quad c\\le b,\\quad c\\ge a+b-1$",
+   "$c\\ge a+b$",
+   "$c\\ge a,\\quad c\\ge b,\\quad c\\le a+b$",
+   "$c\\le a+b$ only"
+  ],
+  "answer": 2,
+  "explain": "$c\\ge a$ and $c\\ge b$ force $c=1$ as soon as one of them is 1; $c\\le a+b$ forces $c=0$ when both are 0. The set $c\\le a$, $c\\le b$, $c\\ge a+b-1$ is the linearisation of AND; $c\\ge a+b$ is infeasible for $a=b=1$; $c\\le a+b$ alone never forces $c=1$. (Standard answer; the book states the exercise without solution.)",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 2.2.2 (p. 17)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-fs-compact-or",
+  "topic": "t104",
+  "type": "tf",
+  "q": "For binary $a_1,\\dots,a_n$ and $c$, the compact formulation $n\\,c\\ge\\sum_{i}a_i,\\ \\ c\\le\\sum_i a_i$ of $c=a_1\\lor\\dots\\lor a_n$ has the same LP relaxation as the disaggregated formulation $c\\ge a_i\\ (i=1,\\dots,n),\\ \\ c\\le\\sum_i a_i$.",
+  "difficulty": 2,
+  "answer": false,
+  "explain": "Both are correct for binary values, but the compact one is weaker. Summing $c\\ge a_i$ over $i$ gives $n\\,c\\ge\\sum_i a_i$, so the disaggregated relaxation is contained in the compact one; the inclusion is strict: with $n=3$, $a=(1,0,0)$, $c=\\tfrac13$ satisfies $3c\\ge 1$ and $c\\le 1$ but violates $c\\ge a_1$. Fewer constraints, weaker relaxation.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 2.2.2 (pp. 17-18)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-mod-impl",
+  "topic": "t101",
+  "type": "mcq",
+  "q": "For binary variables $a$ and $b$, which linear constraint states that the implication $a\\Rightarrow b$ holds?",
+  "difficulty": 1,
+  "options": [
+   "$a\\ge b$",
+   "$a+b\\le 1$",
+   "$a+b\\ge 1$",
+   "$a\\le b$"
+  ],
+  "answer": 3,
+  "explain": "The only combination to exclude is $(a,b)=(1,0)$, and $a\\le b$ excludes exactly that one. $a\\ge b$ encodes $b\\Rightarrow a$, $a+b\\le 1$ says 'not both', and $a+b\\ge 1$ is the OR. (Standard answer; no solution printed in the book.)",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 2.2.4 (p. 18)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-mod-ifthen",
+  "topic": "t101",
+  "type": "mcq",
+  "q": "Let $x\\in[0,100]$ be continuous and $y$ binary. Which single linear constraint models 'if $y=1$ then $x=100$' while leaving $x$ free in $[0,100]$ when $y=0$?",
+  "difficulty": 1,
+  "options": [
+   "$x\\le 100\\,y$",
+   "$x=100\\,y$",
+   "$x\\ge 100\\,(1-y)$",
+   "$x\\ge 100\\,y$"
+  ],
+  "answer": 3,
+  "explain": "Together with the bound $x\\le 100$, $x\\ge 100y$ gives $x=100$ when $y=1$ and is void when $y=0$. $x\\le 100y$ models 'if $y=0$ then $x=0$'; $x=100y$ also forces $x=0$ when $y=0$ (too strong); $x\\ge 100(1-y)$ triggers on $y=0$ instead of $y=1$.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 2.2.5 (p. 18)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-mod-semicont",
+  "topic": "t101",
+  "type": "mcq",
+  "q": "A variable $x\\ge 0$ must take a value in $\\{0\\}\\cup[m,M]$ with $0\\lt m\\lt M$ (semicontinuous variable). With a binary variable $y$, which constraints model this?",
+  "difficulty": 1,
+  "options": [
+   "$x\\le M\\,y$ only",
+   "$m\\le x\\le M\\,y$",
+   "$m\\,(1-y)\\le x\\le M\\,y$",
+   "$m\\,y\\le x\\le M\\,y$"
+  ],
+  "answer": 3,
+  "explain": "$y=0$ gives $x=0$ and $y=1$ gives $m\\le x\\le M$. With $x\\le My$ only, values in $(0,m)$ remain possible; $m\\le x\\le My$ makes $x=0$ impossible; $m(1-y)\\le x\\le My$ is infeasible for $y=0$ and allows $[0,M]$ for $y=1$.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 2.3.2 (p. 18)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-mod-threshold",
+  "topic": "t101",
+  "type": "short",
+  "q": "Let $y\\in[0,100]$ be continuous and $x$ binary. Give linear constraints enforcing $x=1$ if $y\\ge 50$ and $x=0$ otherwise, and explain how the model behaves at $y=50$.",
+  "difficulty": 2,
+  "model": "With a small tolerance $\\varepsilon\\gt 0$: $$y\\ge 50\\,x,\\qquad y\\le 50+50\\,x-\\varepsilon\\,(1-x).$$ If $x=1$: $50\\le y\\le 100$. If $x=0$: $0\\le y\\le 50-\\varepsilon$. Hence $y\\ge 50$ forces $x=1$ and $y\\le 50-\\varepsilon$ forces $x=0$ (values strictly between $50-\\varepsilon$ and $50$ are excluded). Without the tolerance, i.e. with $y\\le 50+50x$, both $x=0$ and $x=1$ are feasible at exactly $y=50$: a linear model with closed constraints cannot express the strict inequality $y\\lt 50$, so the boundary point is ambiguous unless an $\\varepsilon$ is introduced.",
+  "rubric": [
+   "A constraint forcing $y\\ge 50$ when $x=1$ (e.g. $y\\ge 50x$)",
+   "A big-M constraint forcing $y$ below 50 when $x=0$ (e.g. $y\\le 50+50x$, with $M=50$)",
+   "States that without a tolerance both values of $x$ are feasible at $y=50$",
+   "Explains that strict inequalities cannot be modelled; an $\\varepsilon$ fixes the boundary at the price of excluding a small interval"
+  ],
+  "explain": "Check by cases $x=0$ and $x=1$: each constraint must be binding in one case and redundant (thanks to the bounds $0\\le y\\le 100$) in the other.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 2.3.3 (p. 18)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-mod-pwl-interp",
+  "topic": "t101",
+  "type": "num",
+  "q": "A piecewise-linear approximation of $f(x)=x^3+\\log_2 x$ uses breakpoints every $0.5$ between $2$ and $9.5$; two consecutive breakpoints are $(4,\\ 66)$ and $(4.5,\\ 93.295)$. In the convex-combination model ($x=\\sum_k a_k\\lambda_k$, $y=\\sum_k f_k\\lambda_k$, $\\sum_k\\lambda_k=1$, $\\lambda\\ge 0$, only two adjacent $\\lambda_k$ nonzero), which value of $y$ corresponds to $x=4.2$?",
+  "difficulty": 2,
+  "answer": 76.918,
+  "tol": 0.01,
+  "explain": "$4.2=0.6\\cdot 4+0.4\\cdot 4.5$, so the two active weights are $0.6$ and $0.4$ and $y=0.6\\cdot 66+0.4\\cdot 93.295=39.6+37.318=76.918$. (The true value is $f(4.2)\\approx 76.16$: the chord of a convex function overestimates it.) In the MILP, binaries select the active segment so that only two adjacent weights are positive.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 2.3.4 (p. 19)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-mod-schmurf",
+  "topic": "t103",
+  "type": "num",
+  "q": "A player has 1000 coins to buy any number of warriors of five types with (strength, price): type 1: $(1,3)$; type 2: $(3,3)$; type 3: $(7,6)$; type 4: $(8,7)$; type 5: $(10,9)$. With $n_i\\in\\mathbb{Z}_+$ warriors of type $i$ the model is $\\max\\ n_1+3n_2+7n_3+8n_4+10n_5$ s.t. $3n_1+3n_2+6n_3+7n_4+9n_5\\le 1000$. What is the maximum total strength?",
+  "difficulty": 2,
+  "answer": 1166,
+  "explain": "The best strength/price ratio is type 3 ($7/6$), so the LP relaxation gives $1000\\cdot 7/6\\approx 1166.67$ and the integer optimum is at most $1166$. This value is attained: 165 warriors of type 3 (990 coins, strength 1155), one of type 4 (7 coins, 8) and one of type 2 (3 coins, 3) use exactly 1000 coins for a strength of 1166. The rounded relaxation bound therefore proves optimality (also checked with a knapsack DP). The book asks only for the formulation.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 2.4.7 (p. 22)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-mod-flash",
+  "topic": "t101",
+  "type": "short",
+  "q": "Files cannot be split across drives. There are $n_2$ files of 2 GB, $n_3$ files of 3 GB, $n_5$ files of 5 GB and $n_7$ files of 7 GB. (a) Formulate as an integer program the problem of storing all files on a minimum number of 16 GB flash drives. (b) Adapt the model when 32 GB drives cost 9 euros, 16 GB drives cost 5 euros and 8 GB drives cost 3 euros and the total cost is minimised.",
+  "difficulty": 2,
+  "model": "(a) Let $S=\\{2,3,5,7\\}$ and let $K$ be an upper bound on the number of drives (e.g. $K=n_2+n_3+n_5+n_7$). Variables: $y_k\\in\\{0,1\\}$ (drive $k$ is used) and $x_{sk}\\in\\mathbb{Z}_+$ (number of files of size $s$ on drive $k$). $$\\min\\sum_{k=1}^{K}y_k\\quad\\text{s.t.}\\quad\\sum_{k=1}^{K}x_{sk}=n_s\\ \\ \\forall s\\in S,\\qquad\\sum_{s\\in S}s\\,x_{sk}\\le 16\\,y_k\\ \\ \\forall k.$$ (b) Index potential drives by a type $\\tau\\in\\{32,16,8\\}$ with costs $c_{32}=9$, $c_{16}=5$, $c_{8}=3$; variables $y_{\\tau k}\\in\\{0,1\\}$ and $x_{s\\tau k}\\in\\mathbb{Z}_+$: $$\\min\\sum_{\\tau}\\sum_{k}c_\\tau\\,y_{\\tau k}\\quad\\text{s.t.}\\quad\\sum_{\\tau}\\sum_{k}x_{s\\tau k}=n_s\\ \\ \\forall s,\\qquad\\sum_{s\\in S}s\\,x_{s\\tau k}\\le\\tau\\,y_{\\tau k}\\ \\ \\forall\\tau,k.$$ This is a bin-packing model; using one binary variable per individual file instead of integer counts per size is also correct.",
+  "rubric": [
+   "Binary 'drive used' variables and assignment variables (counts per size or one binary per file)",
+   "Every file stored exactly once: $\\sum_k x_{sk}=n_s$",
+   "Capacity linked to the use variable: $\\sum_s s\\,x_{sk}\\le 16\\,y_k$",
+   "Objective (a): number of drives used",
+   "(b): drive types with capacities 32/16/8 in the capacity constraint and costs 9/5/3 in the objective"
+  ],
+  "explain": "The capacity constraint with $y_k$ on the right-hand side both limits the load and forces $y_k=1$ whenever something is stored on drive $k$ (a fixed-charge link). Not solved in the book; the model is worked.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 2.4.8 (pp. 22-23)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-mod-unitcommit",
+  "topic": "t101",
+  "type": "short",
+  "q": "Unit commitment. Over periods $t=1,\\dots,T$ a company operates plants $i=1,\\dots,P$ with maximum power $P_i^{\\max}$ and must satisfy the demand $d_t$ in every period. Using plant $i$ in period $t$ costs a fixed amount $f_{t,i}$ plus $p_{t,i}$ per unit produced; a start-up cost $g_{t,i}$ is paid each time plant $i$ runs in period $t$ after being down in period $t-1$; and each time a plant starts it must run for at least four consecutive periods. Formulate the cost minimisation as a mixed-integer program.",
+  "difficulty": 3,
+  "model": "Variables: $u_{t,i}\\in\\{0,1\\}$ (plant $i$ on in $t$), $v_{t,i}\\in\\{0,1\\}$ (plant $i$ starts in $t$), $q_{t,i}\\ge 0$ (production). $$\\min\\sum_{t}\\sum_{i}\\big(f_{t,i}\\,u_{t,i}+p_{t,i}\\,q_{t,i}+g_{t,i}\\,v_{t,i}\\big)$$ subject to: $\\sum_i q_{t,i}=d_t$ for all $t$ (demand); $q_{t,i}\\le P_i^{\\max}u_{t,i}$ (production only when on); $v_{t,i}\\ge u_{t,i}-u_{t-1,i}$ (start-up detection, $u_{0,i}$ given by the initial state); and $u_{\\tau,i}\\ge v_{t,i}$ for $\\tau=t,\\dots,\\min(t+3,T)$ (a start in $t$ keeps the plant on for four periods). Since $g\\ge 0$, $v_{t,i}=1$ at an optimum only when a start really occurs.",
+  "rubric": [
+   "On/off binaries with $q_{t,i}\\le P_i^{\\max}u_{t,i}$",
+   "Demand satisfied in every period",
+   "Start-up variable with $v_{t,i}\\ge u_{t,i}-u_{t-1,i}$ and start-up cost in the objective",
+   "Minimum up time: a start in $t$ forces $u=1$ in periods $t,\\dots,t+3$",
+   "Objective = fixed + variable + start-up costs"
+  ],
+  "explain": "The key modelling devices are the big-M link between production and the on/off binary and the logical link 'start = on now and off before'. Exam question (September 2016) given without solution in the book; the model is worked.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 2.1.6 (p. 17)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-mod-tcsp-linking",
+  "topic": "t101",
+  "type": "mcq",
+  "q": "A MILP for a shortest path with node opening times uses binaries $x_{ij}$ (arc $(i,j)$ used), times $t_i\\ge r_i$ with $t_1=0$, flow-conservation constraints selecting a path from node 1 to node $n$, the objective $\\min t_n$, and the linking constraints $t_j\\ge t_i+c_{ij}\\,x_{ij}$ for all arcs $(i,j)$. What is the flaw of this linking constraint and its repair?",
+  "difficulty": 3,
+  "options": [
+   "For an unused arc it still imposes $t_j\\ge t_i$, so nodes off the path can delay $t_n$; use $t_j\\ge t_i+c_{ij}-M(1-x_{ij})$",
+   "It is nonlinear because it multiplies $c_{ij}$ by $x_{ij}$; replace it by $t_j\\ge t_i+c_{ij}$ for all arcs",
+   "It does not prevent subtours; add subtour-elimination constraints and keep it unchanged",
+   "It should be an equality $t_j=t_i+c_{ij}x_{ij}$ so that no waiting is allowed"
+  ],
+  "answer": 0,
+  "explain": "With $x_{ij}=0$ the constraint reduces to $t_j\\ge t_i$: times are propagated along every arc, used or not. A node $i$ outside the chosen path with a late opening time $r_i$ then forces $t_j\\ge r_i$ for its successors and can overestimate $t_n$. A big-M term switches the constraint off on unused arcs. ($c_{ij}x_{ij}$ is linear since $c_{ij}$ is a constant; waiting at a node must stay possible, so an equality would be wrong.) The formulation is the book's; the flaw was identified when working the exercise.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 7.3.1 (pp. 56-57)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-cx-pseudopoly",
+  "topic": "t002",
+  "type": "mcq",
+  "q": "A binary knapsack with 5 items has values $(3,4,6,5,8)$, weights $(412, 507, 714, 671, 920)$ and capacity $1794$. Why is this instance awkward for the classical dynamic program indexed by the capacity?",
+  "difficulty": 2,
+  "options": [
+   "Its running time is $O(nC)$ (items times capacity), which is only pseudo-polynomial: about 1800 capacity states per item for a tiny input",
+   "The DP is exponential in the number of items, and $n=5$ is already too many",
+   "The DP is only correct when all weights are smaller than the capacity divided by $n$",
+   "The DP requires the LP relaxation to have an integer optimum, which fails here"
+  ],
+  "answer": 0,
+  "explain": "The DP table has one column per capacity value, so the work is proportional to $n\\cdot C=5\\cdot 1794$, i.e. it grows with the magnitude of the numbers (exponential in their encoding length), not only with the number of items. The book's remedy is the 'dual' DP indexed by value (total value only 26).",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 7.1.5 (p. 54)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-bb-311a-root",
+  "topic": "t102",
+  "type": "num",
+  "q": "Consider the integer program $\\max\\ 9x+5y$ subject to $4x+9y\\le 35$, $x\\le 6$, $x-3y\\ge 1$, $3x+2y\\le 19$, $(x,y)\\in\\mathbb{Z}_+^2$. What is the optimal value of the LP relaxation solved at the root node of branch-and-bound?",
+  "difficulty": 2,
+  "answer": 56.5,
+  "tol": 0.01,
+  "explain": "At $x=6$ the constraints give $y\\le 11/9$, $y\\le 5/3$ and $y\\le 1/2$; the last one ($3x+2y\\le 19$) is binding, so the LP optimum is the vertex $(6,\\ 0.5)$ with value $54+2.5=56.5$. It is optimal because $(9,5)=1.5\\,(1,0)+2.5\\,(3,2)$ is a nonnegative combination of the normals of the two binding constraints.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 3.1.1 (p. 25)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-bb-311a-opt",
+  "topic": "t102",
+  "type": "num",
+  "q": "Solve by branch-and-bound: $\\max\\ 9x+5y$ subject to $4x+9y\\le 35$, $x\\le 6$, $x-3y\\ge 1$, $3x+2y\\le 19$, $(x,y)\\in\\mathbb{Z}_+^2$. What is the optimal objective value?",
+  "difficulty": 2,
+  "answer": 54,
+  "explain": "Root LP: $(6,\\ 0.5)$, value $56.5$; branch on $y$. Node $y\\le 0$: LP optimum $(6,0)$, value $54$, integer: incumbent. Node $y\\ge 1$: LP optimum $(17/3,\\ 1)$, value $56$; branch on $x$: $x\\le 5$ gives $(5,\\ 4/3)$ with value $51.67\\lt 54$ (pruned by bound) and $x\\ge 6$ is infeasible ($18+2\\gt 19$). The optimum is $(x,y)=(6,0)$, the book's answer, with value $54$.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 3.1.1 (p. 25)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-bb-311a-children",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "For $\\max\\ 9x+5y$ subject to $4x+9y\\le 35$, $x\\le 6$, $x-3y\\ge 1$, $3x+2y\\le 19$, $(x,y)\\in\\mathbb{Z}_+^2$, branch-and-bound has found the incumbent $(6,0)$ of value 54 in the node $y\\le 0$. The sibling node $y\\ge 1$ has LP optimum $(17/3,\\ 1)$ of value 56 and is branched on $x$. What happens to its two children?",
+  "difficulty": 2,
+  "options": [
+   "$x\\le 5$: infeasible; $x\\ge 6$: LP value 59, new incumbent",
+   "$x\\le 5$: LP value about $51.67$, pruned by bound; $x\\ge 6$: infeasible",
+   "$x\\le 5$: LP value about $51.67$, must be branched further; $x\\ge 6$: infeasible",
+   "Both children have integer LP solutions that improve the incumbent"
+  ],
+  "answer": 1,
+  "explain": "Child $x\\le 5$, $y\\ge 1$: at $x=5$, $y\\le\\min(5/3,\\ 4/3,\\ 2)=4/3$, value $45+20/3\\approx 51.67\\lt 54$, so it is pruned by bound without further branching. Child $x\\ge 6$ (so $x=6$) with $y\\ge 1$: $3\\cdot 6+2\\cdot 1=20\\gt 19$, infeasible. The search ends with optimum 54.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 3.1.1 (p. 25)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-bb-311b-root",
+  "topic": "t102",
+  "type": "num",
+  "q": "Consider the integer program $\\max\\ 2x+3y$ subject to $-\\tfrac23x+y\\le\\tfrac52$, $\\tfrac13x+y\\le\\tfrac92$, $2x+y\\le 14$, $(x,y)\\in\\mathbb{Z}_+^2$. What is the optimal value of its LP relaxation?",
+  "difficulty": 2,
+  "answer": 19.2,
+  "tol": 0.01,
+  "explain": "The LP optimum is at the intersection of $\\tfrac13x+y=\\tfrac92$ and $2x+y=14$: subtracting gives $\\tfrac53x=9.5$, so $x=5.7$, $y=2.6$ and the value is $11.4+7.8=19.2$. Optimality: $(2,3)=\\tfrac{12}{5}(\\tfrac13,1)+\\tfrac35(2,1)$ with nonnegative multipliers.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 3.1.1 (p. 25)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-bb-311b-prune",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "Branch-and-bound on $\\max\\ 2x+3y$ subject to $-\\tfrac23x+y\\le\\tfrac52$, $\\tfrac13x+y\\le\\tfrac92$, $2x+y\\le 14$, $(x,y)\\in\\mathbb{Z}_+^2$: the root LP optimum is $(5.7,\\ 2.6)$. Branching on $x$ gives node A ($x\\ge 6$) with LP optimum $(6,2)$ of value 18, and node B ($x\\le 5$) with LP optimum $(5,\\ 17/6)$ of value 18.5. What is the correct conclusion?",
+  "difficulty": 2,
+  "options": [
+   "Node B must be branched on $y$, because its bound $18.5$ exceeds the incumbent $18$",
+   "Node A is pruned by bound and the search continues in node B only",
+   "Node B is infeasible, so $(6,2)$ is optimal",
+   "$(6,2)$ is optimal: integer points have integer objective values, so node B cannot contain anything better than $\\lfloor 18.5\\rfloor=18$"
+  ],
+  "answer": 3,
+  "explain": "Node A gives the integer solution $(6,2)$ of value 18 (the book's answer). Node B's bound is 18.5, but the objective $2x+3y$ is an integer for integer $x,y$, so the bound can be rounded down to 18: node B cannot improve the incumbent and is pruned by bound. (Without this rounding argument one would branch on $y$ in node B and find values at most 18.)",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 3.1.1 (p. 25)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-bb-312-gap",
+  "topic": "t102",
+  "type": "num",
+  "q": "A partial branch-and-bound tree shows the LP value of each node: #0: 25; its children #1: 27 and #2: 26; children of #1: #3: 28 and #4: 30; children of #2: #5: 27 and #6: 35 (LP solution integer); children of #4: #7: 31 (LP solution integer) and #8: infeasible. Nodes #3 and #5 have not been branched yet. The problem is a minimisation. With gap $=$ (upper bound $-$ lower bound) / upper bound, what is the current optimality gap in percent?",
+  "difficulty": 1,
+  "answer": 12.9,
+  "tol": 0.1,
+  "unit": "%",
+  "explain": "Upper bound = best integer solution $=\\min(35,31)=31$. Lower bound = smallest LP value among the leaves that are still open $=\\min(28,27)=27$. Gap $=(31-27)/31=12.9\\%$, as printed in the book.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 3.1.2 (pp. 25-26)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-bb-312-open",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "A partial branch-and-bound tree shows the LP value of each node: #0: 25; its children #1: 27 and #2: 26; children of #1: #3: 28 and #4: 30; children of #2: #5: 27 and #6: 35 (LP solution integer); children of #4: #7: 31 (LP solution integer) and #8: infeasible. Nodes #3 and #5 have not been branched yet. Which statement is correct?",
+  "difficulty": 2,
+  "options": [
+   "It is a maximisation; the incumbent is #6 with value 35 and every other leaf can be pruned",
+   "It is a minimisation; #3 is pruned by bound because $28\\gt 27$, so only #5 remains",
+   "It is a minimisation (LP values increase down the tree); the incumbent is #7 with value 31, and #3 and #5 must still be explored",
+   "It is a minimisation; the search is over because two integer solutions have been found"
+  ],
+  "answer": 2,
+  "explain": "Adding branching constraints can only worsen the LP value; here the values increase from parent to child, so the problem is a minimisation and LP values are lower bounds. #6 (35) and #7 (31) are integer: the incumbent is 31. #8 is pruned by infeasibility. #3 (28) and #5 (27) have bounds below 31 and may still contain better solutions, so both remain open (the book's answer).",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 3.1.2 (pp. 25-26)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-bb-314-bounds",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "In a partial branch-and-bound tree, each node shows an upper bound (top number) and, when known, a lower bound (bottom number). Root: 52.7. Its children: 52.3 and 49.9. Children of the node 52.3: a node with 50.1 and a node marked $-\\infty$. Children of the node 49.9: a node with 47 on top and 47 at the bottom, and a node with 49.7. Children of the node 49.7: a node with 44 on top and 44 at the bottom, and a node with 43.7. What is the sense of optimisation and the tightest interval known for the optimal value $z^*$?",
+  "difficulty": 2,
+  "options": [
+   "Maximisation; $44\\le z^*\\le 52.7$",
+   "Maximisation; $47\\le z^*\\le 50.1$",
+   "Minimisation; $43.7\\le z^*\\le 47$",
+   "Maximisation; $47\\le z^*\\le 49.7$"
+  ],
+  "answer": 1,
+  "explain": "The relaxation bounds are upper bounds and decrease down the tree, and $-\\infty$ marks an infeasible node: it is a maximisation. Lower bound = best feasible value $=47$ (the node 44/44 is a worse solution). Upper bound = largest upper bound among the leaves $=\\max(50.1,\\ -\\infty,\\ 47,\\ 44,\\ 43.7)=50.1$. The values 52.7 and 49.7 belong to internal nodes whose children give tighter bounds. (No solution printed in the book.)",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 3.1.4 (pp. 26-27)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-bb-314-explore",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "In a partial branch-and-bound tree, each node shows an upper bound (top number) and, when known, a lower bound (bottom number). Root: 52.7. Its children: 52.3 and 49.9. Children of the node 52.3: a node with 50.1 and a node marked $-\\infty$. Children of the node 49.9: a node with 47 on top and 47 at the bottom, and a node with 49.7. Children of the node 49.7: a node with 44 on top and 44 at the bottom, and a node with 43.7. The problem is a maximisation. Which nodes must still be explored to find an optimal solution?",
+  "difficulty": 2,
+  "options": [
+   "The leaves with upper bounds 50.1 and 43.7",
+   "Only the leaf with upper bound 50.1",
+   "Only the leaf with 43.7, because it is the deepest open node",
+   "None: the node 47/47 already proves optimality"
+  ],
+  "answer": 1,
+  "explain": "The incumbent is 47. The leaf 50.1 may contain a better solution ($50.1\\gt 47$). The leaf 43.7 is pruned by bound ($43.7\\lt 47$), the node $-\\infty$ by infeasibility, and the nodes 47/47 and 44/44 are solved (pruned by optimality). Optimality is not proved yet because the global upper bound is still 50.1.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 3.1.4 (pp. 26-27)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-bb-314-twobest",
+  "topic": "t102",
+  "type": "short",
+  "q": "In a partial branch-and-bound tree, each node shows an upper bound (top number) and, when known, a lower bound (bottom number). Root: 52.7. Its children: 52.3 and 49.9. Children of the node 52.3: a node with 50.1 and a node marked $-\\infty$. Children of the node 49.9: a node with 47 on top and 47 at the bottom, and a node with 49.7. Children of the node 49.7: a node with 44 on top and 44 at the bottom, and a node with 43.7. The problem is a maximisation. Suppose the two best solutions are wanted, not only the best one. Which nodes should be explored further, and why?",
+  "difficulty": 3,
+  "model": "Two feasible values are known, 47 and 44, so the second-best value is at least 44. <ul><li><b>Leaf 50.1</b>: must be explored (it may contain solutions better than 47, or between 44 and 47).</li><li><b>Node 47/47</b>: its relaxation optimum is feasible, but the same subproblem may contain other feasible solutions with value between 44 and 47; it must be explored further (branching so that the solution already found is excluded).</li><li><b>Leaf 43.7</b>: every solution there is worth at most $43.7\\lt 44$, it stays pruned.</li><li><b>Node 44/44</b>: its other solutions are worth at most 44 and cannot improve on the known pair (47, 44).</li><li><b>Node $-\\infty$</b>: infeasible.</li></ul>",
+  "rubric": [
+   "The second-best value is currently at least 44 (known solutions 47 and 44)",
+   "Leaf 50.1 must be explored",
+   "Node 47/47 must be re-opened: other solutions of that subproblem can be second best",
+   "Leaf 43.7 stays pruned because $43.7\\lt 44$; the infeasible node stays pruned"
+  ],
+  "explain": "For the $k$ best solutions the pruning threshold is the $k$-th best known value, and a node 'pruned by optimality' only tells us its best solution, not its second best.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 3.1.4 (pp. 26-27)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-bb-315-lb",
+  "topic": "t102",
+  "type": "num",
+  "q": "A partial branch-and-bound tree gives, for each node, a lower bound on the optimal value of its subproblem and sometimes an upper bound. Node 0 (root): upper 31, lower 20.8. Node 1 (child of 0): lower 22.1. Node 2 (child of 0): lower 29.2. Node 3 (child of 1): upper 29, lower 29. Node 4 (child of 1): lower 22.2. Node 5 (child of 4): lower 23.7. Node 6 (child of 4): infeasible. The problem is a minimisation. What is the tightest lower bound on the optimal value of the full problem?",
+  "difficulty": 2,
+  "answer": 23.7,
+  "tol": 0.01,
+  "explain": "The leaves are nodes 2, 3, 5 and 6. The global lower bound is the smallest lower bound among the feasible leaves: $\\min(29.2,\\ 29,\\ 23.7)=23.7$. The best upper bound is 29 (the solution of node 3, better than the 31 known at the root), so $23.7\\le z^*\\le 29$, a gap of about $18.3\\%$.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 3.1.5 (pp. 27-28)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-bb-315-explore",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "A partial branch-and-bound tree gives, for each node, a lower bound on the optimal value of its subproblem and sometimes an upper bound. Node 0 (root): upper 31, lower 20.8. Node 1 (child of 0): lower 22.1. Node 2 (child of 0): lower 29.2. Node 3 (child of 1): upper 29, lower 29. Node 4 (child of 1): lower 22.2. Node 5 (child of 4): lower 23.7. Node 6 (child of 4): infeasible. Which statement is correct?",
+  "difficulty": 2,
+  "options": [
+   "Minimisation; nodes 2 and 5 both still have to be explored",
+   "Maximisation; only node 2 still has to be explored",
+   "Minimisation; only node 5 still has to be explored (node 2 is pruned by bound since $29.2\\gt 29$)",
+   "Minimisation; nothing is left to explore because node 3 has equal bounds"
+  ],
+  "answer": 2,
+  "explain": "Lower bounds come from relaxations and increase down the tree, upper bounds from feasible solutions: it is a minimisation. The incumbent is 29 (node 3). Node 2 cannot contain a solution better than 29.2, so it is pruned by bound; node 3 is solved; node 6 is infeasible; node 5 (bound $23.7\\lt 29$) is the only node left.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 3.1.5 (pp. 27-28)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-bb-315-second",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "A partial branch-and-bound tree gives, for each node, a lower bound on the optimal value of its subproblem and sometimes an upper bound. Node 0 (root): upper 31, lower 20.8. Node 1 (child of 0): lower 22.1. Node 2 (child of 0): lower 29.2. Node 3 (child of 1): upper 29, lower 29. Node 4 (child of 1): lower 22.2. Node 5 (child of 4): lower 23.7. Node 6 (child of 4): infeasible. The problem is a minimisation with incumbent 29 (node 3). If the two best solutions are wanted, which leaves can potentially contain the second-best solution?",
+  "difficulty": 3,
+  "options": [
+   "Leaf 5 only",
+   "Leaves 2 and 5 only",
+   "Leaves 2, 3, 5 and 6",
+   "Leaves 2, 3 and 5"
+  ],
+  "answer": 3,
+  "explain": "Leaf 5 is unexplored (bound 23.7). Leaf 2 only contains solutions of value at least 29.2: useless for the best solution, but possibly the second best. Leaf 3 is solved for its best solution (29), yet other solutions of the same subproblem, with value at least 29, may be second best. Leaf 6 is infeasible.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 3.1.5 (pp. 27-28)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-bb-prune-rules",
+  "topic": "t102",
+  "type": "card",
+  "q": "Name the three ways in which a node can be pruned in branch-and-bound.",
+  "difficulty": 1,
+  "a": "<ul><li><b>By bound</b>: the node's relaxation value is not better than the incumbent.</li><li><b>By optimality</b>: the relaxation solution is integer-feasible (it becomes the incumbent if it improves it).</li><li><b>By infeasibility</b>: the node's relaxation is infeasible.</li></ul>",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 3.2.1 (p. 28)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-bb-strategies",
+  "topic": "t102",
+  "type": "mcq",
+  "q": "Two simple node-selection strategies in branch-and-bound are depth-first and breadth-first search. Which statement describes their effect on the bounds?",
+  "difficulty": 1,
+  "options": [
+   "Depth-first mainly improves the primal bound (it reaches integer solutions quickly); breadth-first mainly improves the dual bound",
+   "Depth-first mainly improves the dual bound; breadth-first mainly improves the primal bound",
+   "Both improve only the dual bound; primal bounds come exclusively from heuristics",
+   "Breadth-first is the strategy that reaches a first integer solution in the fewest nodes"
+  ],
+  "answer": 0,
+  "explain": "Diving deep adds many branching constraints quickly, so leaves with integer solutions (incumbents, i.e. primal bounds) are reached early. Breadth-first treats all shallow nodes first, which raises the worst remaining relaxation value (the dual bound) but usually finds feasible solutions late. This is the book's answer.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 3.2.2 (p. 28)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-fs-strict-proof",
+  "topic": "t104",
+  "type": "mcq",
+  "q": "Two formulations with LP relaxations $P_1$ and $P_2$ describe the same set of integer points, and you have shown $P_1\\subseteq P_2$. What is enough to conclude that $P_1$ is <b>strictly</b> stronger?",
+  "difficulty": 1,
+  "options": [
+   "Exhibit one integer point that belongs to $P_2$ but not to $P_1$",
+   "Check that one particular point of $P_1$ also belongs to $P_2$",
+   "Exhibit one point of $P_2$ (necessarily fractional) that violates a constraint of $P_1$",
+   "Show that $P_1$ has more constraints than $P_2$"
+  ],
+  "answer": 2,
+  "explain": "$P_1\\subsetneq P_2$ needs a point in $P_2\\setminus P_1$. Because both formulations have the same integer points, such a point must be fractional. Checking a single point of $P_1$ proves nothing, and the number of constraints says nothing about inclusion.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ch. 4 introduction (p. 31)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-fs-ufl-which",
+  "topic": "t104",
+  "type": "mcq",
+  "q": "Uncapacitated facility location with clients $C$, facilities $F$, variables $x_j$ (facility $j$ open) and $y_{ij}$ (client $i$ served by $j$), and assignment constraints $\\sum_{j\\in F}y_{ij}=1$ for all $i\\in C$. Formulation A links the variables with $y_{ij}\\le x_j$ for all $i\\in C$, $j\\in F$; formulation B uses the aggregated constraints $\\sum_{i\\in C}y_{ij}\\le |C|\\,x_j$ for all $j\\in F$. How do the LP relaxations compare?",
+  "difficulty": 1,
+  "options": [
+   "B is strictly stronger than A",
+   "A is strictly stronger than B",
+   "They are equal",
+   "Neither contains the other"
+  ],
+  "answer": 1,
+  "explain": "Summing $y_{ij}\\le x_j$ over $i$ gives B's constraint, so $P_A\\subseteq P_B$. The inclusion is strict: with two clients and two facilities, $y_{11}=y_{22}=1$, $x_1=x_2=\\tfrac12$ satisfies B ($1\\le 2\\cdot\\tfrac12$) but not A ($1\\gt\\tfrac12$). The price is $|C|\\,|F|$ linking constraints instead of $|F|$. This is the book's conclusion.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 4.1.1 (p. 33)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-fs-ufl-proof",
+  "topic": "t104",
+  "type": "short",
+  "q": "Uncapacitated facility location with clients $C$, facilities $F$, variables $x_j$ (facility $j$ open) and $y_{ij}$ (client $i$ served by $j$), and assignment constraints $\\sum_{j\\in F}y_{ij}=1$ for all $i\\in C$. Formulation A links the variables with $y_{ij}\\le x_j$ for all $i\\in C$, $j\\in F$; formulation B uses the aggregated constraints $\\sum_{i\\in C}y_{ij}\\le |C|\\,x_j$ for all $j\\in F$. Both relaxations also contain $0\\le x_j\\le 1$ and $y_{ij}\\ge 0$. Prove that formulation A is strictly stronger than formulation B.",
+  "difficulty": 2,
+  "model": "<b>Inclusion.</b> Let $(x,y)\\in P_A$. Summing $y_{ij}\\le x_j$ over $i\\in C$ gives $\\sum_{i\\in C}y_{ij}\\le |C|\\,x_j$; all other constraints are common, so $(x,y)\\in P_B$ and $P_A\\subseteq P_B$. <b>Strictness.</b> Take $C=\\{1,2\\}$, $F=\\{1,2\\}$, $y_{11}=y_{22}=1$, $y_{12}=y_{21}=0$, $x_1=x_2=\\tfrac12$. The assignment constraints hold and $\\sum_i y_{i1}=1\\le 2\\cdot\\tfrac12$ (same for $j=2$), so the point is in $P_B$; but $y_{11}=1\\gt\\tfrac12=x_1$, so it is not in $P_A$. Hence $P_A\\subsetneq P_B$. (For binary $x$ both linkings describe the same integer solutions, so both formulations are valid.)",
+  "rubric": [
+   "Shows $P_A\\subseteq P_B$ by summing the disaggregated constraints over the clients",
+   "Gives a fractional point satisfying the aggregated constraints",
+   "Checks that this point violates some $y_{ij}\\le x_j$",
+   "Concludes strict inclusion (same integer points, smaller relaxation)"
+  ],
+  "explain": "The book states the conclusion only; the proof follows its recipe: constraints of the stronger formulation imply those of the weaker, plus one fractional separating point.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 4.1.1 (p. 33)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-fs-exam-proof",
+  "topic": "t104",
+  "type": "short",
+  "q": "Exam timetabling: $x_{it}=1$ if exam $i\\in L$ takes place on day $t\\in T$; $C(k)$ is the set of courses of student $k\\in S$; every exam is scheduled once, $\\sum_{t\\in T}x_{it}=1$. To forbid two exams of the same student on the same day, formulation 1 uses $\\sum_{i\\in C(k)}x_{it}\\le 1$ for all $k\\in S$, $t\\in T$, and formulation 2 uses $x_{it}+x_{jt}\\le 1$ for all $k\\in S$, $t\\in T$ and all pairs $i\\ne j$ in $C(k)$. Which formulation is better? Prove it.",
+  "difficulty": 2,
+  "model": "Formulation 1 is stronger (the book's answer). <b>Inclusion.</b> If $x\\ge 0$ satisfies formulation 1, then for $i\\ne j$ in $C(k)$: $x_{it}+x_{jt}\\le\\sum_{l\\in C(k)}x_{lt}\\le 1$, so $x$ satisfies formulation 2: $P_1\\subseteq P_2$. <b>Strictness</b> (as soon as a student takes at least three courses): with courses $\\{1,2,3\\}$ of one student and two days, set $x_{it}=\\tfrac12$ for all $i,t$. Then $\\sum_t x_{it}=1$ and every pair satisfies $\\tfrac12+\\tfrac12\\le 1$, but $\\sum_{i}x_{it}=\\tfrac32\\gt 1$: the point is in $P_2$ and not in $P_1$. Hence $P_1\\subsetneq P_2$. (If every student takes at most two courses the two formulations coincide.)",
+  "rubric": [
+   "States that the formulation with the sum over $C(k)$ (clique form) is the stronger one",
+   "Proves the pairwise constraints are implied by the clique constraints using $x\\ge 0$",
+   "Gives a fractional point (e.g. all $x_{it}=1/2$ with three courses) feasible for the pairwise formulation",
+   "Shows this point violates a clique constraint, hence strict inclusion"
+  ],
+  "explain": "The clique constraint is the sum-form of all pairwise conflicts among the courses of one student; it has fewer constraints and a tighter LP relaxation.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 4.1.2 (pp. 33-34)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-fs-ls-proj",
+  "topic": "t104",
+  "type": "short",
+  "q": "Lot sizing over $T$ periods with demands $d_t\\ge 0$. Formulation $P_1$ uses production $x_t\\ge 0$, stock $s_t\\ge 0$ and set-up $y_t\\in[0,1]$ (LP relaxation) with $x_t+s_{t-1}=d_t+s_t$ for $t=1,\\dots,T$, $s_0=s_T=0$, and $x_t\\le M_t\\,y_t$ where $M_t=\\sum_{i=t}^{T}d_i$. Formulation $P_2$ uses $x_t\\ge 0$, $y_t\\in[0,1]$ and $w_{st}\\ge 0$ ($s\\le t$), the fraction of the demand of period $t$ produced in period $s$, with $x_t=\\sum_{i=t}^{T}d_i\\,w_{ti}$, $\\sum_{s=1}^{t}w_{st}=1$ for all $t$, and $w_{st}\\le y_s$. Show that every $(x,y)$ in the projection of $P_2$ belongs to the projection of $P_1$, and give a small example showing that the inclusion is strict.",
+  "difficulty": 3,
+  "model": "<b>Inclusion.</b> Given $(x,y,w)\\in P_2$, define $s_t=\\sum_{r\\le t}\\sum_{i\\gt t}d_i\\,w_{ri}\\ge 0$ (demand of later periods already produced), so $s_0=0$ and $s_T=0$. Then $$x_t+s_{t-1}=\\sum_{r\\le t}\\sum_{i\\ge t}d_i\\,w_{ri}=d_t\\sum_{r\\le t}w_{rt}+s_t=d_t+s_t,$$ and $x_t=\\sum_{i\\ge t}d_i\\,w_{ti}\\le\\Big(\\sum_{i\\ge t}d_i\\Big)y_t=M_t\\,y_t$. So $(x,y,s)\\in P_1$. <b>Strictness.</b> $T=2$, $d=(1,1)$: $x=(1,1)$, $y=(\\tfrac12,1)$, $s_1=0$ is in $P_1$ because $x_1=1\\le M_1y_1=2\\cdot\\tfrac12$. In $P_2$, $w_{11}=1$ forces $y_1\\ge 1$, so this $(x,y)$ is not in the projection of $P_2$. <b>Intuition.</b> $P_1$ uses a single big-M covering all the remaining demand, while $P_2$ links the set-up to each period's demand separately ($w_{st}\\le y_s$, i.e. a big-M equal to 1 per demand).",
+  "rubric": [
+   "Defines a stock $s_t$ from $w$ (demand of periods after $t$ produced up to $t$) and checks $s\\ge 0$",
+   "Verifies the balance equations $x_t+s_{t-1}=d_t+s_t$ using $\\sum_{s\\le t}w_{st}=1$",
+   "Derives $x_t\\le M_t y_t$ from $w_{ti}\\le y_t$",
+   "Gives a fractional point of $P_1$ that has no preimage in $P_2$ (e.g. $T=2$, $d=(1,1)$, $y_1=1/2$)",
+   "Intuition: disaggregated big-M (one per unit of demand) versus one aggregated big-M"
+  ],
+  "explain": "Comparing an extended formulation with a compact one requires projecting onto the common variables $(x,y)$; exam question (January 2017) without printed solution.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 4.1.4 (p. 35)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-fs-bigm-5y",
+  "topic": "t104",
+  "type": "mcq",
+  "q": "Let $X_2=\\{(x,y)\\in\\mathbb{R}_+\\times\\{0,1\\}:\\ x\\le 20\\,y,\\ x\\le 5\\}$ and consider the fractional point $(x,y)=(5,\\tfrac14)$ of its LP relaxation. Which inequality is valid for $X_2$ and cuts off this point?",
+  "difficulty": 2,
+  "options": [
+   "$x\\le 5\\,y$",
+   "$x\\le 20\\,y$",
+   "$x\\le 4\\,y$",
+   "$x+15\\,y\\le 20$"
+  ],
+  "answer": 0,
+  "explain": "Disjunction on $y$: $y=0$ forces $x=0$ and $y=1$ allows $x\\le 5$, so $x\\le 5y$ is valid (the big-M 20 is tightened to 5). At the point: $5\\gt 5\\cdot\\tfrac14$, so it is cut off. $x\\le 20y$ holds with equality at the point; $x\\le 4y$ is not valid ($(5,1)\\in X_2$); $x+15y\\le 20$ is valid but satisfied by the point ($8.75\\le 20$). The same reasoning gives $x\\le 7y$ for $\\{x\\le 20y,\\ x\\le 7\\}$ (book, ex. 5.1.1).",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.3.4 (p. 43)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-tsp-identity",
+  "topic": "t201",
+  "type": "short",
+  "q": "Undirected TSP on $G=(V,E)$ with $x_e\\in[0,1]$ and degree constraints $\\sum_{e\\in\\delta(i)}x_e=2$ for all $i\\in V$. Show that for every $S\\subsetneq V$ with $2\\le|S|\\le|V|-1$ the subtour-elimination constraint $\\sum_{e\\in E(S)}x_e\\le|S|-1$ holds if and only if the cut-set constraint $\\sum_{e\\in\\delta(S)}x_e\\ge 2$ holds. What does this imply for the two formulations $P_{sub}$ and $P_{cut}$?",
+  "difficulty": 2,
+  "model": "Sum the degree constraints over $i\\in S$: an edge with both ends in $S$ is counted twice and an edge of the cut once, so $$2|S|=2\\,x(E(S))+x(\\delta(S)).$$ Therefore $x(E(S))\\le|S|-1\\iff 2|S|-x(\\delta(S))\\le 2|S|-2\\iff x(\\delta(S))\\ge 2$. Given the degree equations, the two constraints for the same $S$ are equivalent, so $P_{sub}=P_{cut}$: the LP relaxations coincide and neither formulation is stronger. Both families contain exponentially many constraints and are handled by separation (lazy constraints).",
+  "rubric": [
+   "Sums the degree constraints over the vertices of $S$",
+   "Obtains $2|S|=2x(E(S))+x(\\delta(S))$ (inside edges counted twice, cut edges once)",
+   "Deduces the equivalence of the two inequalities for each $S$",
+   "Concludes $P_{sub}=P_{cut}$ (same LP relaxation)"
+  ],
+  "explain": "The book prints the partition $\\delta(S)=E(V)\\setminus E(S)\\setminus E(V\\setminus S)$ and leaves the conclusion to the reader; the counting identity above is the key step.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 4.2.1 (pp. 36-37)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-lazy-vs-user",
+  "topic": "t202",
+  "type": "mcq",
+  "q": "What distinguishes lazy constraints from user cuts in a MIP solver?",
+  "difficulty": 1,
+  "options": [
+   "User cuts are needed for correctness, whereas lazy constraints only speed up the solver",
+   "Lazy constraints may only remove fractional solutions, whereas user cuts may remove integer-feasible solutions",
+   "Lazy constraints belong to the formulation (they are needed for correctness) and may cut off integer points feasible for the current model; user cuts only strengthen the relaxation and may remove only fractional points",
+   "There is no difference: both are optional strengthening inequalities"
+  ],
+  "answer": 2,
+  "explain": "Lazy constraints are constraints of the model that are left out because there are too many (e.g. subtour-elimination or cut-set constraints of the TSP) and are added back when violated; without them the model is wrong, so they must be allowed to reject integer solutions. User cuts are valid inequalities added in callbacks at branch-and-bound nodes: they never remove feasible integer solutions, only fractional ones.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ch. 5 introduction (p. 39)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-lazy-tsp",
+  "topic": "t202",
+  "type": "mcq",
+  "q": "The TSP is solved with the model $\\min\\sum_e c_ex_e$, $\\sum_{e\\in\\delta(i)}x_e=2$ for all $i\\in V$, $x_e\\in\\{0,1\\}$, while the subtour-elimination constraints $\\sum_{e\\in E(S)}x_e\\le|S|-1$ are added lazily. When the solver finds an integer solution, how is a violated constraint generated?",
+  "difficulty": 2,
+  "options": [
+   "Identify the cycles formed by the chosen edges; any cycle that does not contain the origin city (so does not visit all cities) gives a set $S$ whose constraint is violated",
+   "Add the constraints of all sets $S$ with $|S|=2$ and re-solve",
+   "Round the LP relaxation again and add the constraint with the largest right-hand side",
+   "Add a second degree constraint for the city with the most expensive incident edges"
+  ],
+  "answer": 0,
+  "explain": "With the degree constraints an integer solution is a union of disjoint cycles. If it is not a single tour, a cycle that misses the origin is a subtour on its vertex set $S$: it uses $|S|$ edges inside $S$, violating $x(E(S))\\le|S|-1$. Adding that constraint and continuing is the lazy approach described in the book.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.4.1 (p. 44)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-lazy-pctsp",
+  "topic": "t202",
+  "type": "short",
+  "q": "Prize-collecting TSP: traversing edge $e$ costs $c_e$ and visiting city $j$ earns a profit $f_j$; not all cities have to be visited, but the route must be a cycle through city 1 (the origin). With $x_e\\in\\{0,1\\}$ (edge used) and $y_j\\in\\{0,1\\}$ (city visited), write a MILP using generalised subtour-elimination constraints (GSEC), justify the GSEC, and explain how violated GSECs are generated lazily.",
+  "difficulty": 3,
+  "model": "$$\\max\\ \\sum_{j\\in V}f_j\\,y_j-\\sum_{e\\in E}c_e\\,x_e\\quad\\text{s.t.}\\quad\\sum_{e\\in\\delta(j)}x_e=2\\,y_j\\ \\ \\forall j\\in V,\\qquad y_1=1,$$ $$\\sum_{e\\in E(S)}x_e\\le\\sum_{j\\in S\\setminus\\{k\\}}y_j\\qquad\\forall S\\subseteq V\\setminus\\{1\\},\\ \\forall k\\in S.$$ <b>Validity.</b> $S$ excludes the origin, so a route through the origin induces only paths inside $S$: if it visits $m\\ge 1$ cities of $S$ it uses at most $m-1$ edges of $E(S)$, and $y(S)-y_k\\ge m-1$ whether or not $k$ is visited. <b>Effect.</b> A subtour on $S$ has $|S|$ edges inside $S$ while the right-hand side is $|S|-1$: it is cut off. <b>Lazy generation.</b> There are exponentially many GSECs, so start without them. For every integer solution, find the cycles of the selected edges; each cycle that does not contain the origin gives a violated GSEC with $S$ = its cities (any $k\\in S$; for a fractional point take the $k$ with the largest $y_k$ to maximise the violation).",
+  "rubric": [
+   "Objective: profits of visited cities minus edge costs (a maximisation)",
+   "Degree constraints $\\sum_{e\\in\\delta(j)}x_e=2y_j$ and $y_1=1$",
+   "GSEC $\\sum_{e\\in E(S)}x_e\\le\\sum_{j\\in S\\setminus\\{k\\}}y_j$ for $S$ not containing the origin, $k\\in S$",
+   "Argument why the GSEC is valid for routes and violated by a subtour",
+   "Separation: cycles of the current solution that miss the origin give violated GSECs; added lazily"
+  ],
+  "explain": "The formulation is the book's (which misprints the objective as 'min max'); the validity argument and the choice of $k$ are worked. The practical difficulty is the exponential number of constraints, hence lazy generation.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.4.2 (pp. 44-45)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-cg-511-round",
+  "topic": "t204",
+  "type": "mcq",
+  "q": "Let $X=\\{(x,y)\\in\\{0,1\\}^2:\\ 12x-6y\\le 7\\}$. Which inequality is obtained by dividing the constraint by 6 and rounding the right-hand side down (Chvatal-Gomory rounding)?",
+  "difficulty": 1,
+  "options": [
+   "$2x-y\\le 2$",
+   "$2x-y\\le 0$",
+   "$2x+y\\le 1$",
+   "$2x-y\\le 1$"
+  ],
+  "answer": 3,
+  "explain": "Dividing by 6 gives $2x-y\\le 7/6$. The left-hand side is an integer for integer $x,y$, so it is at most $\\lfloor 7/6\\rfloor=1$. The cut removes fractional points such as $(1,\\tfrac56)$. Rounding up to 2 gives nothing new, and $2x-y\\le 0$ or $2x+y\\le 1$ would cut off the feasible point $(1,1)$. This is the book's answer.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.1.1 (p. 40)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-cg-512-cut",
+  "topic": "t204",
+  "type": "mcq",
+  "q": "Let $X=\\{(v,w,x,y,z)\\in\\mathbb{Z}_+^5:\\ 9v+12w+8x+17y+13z\\ge 50\\}$ and the point $x^*=(0,\\tfrac{25}{6},0,0,0)$ of its LP relaxation. Apply Chvatal-Gomory rounding with multiplier $\\tfrac14$ (for a $\\ge$ constraint with nonnegative integer variables, coefficients and right-hand side are rounded <b>up</b>). Which cut is obtained?",
+  "difficulty": 2,
+  "options": [
+   "$3v+3w+2x+5y+4z\\ge 13$",
+   "$2v+3w+2x+4y+3z\\ge 12$",
+   "$3v+3w+2x+5y+4z\\ge 12$",
+   "$2v+3w+2x+4y+3z\\ge 13$"
+  ],
+  "answer": 0,
+  "explain": "Multiplying by $\\tfrac14$: $2.25v+3w+2x+4.25y+3.25z\\ge 12.5$. Rounding the coefficients up keeps the inequality valid because the variables are nonnegative; the left-hand side is then an integer, so the right-hand side can be rounded up to 13. At $x^*$: $3\\cdot\\tfrac{25}{6}=12.5\\lt 13$, so the point is cut off (the book's answer). Note: the book prints the set with $\\mathbb{Z}^5$; nonnegativity is needed for this rounding and is assumed here.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.1.2 (p. 40)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-cg-512-negative",
+  "topic": "t204",
+  "type": "tf",
+  "q": "Consider $X=\\{(v,w,x,y,z)\\in\\mathbb{Z}^5:\\ 9v+12w+8x+17y+13z\\ge 50\\}$ where the variables may be <b>negative</b>. Statement: the inequality $3v+3w+2x+5y+4z\\ge 13$ (obtained by multiplying by $\\tfrac14$ and rounding everything up) is valid for $X$.",
+  "difficulty": 2,
+  "answer": false,
+  "explain": "Counterexample: $v=-2$, $w=6$, $x=y=z=0$ is in $X$ since $-18+72=54\\ge 50$, but $3(-2)+3\\cdot 6=12\\lt 13$. Rounding a coefficient up weakens a $\\ge$ inequality only if the variable is nonnegative; the Chvatal-Gomory argument therefore requires $\\mathbb{Z}_+^5$ (the book's statement of this exercise omits the sign restriction).",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.1.2 (p. 40)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-gom-531-frac",
+  "topic": "t204",
+  "type": "mcq",
+  "q": "Let $X_2=\\{x\\in\\mathbb{Z}_+^4:\\ x_1-\\tfrac23x_2+\\tfrac76x_3+\\tfrac43x_4=\\tfrac23\\}$ and $\\bar x=(\\tfrac23,0,0,0)$. Which inequality is the Gomory fractional cut generated from this row (scaled to integer coefficients)?",
+  "difficulty": 2,
+  "options": [
+   "$4x_2+x_3+2x_4\\ge 4$",
+   "$2x_2+x_3+2x_4\\ge 2$",
+   "$2x_2+x_3+2x_4\\ge 4$",
+   "$x_2+x_3+x_4\\ge 1$"
+  ],
+  "answer": 2,
+  "explain": "Fractional parts: $-\\tfrac23\\to\\tfrac13$ (since $-\\tfrac23=-1+\\tfrac13$), $\\tfrac76\\to\\tfrac16$, $\\tfrac43\\to\\tfrac13$, right-hand side $\\tfrac23$. The cut is $\\tfrac13x_2+\\tfrac16x_3+\\tfrac13x_4\\ge\\tfrac23$, i.e. $2x_2+x_3+2x_4\\ge 4$; at $\\bar x$ the left-hand side is 0, so $\\bar x$ is cut off. The option with $4x_2$ takes the fractional part of $-\\tfrac23$ to be $\\tfrac23$, a typical slip. (Checked by enumerating the integer points of $X_2$.)",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.3.1 (p. 42)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-gom-531-scaled",
+  "topic": "t204",
+  "type": "mcq",
+  "q": "Let $X_3=\\{x\\in\\mathbb{Z}_+^4:\\ x_1-\\tfrac13x_2+\\tfrac53x_3+\\tfrac13x_4=\\tfrac13\\}$ and $\\bar x=(\\tfrac12,\\tfrac12,0,0)$, which satisfies the equation. The Gomory fractional cut of the row itself, $2x_2+2x_3+x_4\\ge 1$, is satisfied with equality by $\\bar x$. Multiply the row by 2: $2x_1-\\tfrac23x_2+\\tfrac{10}{3}x_3+\\tfrac23x_4=\\tfrac23$. Which cut does rounding down all coefficients and the right-hand side now give, and does it cut off $\\bar x$?",
+  "difficulty": 3,
+  "options": [
+   "$2x_1-x_2+3x_3+x_4\\le 0$; its left-hand side at $\\bar x$ is $\\tfrac12$, so $\\bar x$ is cut off",
+   "$2x_1+3x_3\\le 0$; its left-hand side at $\\bar x$ is $1$, so $\\bar x$ is cut off",
+   "$2x_1-x_2+3x_3\\le 0$; its left-hand side at $\\bar x$ is $\\tfrac12$, so $\\bar x$ is cut off",
+   "$2x_1-x_2+3x_3\\le 1$; its left-hand side at $\\bar x$ is $\\tfrac12$, so $\\bar x$ is not cut off"
+  ],
+  "answer": 2,
+  "explain": "$\\lfloor-\\tfrac23\\rfloor=-1$, $\\lfloor\\tfrac{10}{3}\\rfloor=3$, $\\lfloor\\tfrac23\\rfloor=0$ for both the coefficient of $x_4$ and the right-hand side: $2x_1-x_2+3x_3\\le 0$, valid because $x\\ge 0$ is integer. At $\\bar x$: $1-\\tfrac12=\\tfrac12\\gt 0$. Subtracting from the scaled row gives the equivalent Gomory form $x_2+x_3+2x_4\\ge 2$. Rounding $\\tfrac23$ up to 1 or $-\\tfrac23$ to 0 gives invalid inequalities (they cut off $(0,0,0,1)$ and $(1,2,0,0)$, both in $X_3$). Lesson: if one multiplier gives no violated cut, try another.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.3.1 (p. 42)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-cg-534-round",
+  "topic": "t204",
+  "type": "mcq",
+  "q": "Let $X_3=\\{x\\in\\mathbb{Z}_+^4:\\ 6x_1+7x_2-3x_3-x_4\\le 1\\}$ and the point $(\\tfrac16,0,0,0)$. Divide the constraint by 6 and round down coefficients and right-hand side. Which inequality results?",
+  "difficulty": 2,
+  "options": [
+   "$x_1+x_2-x_3-x_4\\le 0$",
+   "$x_1+x_2\\le 0$",
+   "$x_1+x_2-x_3-x_4\\le 1$",
+   "$x_1+x_2-\\tfrac12x_3\\le 0$"
+  ],
+  "answer": 0,
+  "explain": "Dividing by 6: $x_1+\\tfrac76x_2-\\tfrac12x_3-\\tfrac16x_4\\le\\tfrac16$. Floors: $\\lfloor\\tfrac76\\rfloor=1$, $\\lfloor-\\tfrac12\\rfloor=-1$, $\\lfloor-\\tfrac16\\rfloor=-1$, $\\lfloor\\tfrac16\\rfloor=0$, giving $x_1+x_2-x_3-x_4\\le 0$; at the point the left-hand side is $\\tfrac16\\gt 0$, so it is cut off. Negative coefficients must be rounded <b>down</b> (away from zero): $x_1+x_2\\le 0$ is not valid, e.g. $(1,0,2,0)\\in X_3$.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.3.4 (p. 43)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-mir-511-xy",
+  "topic": "t205",
+  "type": "mcq",
+  "q": "Let $X=\\{x\\in\\mathbb{R}_+,\\ y\\in\\mathbb{N}:\\ x\\le 6\\,y,\\ x\\le 16\\}$. Which inequality is valid for $X$ and cuts off the point $(x,y)=(16,\\tfrac83)$ of the LP relaxation?",
+  "difficulty": 2,
+  "options": [
+   "$x\\le 6\\,y-2$",
+   "$x\\le 16\\,y$",
+   "$x\\le 4+4\\,y$",
+   "$x\\le 4\\,y$"
+  ],
+  "answer": 2,
+  "explain": "$16/6=2+\\tfrac23$. For $y\\le 2$ the bound is $x\\le 6y$, for $y\\ge 3$ it is $x\\le 16$; the line through $(y,x)=(2,12)$ and $(3,16)$ is $x=4+4y$, and $x\\le 4+4y$ holds for every integer $y\\ge 0$ (0, 6, 12, 16, 16, ... against 4, 8, 12, 16, 20, ...). At $(16,\\tfrac83)$: $4+\\tfrac{32}{3}\\approx 14.67\\lt 16$, so the point is cut off. It is the MIR inequality $x\\le 16-4\\,(3-y)$ with $4=6\\cdot\\tfrac23$. $x\\le 6y-2$ and $x\\le 4y$ are not valid; $x\\le 16y$ is valid but not violated. Book's answer.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.1.1 (p. 40)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-mir-511-formula",
+  "topic": "t205",
+  "type": "mcq",
+  "q": "Let $X=\\{x\\in\\mathbb{R}_+,\\ (y_1,y_2,y_3)\\in\\mathbb{N}^3:\\ -x-\\tfrac{10}{3}y_1+y_2+\\tfrac{11}{4}y_3\\le\\tfrac{21}{2}\\}$. For a row $\\sum_j a_jy_j-x\\le b$ with $f_0=b-\\lfloor b\\rfloor$ and $f_j=a_j-\\lfloor a_j\\rfloor$, the MIR inequality is $$\\sum_j\\Big(\\lfloor a_j\\rfloor+\\frac{(f_j-f_0)^+}{1-f_0}\\Big)y_j-\\frac{x}{1-f_0}\\le\\lfloor b\\rfloor.$$ Which inequality does it give here?",
+  "difficulty": 3,
+  "options": [
+   "$-4y_1+y_2+2y_3-x\\le 10$",
+   "$-3y_1+y_2+\\tfrac52y_3-2x\\le 10$",
+   "$-\\tfrac{11}{3}y_1+y_2+\\tfrac52y_3-2x\\le 11$",
+   "$-\\tfrac{11}{3}y_1+y_2+\\tfrac52y_3-2x\\le 10$"
+  ],
+  "answer": 3,
+  "explain": "$f_0=\\tfrac12$. For $y_1$: $\\lfloor-\\tfrac{10}{3}\\rfloor=-4$, $f_1=\\tfrac23$, coefficient $-4+\\tfrac{2/3-1/2}{1/2}=-\\tfrac{11}{3}$. For $y_2$: 1. For $y_3$: $\\lfloor\\tfrac{11}{4}\\rfloor=2$, $f_3=\\tfrac34$, coefficient $2+\\tfrac{1/4}{1/2}=\\tfrac52$. For $x$: $-\\tfrac{1}{1/2}=-2$. Right-hand side $\\lfloor\\tfrac{21}{2}\\rfloor=10$. Plain rounding with coefficient $-1$ for $x$ is invalid (e.g. $y_2=11$, $x=\\tfrac12$), and $\\lfloor-\\tfrac{10}{3}\\rfloor$ is $-4$, not $-3$. Not printed in the book; validity was checked by enumeration.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.1.1 (p. 40)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-mir-535-cut",
+  "topic": "t205",
+  "type": "mcq",
+  "q": "Let $X_2=\\{(x_1,x_2)\\in\\mathbb{Z}\\times\\mathbb{R}_+:\\ x_1+x_2\\ge\\tfrac54\\}$ and $\\bar x=(\\tfrac54,0)$. Which inequality is valid for $X_2$ and separates $\\bar x$?",
+  "difficulty": 2,
+  "options": [
+   "$x_1+x_2\\ge 2$",
+   "$x_1\\ge 2$",
+   "$4x_1+x_2\\ge 5$",
+   "$x_1+4x_2\\ge 2$"
+  ],
+  "answer": 3,
+  "explain": "Basic mixed-integer rounding with $b=\\tfrac54$, $f=\\tfrac14$: $x_2\\ge f\\,(\\lceil b\\rceil-x_1)=\\tfrac14(2-x_1)$, i.e. $x_1+4x_2\\ge 2$. At $\\bar x$: $\\tfrac54\\lt 2$. The three other inequalities are violated by the feasible point $(1,\\tfrac14)$, so they are not valid.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.3.5 (p. 43)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-mir-535-proof",
+  "topic": "t205",
+  "type": "short",
+  "q": "Let $X=\\{(x_1,x_2)\\in\\mathbb{Z}\\times\\mathbb{R}_+:\\ x_1+x_2\\ge\\tfrac54\\}$. Using the disjunction $x_1\\le 1$ or $x_1\\ge 2$, prove that $x_1+4x_2\\ge 2$ is valid for $X$, and show that it cuts off the point $(\\tfrac54,0)$.",
+  "difficulty": 2,
+  "model": "<b>Case $x_1\\ge 2$:</b> since $x_2\\ge 0$, $x_1+4x_2\\ge 2$. <b>Case $x_1\\le 1$:</b> from $x_2\\ge\\tfrac54-x_1$ we get $x_1+4x_2\\ge x_1+5-4x_1=5-3x_1\\ge 2$. As $x_1$ is an integer, one of the two cases holds, so the inequality is valid for $X$. At $(\\tfrac54,0)$ the left-hand side equals $\\tfrac54\\lt 2$: the point is cut off. The inequality is the MIR cut $x_2\\ge f\\,(\\lceil b\\rceil-x_1)$ with $b=\\tfrac54$, $f=\\tfrac14$; it is tight at $(1,\\tfrac14)$ and $(2,0)$.",
+  "rubric": [
+   "Case $x_1\\ge 2$ handled using $x_2\\ge 0$",
+   "Case $x_1\\le 1$ handled using $x_2\\ge\\tfrac54-x_1$",
+   "Uses integrality of $x_1$ to say the two cases cover $X$",
+   "Evaluates the cut at $(\\tfrac54,0)$: $\\tfrac54\\lt 2$"
+  ],
+  "explain": "This is a split (disjunctive) argument: the inequality is valid on both sides of the split $x_1\\le 1$ / $x_1\\ge 2$, hence valid for the mixed-integer set.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.3.5 (p. 43)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-mir-536-beta",
+  "topic": "t205",
+  "type": "num",
+  "q": "Let $X_2=\\{(x_1,x_2)\\in\\mathbb{Z}\\times\\mathbb{R}_+:\\ x_1+x_2\\ge\\tfrac75\\}$ and $\\bar x=(\\tfrac75,0)$. The mixed-integer rounding inequality that separates $\\bar x$ can be written $2x_1+5x_2\\ge\\beta$. What is $\\beta$?",
+  "difficulty": 2,
+  "answer": 4,
+  "explain": "$b=\\tfrac75$, $f=\\tfrac25$, $\\lceil b\\rceil=2$: $x_2\\ge\\tfrac25(2-x_1)$, i.e. $2x_1+5x_2\\ge 4$. At $\\bar x$ the left-hand side is $2.8\\lt 4$. The cut is tight at the feasible points $(1,\\tfrac25)$ and $(2,0)$.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.3.6 (p. 43)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-cov-521-first",
+  "topic": "t206a",
+  "type": "mcq",
+  "q": "Binary knapsack set $9v+8w+6x+6y+5z\\le 14$ and the fractional point $(v,w,x,y,z)=(0,\\tfrac58,\\tfrac34,\\tfrac34,0)$. Which cover inequality is valid and violated by this point?",
+  "difficulty": 1,
+  "options": [
+   "$x+y\\le 1$",
+   "$v+w\\le 1$",
+   "$w+x+y\\le 2$",
+   "$w+x+y+z\\le 3$"
+  ],
+  "answer": 2,
+  "explain": "$\\{w,x,y\\}$ is a cover ($8+6+6=20\\gt 14$), so $w+x+y\\le 2$ is valid; at the point the left-hand side is $\\tfrac58+\\tfrac34+\\tfrac34=2.125\\gt 2$. $\\{x,y\\}$ is not a cover ($12\\le 14$), so $x+y\\le 1$ is invalid; $v+w\\le 1$ and $w+x+y+z\\le 3$ are valid cover inequalities but not violated ($0.625$ and $2.125$). Book's answer.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.2.1 (p. 40)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-cov-521-complement",
+  "topic": "t206a",
+  "type": "mcq",
+  "q": "Binary set $12v-9w+8x+6y-3z\\le 2$ and the point $(v,w,x,y,z)=(0,0,\\tfrac12,\\tfrac16,1)$. Complementing the variables with negative coefficients ($w'=1-w$, $z'=1-z$) gives a standard knapsack. Which cover inequality, written in the original variables, is valid and violated by the point?",
+  "difficulty": 2,
+  "options": [
+   "$x+w\\le 1$",
+   "$x+y\\le 1$",
+   "$x-w\\le 0$",
+   "$v+x\\le 1$"
+  ],
+  "answer": 2,
+  "explain": "Substituting gives $12v+9w'+8x+6y+3z'\\le 14$ and the point becomes $w'=1$, $z'=0$. $\\{w',x\\}$ is a cover ($17\\gt 14$): $w'+x\\le 1$, i.e. $x-w\\le 0$; at the point $\\tfrac12\\gt 0$. $x+w\\le 1$ forgets to convert back and is invalid ($w=x=1$ is feasible: $-1\\le 2$); $x+y\\le 1$ is invalid ($w=z=x=y=1$ gives $2\\le 2$); $v+x\\le 1$ is valid but not violated. Book's answer.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.2.1 (p. 40)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-cov-533-sep",
+  "topic": "t206a",
+  "type": "mcq",
+  "q": "Knapsack set $5x_1+5x_2+6x_3+7x_4+8x_5+12x_6+16x_7\\le 20$, $x\\in\\{0,1\\}^7$, and the fractional point $x^*=(0,\\tfrac13,1,1,\\tfrac23,0,0)$. Which cover inequality is violated by $x^*$?",
+  "difficulty": 2,
+  "options": [
+   "$x_2+x_3+x_4+x_5\\le 3$",
+   "$x_3+x_4+x_5\\le 2$",
+   "$x_3+x_4\\le 1$",
+   "$x_2+x_3+x_4\\le 2$"
+  ],
+  "answer": 1,
+  "explain": "$\\{3,4,5\\}$ is a cover ($6+7+8=21\\gt 20$) and the left-hand side at $x^*$ is $1+1+\\tfrac23=\\tfrac83\\gt 2$. $\\{2,3,4,5\\}$ is also a cover, but its inequality holds with equality at $x^*$ ($\\tfrac13+1+1+\\tfrac23=3$). $\\{3,4\\}$ (weight 13) and $\\{2,3,4\\}$ (weight 18) are not covers, so their inequalities are not valid. $\\{3,4,5\\}$ is in fact the only minimal cover violated by $x^*$ (checked by enumeration). Only item 2 of this exam exercise is used: the data printed for its items 1 and 3 are inconsistent.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.3.3 (p. 43)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-cov-523-extend",
+  "topic": "t206a",
+  "type": "mcq",
+  "q": "Knapsack set $5x_1+5x_2+6x_3+7x_4+8x_5+12x_6+16x_7\\le 20$, $x\\in\\{0,1\\}^7$. $\\{2,3,6\\}$ is a cover (weight 23), giving $x_2+x_3+x_6\\le 2$. Which single variable can be added to the left-hand side while keeping the right-hand side 2 (extended cover inequality)?",
+  "difficulty": 2,
+  "options": [
+   "$x_7$",
+   "$x_1$",
+   "$x_4$",
+   "$x_5$"
+  ],
+  "answer": 0,
+  "explain": "Item 7 weighs 16, at least as much as the heaviest item of the cover (12), so any three items among $\\{2,3,6,7\\}$ weigh at least $5+6+12=23\\gt 20$: $x_2+x_3+x_6+x_7\\le 2$ is valid (the book's example). For the other candidates three items fit together: $\\{1,2,3\\}$ weighs 16, $\\{2,3,4\\}$ 18 and $\\{2,3,5\\}$ 19.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.2.3 (p. 41)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-kn-523-lp",
+  "topic": "t103",
+  "type": "num",
+  "q": "A knapsack of capacity 20 kg and seven items with profits $(4,5,6,6,6,10,15)$ and weights $(5,5,6,7,8,12,16)$ (each item at most once). What is the optimal value of the LP relaxation?",
+  "difficulty": 2,
+  "answer": 19.4375,
+  "tol": 0.001,
+  "explain": "Profit/weight ratios: items 2 and 3: $1$; item 7: $0.9375$; item 4: $0.857$; item 6: $0.833$; item 1: $0.8$; item 5: $0.75$. Greedy: take items 2 and 3 (weight 11, profit 11), then $\\tfrac{9}{16}$ of item 7: $11+15\\cdot\\tfrac{9}{16}=19.4375$, the value printed in the book. The integer optimum is 17.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.2.3 (p. 41)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-lift-523-seq",
+  "topic": "t206b",
+  "type": "mcq",
+  "q": "Knapsack set $5x_1+5x_2+6x_3+7x_4+8x_5+12x_6+16x_7\\le 20$, $x\\in\\{0,1\\}^7$. Start from the cover inequality $x_1+x_2+x_3+x_4\\le 3$ (the four items weigh 23) and lift sequentially $x_7$, then $x_6$, then $x_5$. Which inequality is obtained?",
+  "difficulty": 3,
+  "options": [
+   "$x_1+x_2+x_3+x_4+x_5+2x_6+3x_7\\le 3$",
+   "$x_1+x_2+x_3+x_4+x_5+x_6+x_7\\le 3$",
+   "$x_1+x_2+x_3+x_4+2x_5+2x_6+3x_7\\le 3$",
+   "$x_1+x_2+x_3+x_4+x_5+2x_6+2x_7\\le 3$"
+  ],
+  "answer": 0,
+  "explain": "$\\alpha_7=3-\\max\\{x_1+\\dots+x_4:\\ \\text{weight}\\le 20-16=4\\}=3-0=3$. $\\alpha_6=3-\\max\\{x_1+\\dots+x_4+3x_7:\\ \\text{weight}\\le 8\\}=3-1=2$. $\\alpha_5=3-\\max\\{x_1+\\dots+x_4+2x_6+3x_7:\\ \\text{weight}\\le 12\\}=3-2=1$. The all-ones inequality is only the extended cover (weaker); a coefficient 2 for $x_5$ is invalid (items 1, 2, 5 weigh 18 and would give 4); a coefficient 2 for $x_7$ is valid but not the largest possible. Verified: adding this inequality alone to the LP relaxation gives the bound 17.667 quoted in the book.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.2.3 (p. 42)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-lift-523-bound",
+  "topic": "t206b",
+  "type": "tf",
+  "q": "For the knapsack $\\max\\ 4x_1+5x_2+6x_3+6x_4+6x_5+10x_6+15x_7$ s.t. $5x_1+5x_2+6x_3+7x_4+8x_5+12x_6+16x_7\\le 20$, $x$ binary, the LP relaxation value is 19.4375 at $x=(0,1,1,0,0,0,\\tfrac{9}{16})$. Statement: adding the extended cover inequality $x_1+\\dots+x_7\\le 3$ leaves this LP bound unchanged, whereas adding the lifted cover inequality $x_1+x_2+x_3+x_4+x_5+2x_6+3x_7\\le 3$ lowers it to about 17.67, which proves that the solution $x_2=x_3=x_4=1$ of profit 17 is optimal.",
+  "difficulty": 2,
+  "answer": true,
+  "explain": "The LP optimum has $\\sum_i x_i=2.5625\\le 3$, so the extended cover does not cut it off. Its lifted left-hand side is $2+3\\cdot\\tfrac{9}{16}=3.6875\\gt 3$, so the lifted cover does; the new LP optimum is $(0,\\tfrac13,1,1,\\tfrac23,0,0)$ with value $\\tfrac{53}{3}\\approx 17.67$ (the book's figure, recomputed with an LP solver). All profits are integers, so the optimum is at most 17, and items 2, 3, 4 (weight 18) reach 17. Lifting gives stronger cuts than simple extension.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.2.3 (p. 42)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-lift-522-u",
+  "topic": "t206b",
+  "type": "num",
+  "q": "Let $X=\\{(u,v,w,x,y,z)\\in\\{0,1\\}^6:\\ 12u+9v+7w+5x+5y+3z\\le 14\\}$ and the cover inequality $w+y+z\\le 2$ (valid since $7+5+3=15\\gt 14$). Lifting the variable $u$ first, what is its lifting coefficient $\\alpha_u$ in $\\alpha_u\\,u+w+y+z\\le 2$?",
+  "difficulty": 2,
+  "answer": 2,
+  "explain": "$\\alpha_u=2-\\max\\{w+y+z:\\ 7w+5y+3z\\le 14-12=2\\}=2-0=2$: when $u=1$ only 2 units of capacity remain and none of $w,y,z$ fits. The inequality becomes $2u+w+y+z\\le 2$, as in the book.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.2.2 (p. 41)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-lift-522-full",
+  "topic": "t206b",
+  "type": "mcq",
+  "q": "Let $X=\\{(u,v,w,x,y,z)\\in\\{0,1\\}^6:\\ 12u+9v+7w+5x+5y+3z\\le 14\\}$. Starting from the cover inequality $w+y+z\\le 2$ and after lifting $u$ (which gives $2u+w+y+z\\le 2$), lift $v$ and then $x$. Which inequality is obtained?",
+  "difficulty": 2,
+  "options": [
+   "$2u+v+w+x+y+z\\le 2$",
+   "$2u+v+w+y+z\\le 2$",
+   "$2u+2v+w+y+z\\le 2$",
+   "$2u+w+y+z\\le 2$ (both new coefficients are 0)"
+  ],
+  "answer": 1,
+  "explain": "$\\alpha_v=2-\\max\\{2u+w+y+z:\\ 12u+7w+5y+3z\\le 14-9=5\\}=2-1=1$ (one of $y$, $z$ fits). $\\alpha_x=2-\\max\\{2u+v+w+y+z:\\ 12u+9v+7w+5y+3z\\le 9\\}=2-2=0$ ($y$ and $z$ together weigh 8). Result: $2u+v+w+y+z\\le 2$ (the book's answer). A coefficient 1 for $x$ is invalid ($x=y=z=1$ weighs 13), and a coefficient 2 for $v$ is invalid ($v=y=1$ weighs 14).",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.2.2 (p. 41)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-lift-522-facet",
+  "topic": "t206b",
+  "type": "short",
+  "q": "Let $X_0=\\{(w,y,z)\\in\\{0,1\\}^3:\\ 7w+5y+3z\\le 14\\}$ (the set $12u+9v+7w+5x+5y+3z\\le 14$ restricted to $u=v=x=0$). Show that the cover inequality $w+y+z\\le 2$ defines a facet of $\\mathrm{conv}(X_0)$.",
+  "difficulty": 2,
+  "model": "<b>Validity:</b> $7+5+3=15\\gt 14$, so the three variables cannot all be 1. <b>Dimension:</b> $X_0$ contains the origin and the three unit vectors, so $\\mathrm{conv}(X_0)$ has dimension 3 and a facet is a face of dimension 2, which needs 3 affinely independent points of $X_0$ satisfying the inequality with equality. <b>Tight points:</b> $(1,1,0)$, $(1,0,1)$ and $(0,1,1)$ are feasible (weights 12, 10, 8), satisfy $w+y+z=2$, and are affinely (even linearly) independent. Hence the inequality defines a facet.",
+  "rubric": [
+   "Validity of the cover inequality ($15\\gt 14$)",
+   "$\\dim\\mathrm{conv}(X_0)=3$ (origin and unit vectors are feasible)",
+   "Three feasible tight points: $(1,1,0)$, $(1,0,1)$, $(0,1,1)$",
+   "These points are affinely independent, so the face has dimension 2"
+  ],
+  "explain": "The book's justification is exactly this: the cover inequality has three affinely independent tight points in the restricted set. A minimal cover inequality is always facet-defining once restricted to the variables of the cover.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.2.2 (p. 41)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-lift-532-notfacet",
+  "topic": "t206b",
+  "type": "short",
+  "q": "Let $X=\\{x\\in\\{0,1\\}^4:\\ 3x_1+5x_2+6x_3+11x_4\\le 13\\}$. Show that $x_1+x_2+x_3\\le 2$ is valid for $X$ but does not define a facet of $\\mathrm{conv}(X)$.",
+  "difficulty": 2,
+  "model": "<b>Valid:</b> $3+5+6=14\\gt 13$, so $x_1=x_2=x_3=1$ is impossible. <b>Not a facet:</b> $\\mathrm{conv}(X)$ has dimension 4 (it contains the origin and the four unit vectors), so a facet needs 4 affinely independent tight points. A tight point has exactly two of $x_1,x_2,x_3$ equal to 1, hence weight at least $3+5=8$, and then $x_4=1$ is impossible ($8+11\\gt 13$). The only tight points are $(1,1,0,0)$, $(1,0,1,0)$, $(0,1,1,0)$: three points, so the face has dimension 2 only (all tight points also satisfy $x_4=0$).",
+  "rubric": [
+   "Validity from $3+5+6=14\\gt 13$",
+   "$\\dim\\mathrm{conv}(X)=4$, so 4 affinely independent tight points are required",
+   "Lists the tight points and notes that all have $x_4=0$",
+   "Concludes the face has dimension 2, so it is not a facet"
+  ],
+  "explain": "A cover inequality is generally not facet-defining for the full knapsack polytope; lifting the variables outside the cover repairs this.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.3.2 (p. 42)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-lift-532-coef",
+  "topic": "t206b",
+  "type": "num",
+  "q": "Let $X=\\{x\\in\\{0,1\\}^4:\\ 3x_1+5x_2+6x_3+11x_4\\le 13\\}$. The cover inequality $x_1+x_2+x_3\\le 2$ is lifted with respect to $x_4$. What is the lifting coefficient $\\alpha$ in $x_1+x_2+x_3+\\alpha\\,x_4\\le 2$?",
+  "difficulty": 2,
+  "answer": 2,
+  "explain": "$\\alpha=2-\\max\\{x_1+x_2+x_3:\\ 3x_1+5x_2+6x_3\\le 13-11=2\\}=2-0=2$: with $x_4=1$ nothing else fits. The lifted inequality is $x_1+x_2+x_3+2x_4\\le 2$.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.3.2 (p. 42)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-lift-532-facet",
+  "topic": "t206b",
+  "type": "short",
+  "q": "Let $X=\\{x\\in\\{0,1\\}^4:\\ 3x_1+5x_2+6x_3+11x_4\\le 13\\}$. Show that $x_1+x_2+x_3+2x_4\\le 2$ defines a facet of $\\mathrm{conv}(X)$.",
+  "difficulty": 2,
+  "model": "<b>Valid:</b> if $x_4=0$ it is the cover inequality ($3+5+6=14\\gt 13$); if $x_4=1$ the remaining capacity is 2 and $x_1=x_2=x_3=0$. <b>Facet:</b> $\\dim\\mathrm{conv}(X)=4$, so 4 affinely independent tight points are needed. The points $(1,1,0,0)$, $(1,0,1,0)$, $(0,1,1,0)$, $(0,0,0,1)$ are feasible (weights 8, 9, 11, 11) and tight. Subtracting the last from the first three gives $(1,1,0,-1)$, $(1,0,1,-1)$, $(0,1,1,-1)$, which are linearly independent (the $3\\times 3$ determinant of their first three coordinates is $-2\\ne 0$). Hence the face has dimension 3: a facet.",
+  "rubric": [
+   "Validity checked for $x_4=0$ and $x_4=1$",
+   "$\\dim\\mathrm{conv}(X)=4$",
+   "Four feasible tight points, including $(0,0,0,1)$",
+   "Affine independence of the four points is justified"
+  ],
+  "explain": "Sequential lifting of a facet of the restricted polytope produces a facet of the full polytope; here the direct check with four affinely independent points confirms it.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.3.2 (p. 42)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-lift-534-coef",
+  "topic": "t206b",
+  "type": "num",
+  "q": "Let $X_1=\\{x\\in\\{0,1\\}^4:\\ 7x_1+9x_2+10x_3+12x_4\\le 25\\}$. The point $(0,1,1,\\tfrac12)$ violates the cover inequality $x_2+x_3+x_4\\le 2$ (the three items weigh 31). Lifting $x_1$, what is its coefficient $\\alpha_1$ in $\\alpha_1x_1+x_2+x_3+x_4\\le 2$?",
+  "difficulty": 2,
+  "answer": 1,
+  "explain": "$\\alpha_1=2-\\max\\{x_2+x_3+x_4:\\ 9x_2+10x_3+12x_4\\le 25-7=18\\}=2-1=1$ (only one of the three items fits in 18). The lifted cut $x_1+x_2+x_3+x_4\\le 2$ still cuts off the point ($2.5\\gt 2$) and is facet-defining: $(1,1,0,0)$, $(1,0,1,0)$, $(1,0,0,1)$, $(0,1,1,0)$ are four affinely independent tight points.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.3.4 (p. 43)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-lift-535-facet",
+  "topic": "t206b",
+  "type": "mcq",
+  "q": "Let $X_1=\\{x\\in\\{0,1\\}^4:\\ 5x_1+7x_2+8x_3+13x_4\\le 17\\}$ and $\\bar x=(1,1,\\tfrac12,0)$. Which inequality is facet-defining for $\\mathrm{conv}(X_1)$ and cuts off $\\bar x$?",
+  "difficulty": 3,
+  "options": [
+   "$x_1+x_2+x_3\\le 2$",
+   "$x_1+x_2+x_3+2x_4\\le 2$",
+   "$x_1+x_2+x_3+x_4\\le 2$",
+   "$x_1+x_2+x_3+3x_4\\le 2$"
+  ],
+  "answer": 1,
+  "explain": "$\\{1,2,3\\}$ is a cover ($20\\gt 17$) and $\\bar x$ violates $x_1+x_2+x_3\\le 2$ ($2.5\\gt 2$), but that inequality has only three tight points. Lifting $x_4$: $\\alpha_4=2-\\max\\{x_1+x_2+x_3:\\ 5x_1+7x_2+8x_3\\le 4\\}=2$. Then $(1,1,0,0)$, $(1,0,1,0)$, $(0,1,1,0)$, $(0,0,0,1)$ are four affinely independent tight points in a 4-dimensional polytope: a facet. A coefficient 1 for $x_4$ adds no tight point (item 4 fits with no other item), and a coefficient 3 is invalid since $(0,0,0,1)\\in X_1$.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 5.3.5 (p. 43)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-lag-tsp-1tree",
+  "topic": "t401",
+  "type": "num",
+  "q": "Symmetric TSP on 6 cities with distances $d_{12}=8$, $d_{13}=2$, $d_{14}=14$, $d_{15}=26$, $d_{16}=13$, $d_{23}=7$, $d_{24}=4$, $d_{25}=16$, $d_{26}=8$, $d_{34}=23$, $d_{35}=14$, $d_{36}=9$, $d_{45}=12$, $d_{46}=6$, $d_{56}=5$. A 1-tree (with special node 1) is a spanning tree on the nodes $\\{2,\\dots,6\\}$ plus two edges incident to node 1. What is the weight of a minimum 1-tree, i.e. the Lagrangian bound obtained with all multipliers equal to zero?",
+  "difficulty": 2,
+  "answer": 32,
+  "explain": "Minimum spanning tree on $\\{2,\\dots,6\\}$ (Kruskal): 2-4 (4), 5-6 (5), 4-6 (6), 2-3 (7), total 22. Two cheapest edges at node 1: 1-3 (2) and 1-2 (8), total 10. The minimum 1-tree weighs 32; since every tour is a 1-tree, 32 is a lower bound on the optimal tour length (which is 39).",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 6.0.1 (p. 47)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-lag-tsp-subgrad",
+  "topic": "t401",
+  "type": "mcq",
+  "q": "In the Lagrangian relaxation of a symmetric TSP on 6 cities, the degree constraints are dualised with multipliers $\\pi_i$ (modified edge costs $d_{ij}+\\pi_i+\\pi_j$) and the subproblem is a minimum 1-tree. For $\\pi=0$ the minimum 1-tree consists of the edges 1-2, 1-3, 2-3, 2-4, 4-6 and 5-6. In which direction does a subgradient step move the multipliers?",
+  "difficulty": 2,
+  "options": [
+   "Decrease $\\pi_2$ and increase $\\pi_5$; the others stay unchanged",
+   "Increase $\\pi_2$ (degree 3) and decrease $\\pi_5$ (degree 1); the others stay unchanged",
+   "Increase all multipliers by the same amount",
+   "Increase $\\pi_1$ only, because node 1 is the special node"
+  ],
+  "answer": 1,
+  "explain": "The node degrees in the 1-tree are $(2,3,2,2,1,2)$ and the subgradient is degree minus 2: $(0,+1,0,0,-1,0)$. To maximise the lower bound, the multiplier of the over-used node 2 is increased (its edges become more expensive) and that of the under-used node 5 is decreased (its edges become cheaper), pushing the next 1-tree towards a tour.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 6.0.1 (p. 47)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-lag-tsp-step",
+  "topic": "t401",
+  "type": "num",
+  "q": "Symmetric TSP on 6 cities with distances $d_{12}=8$, $d_{13}=2$, $d_{14}=14$, $d_{15}=26$, $d_{16}=13$, $d_{23}=7$, $d_{24}=4$, $d_{25}=16$, $d_{26}=8$, $d_{34}=23$, $d_{35}=14$, $d_{36}=9$, $d_{45}=12$, $d_{46}=6$, $d_{56}=5$. Dualising the degree constraints with multipliers $\\pi$ gives modified costs $d_{ij}+\\pi_i+\\pi_j$ and the bound $L(\\pi)=$ (weight of a minimum 1-tree, special node 1, for the modified costs) $-\\ 2\\sum_i\\pi_i$. Compute $L(\\pi)$ for $\\pi=(0,1,0,0,-1,0)$.",
+  "difficulty": 3,
+  "answer": 34,
+  "explain": "Edges at node 2 cost 1 more, edges at node 5 cost 1 less (edge 2-5 is unchanged). Spanning tree on $\\{2,\\dots,6\\}$: 5-6 (4), 2-4 (5), 4-6 (6), 2-3 (8), total 23. Two cheapest edges at node 1: 1-3 (2) and 1-2 (9), total 11. $\\sum_i\\pi_i=0$, so $L(\\pi)=34$, better than the bound 32 obtained with $\\pi=0$.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 6.0.1 (p. 47)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-lag-tsp-closing",
+  "topic": "t401",
+  "type": "num",
+  "q": "Symmetric TSP on 6 cities with distances $d_{12}=8$, $d_{13}=2$, $d_{14}=14$, $d_{15}=26$, $d_{16}=13$, $d_{23}=7$, $d_{24}=4$, $d_{25}=16$, $d_{26}=8$, $d_{34}=23$, $d_{35}=14$, $d_{36}=9$, $d_{45}=12$, $d_{46}=6$, $d_{56}=5$. With multipliers $\\pi=(0,5,0,0,-5,0)$ on the degree constraints (modified costs $d_{ij}+\\pi_i+\\pi_j$), compute the Lagrangian bound $L(\\pi)=$ (weight of a minimum 1-tree with special node 1) $-\\ 2\\sum_i\\pi_i$.",
+  "difficulty": 3,
+  "answer": 39,
+  "explain": "Modified costs on $\\{2,\\dots,6\\}$: 5-6: 0, 4-6: 6, 4-5: 7, 2-4: 9, 3-5: 9, 3-6: 9, 2-3: 12, 2-6: 13, 2-5: 16, 3-4: 23. Kruskal: 5-6, 4-6, 2-4 and then 3-5 (tie with 3-6): 24. Node 1: 1-3 (2) and 1-2 (13, tie with 1-6): 15. $L(\\pi)=39-0=39$. With the choices 3-5 and 1-2 the 1-tree is the tour 1-2-4-6-5-3-1, whose true length is $8+4+6+5+14+2=39$: lower bound = tour length, so this tour is optimal and there is no duality gap on this instance (confirmed by enumerating the 60 tours).",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 6.0.1 (p. 47)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-lag-gap-l0",
+  "topic": "t401",
+  "type": "num",
+  "q": "Generalised assignment problem (maximisation): $\\max\\sum_{i=1}^{4}\\sum_{j=1}^{3}c_{ij}x_{ij}$ s.t. $\\sum_{j}x_{ij}\\le 1$ for each item $i$, $\\sum_{i}a_{ij}x_{ij}\\le b_j$ for each knapsack $j$, $x$ binary, with $$A=\\begin{pmatrix}5&6&2\\\\3&6&6\\\\8&5&9\\\\4&8&10\\end{pmatrix},\\quad b=(10,10,10),\\quad C=\\begin{pmatrix}6&10&3\\\\12&12&4\\\\15&8&7\\\\10&7&10\\end{pmatrix}.$$ Dualising the assignment constraints with multipliers $u\\ge 0$ gives $L(u)=\\sum_iu_i+\\sum_{j}\\max\\big\\{\\sum_i(c_{ij}-u_i)x_{ij}:\\ \\sum_ia_{ij}x_{ij}\\le b_j,\\ x\\ \\text{binary}\\big\\}$. What is $L(0)$?",
+  "difficulty": 2,
+  "answer": 44,
+  "explain": "The subproblem splits into three 0-1 knapsacks (one per column). Knapsack 1 (weights 5, 3, 8, 4): items 2 and 4, profit $12+10=22$. Knapsack 2 (weights 6, 6, 5, 8): only one item fits, item 2, profit 12. Knapsack 3 (weights 2, 6, 9, 10): item 4, profit 10 (items 1 and 2 together give only 7). $L(0)=44$ is an upper bound on the optimum (39), tighter than the LP bound 47; items 2 and 4 are used twice, so the solution is not feasible.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 6.0.3 (p. 48)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-lag-gap-step",
+  "topic": "t401",
+  "type": "num",
+  "q": "Generalised assignment problem (maximisation): $\\max\\sum_{i=1}^{4}\\sum_{j=1}^{3}c_{ij}x_{ij}$ s.t. $\\sum_{j}x_{ij}\\le 1$ for each item $i$, $\\sum_{i}a_{ij}x_{ij}\\le b_j$ for each knapsack $j$, $x$ binary, with $$A=\\begin{pmatrix}5&6&2\\\\3&6&6\\\\8&5&9\\\\4&8&10\\end{pmatrix},\\quad b=(10,10,10),\\quad C=\\begin{pmatrix}6&10&3\\\\12&12&4\\\\15&8&7\\\\10&7&10\\end{pmatrix}.$$ Dualising the assignment constraints with multipliers $u\\ge 0$ gives $L(u)=\\sum_iu_i+\\sum_{j}\\max\\big\\{\\sum_i(c_{ij}-u_i)x_{ij}:\\ \\sum_ia_{ij}x_{ij}\\le b_j,\\ x\\ \\text{binary}\\big\\}$. At $u^0=0$, $L(u^0)=44$ and the subproblem solution uses item 2 in knapsacks 1 and 2, item 4 in knapsacks 1 and 3, and leaves items 1 and 3 unassigned, so the subgradient $g_i=1-\\sum_jx_{ij}$ is $g=(1,-1,1,-1)$. A feasible solution of value $\\underline z=39$ is known. Perform one subgradient step $u^1=\\max\\{0,\\ u^0-\\theta\\,g\\}$ with $\\theta=\\dfrac{L(u^0)-\\underline z}{\\lVert g\\rVert^2}$. What is $L(u^1)$?",
+  "difficulty": 3,
+  "answer": 41.5,
+  "tol": 0.01,
+  "explain": "$\\theta=(44-39)/4=1.25$, so $u^1=\\max\\{0,(-1.25,\\ 1.25,\\ -1.25,\\ 1.25)\\}=(0,\\ 1.25,\\ 0,\\ 1.25)$. Knapsack 1: items 2 and 4, $10.75+8.75=19.5$. Knapsack 2: item 2, $10.75$ (item 1 gives 10). Knapsack 3: item 4, $8.75$. $L(u^1)=2.5+19.5+10.75+8.75=41.5$: the upper bound improves from 44 to 41.5. The multipliers of the over-used items 2 and 4 increase.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 6.0.3 (p. 48)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-lag-gap-optdual",
+  "topic": "t401",
+  "type": "num",
+  "q": "Generalised assignment problem (maximisation): $\\max\\sum_{i=1}^{4}\\sum_{j=1}^{3}c_{ij}x_{ij}$ s.t. $\\sum_{j}x_{ij}\\le 1$ for each item $i$, $\\sum_{i}a_{ij}x_{ij}\\le b_j$ for each knapsack $j$, $x$ binary, with $$A=\\begin{pmatrix}5&6&2\\\\3&6&6\\\\8&5&9\\\\4&8&10\\end{pmatrix},\\quad b=(10,10,10),\\quad C=\\begin{pmatrix}6&10&3\\\\12&12&4\\\\15&8&7\\\\10&7&10\\end{pmatrix}.$$ Dualising the assignment constraints with multipliers $u\\ge 0$ gives $L(u)=\\sum_iu_i+\\sum_{j}\\max\\big\\{\\sum_i(c_{ij}-u_i)x_{ij}:\\ \\sum_ia_{ij}x_{ij}\\le b_j,\\ x\\ \\text{binary}\\big\\}$. Evaluate $L(u)$ at $u=(0,2,0,3)$.",
+  "difficulty": 3,
+  "answer": 39,
+  "explain": "$\\sum_iu_i=5$. Knapsack 1, reduced profits $(6,10,15,7)$: items 2 and 4 (weight 7) give 17. Knapsack 2, reduced profits $(10,10,8,4)$: one item, 10. Knapsack 3, reduced profits $(3,2,7,7)$: one item, 7. $L(u)=5+17+10+7=39$. The feasible solution $x_{12}=x_{21}=x_{33}=x_{41}=1$ has value $10+12+7+10=39$ (loads 7, 6, 9), so upper bound = lower bound: it is optimal and this Lagrangian relaxation has no duality gap here, whereas the LP relaxation gives 47.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 6.0.3 (p. 48)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-lag-gap-strength",
+  "topic": "t401",
+  "type": "mcq",
+  "q": "Generalised assignment problem (maximisation) with assignment constraints $\\sum_jx_{ij}\\le 1$ (each item at most once) and knapsack constraints $\\sum_ia_{ij}x_{ij}\\le b_j$. Which Lagrangian relaxation can give a bound strictly better than the LP relaxation?",
+  "difficulty": 2,
+  "options": [
+   "Dualising the knapsack constraints: every item simply picks its best knapsack, and this easy subproblem yields the strongest bound",
+   "Dualising the assignment constraints: the subproblem splits into independent 0-1 knapsacks, which do not have the integrality property",
+   "Dualising both families: the more constraints are dualised, the stronger the bound",
+   "None of them: a Lagrangian dual bound always equals the LP bound"
+  ],
+  "answer": 1,
+  "explain": "If the remaining subproblem has the integrality property (its LP relaxation has integer optimal solutions), the Lagrangian dual gives exactly the LP bound: this happens when the knapsack constraints, or both families, are dualised (the subproblem is then trivial). Keeping the knapsack constraints gives NP-hard but pseudo-polynomial subproblems without the integrality property, so the bound can be strictly better (in the exam instance 39 instead of 47). Dualising more constraints never strengthens the bound.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 6.0.3 (p. 48)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-lag-gap602-l0",
+  "topic": "t401",
+  "type": "tf",
+  "q": "Generalised assignment instance with 5 items and 3 knapsacks (maximisation, $\\sum_jx_{ij}\\le 1$ per item, $\\sum_ia_{ij}x_{ij}\\le b_j$ per knapsack): $$A=\\begin{pmatrix}5&7&2\\\\14&8&7\\\\10&6&12\\\\8&4&15\\\\6&12&5\\end{pmatrix},\\quad b=(15,15,15),\\quad C=\\begin{pmatrix}6&10&1\\\\12&12&5\\\\15&4&3\\\\10&3&9\\\\8&9&5\\end{pmatrix}.$$ Its LP relaxation value is 53.2. Let $L(u)$ be the Lagrangian function obtained by dualising the assignment constraints. Statement: because this Lagrangian relaxation is at least as strong as the LP relaxation, $L(0)\\le 53.2$.",
+  "difficulty": 2,
+  "answer": false,
+  "explain": "$L(0)$ is the sum of three independent knapsack optima: knapsack 1: items 1 and 3 (weight 15), profit 21; knapsack 2: items 1 and 2 (weight 15), profit 22; knapsack 3: items 1, 2 and 5 (weight 14), profit 11. So $L(0)=54\\gt 53.2$. Only the Lagrangian <b>dual</b> value $\\min_{u\\ge 0}L(u)$ is guaranteed to be at least as good as the LP bound; $L(u)$ at an arbitrary $u$ can be worse. (The integer optimum of this instance is 46.)",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 6.0.2 (pp. 47-48)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-lag-budget",
+  "topic": "t401",
+  "type": "mcq",
+  "q": "Assignment problem with a budget constraint: $\\max\\sum_{i,j}c_{ij}x_{ij}$ s.t. $\\sum_jx_{ij}=1$ for all $i$, $\\sum_ix_{ij}=1$ for all $j$, $\\sum_{i,j}a_{ij}x_{ij}\\le b$, $x$ binary. What is obtained by dualising only the budget constraint with a multiplier $\\lambda\\ge 0$?",
+  "difficulty": 2,
+  "options": [
+   "A pure assignment subproblem with profits $c_{ij}-\\lambda a_{ij}$ (polynomial); it has the integrality property, so the best bound equals the LP bound; the dual has a single variable",
+   "A knapsack subproblem (NP-hard) and a bound that is in general strictly better than the LP bound",
+   "A pure assignment subproblem and a bound that is in general strictly better than the LP bound",
+   "A subproblem that is infeasible unless $\\lambda=0$"
+  ],
+  "answer": 0,
+  "explain": "Without the budget constraint the remaining constraints are those of the assignment problem, whose polytope is integral (totally unimodular matrix) and which is solved in polynomial time (Hungarian method or network flow). By the integrality property the Lagrangian dual bound coincides with the LP bound; the dual is a one-dimensional piecewise-linear convex minimisation over $\\lambda\\ge 0$, easy to solve.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 6.0.4 (p. 48)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-lag-budget-compare",
+  "topic": "t401",
+  "type": "short",
+  "q": "For the assignment problem with a budget constraint (rows $\\sum_jx_{ij}=1$, columns $\\sum_ix_{ij}=1$, budget $\\sum_{i,j}a_{ij}x_{ij}\\le b$, $x$ binary, maximisation), compare the Lagrangian relaxations obtained by dualising (i) the budget constraint, (ii) one family of assignment constraints, (iii) both families of assignment constraints: type of subproblem, strength of the bound, difficulty of the dual.",
+  "difficulty": 3,
+  "model": "<b>(i) Budget dualised.</b> Subproblem: assignment problem with profits $c_{ij}-\\lambda a_{ij}$, polynomial; integrality property, so the dual bound equals the LP bound; one multiplier $\\lambda\\ge 0$, an easy one-dimensional dual. <b>(ii) One assignment family dualised</b> (say the columns; rows and budget kept): a multiple-choice knapsack (one $j$ per row under a budget), NP-hard but solvable in pseudo-polynomial time by DP; no integrality property, so the bound can be strictly better than the LP bound; one free-sign multiplier per dualised equality, dual solved by subgradient. <b>(iii) Both families dualised</b> (budget kept): a 0-1 knapsack, NP-hard, pseudo-polynomial; bound at least as good as the LP bound but never better than (ii), because fewer constraints are kept; $m+n$ multipliers. Dualising everything gives a trivial subproblem and the LP bound.",
+  "rubric": [
+   "(i): assignment subproblem, polynomial, integrality property, bound = LP bound, one multiplier",
+   "(ii): multiple-choice knapsack subproblem, NP-hard / pseudo-polynomial, bound can beat the LP bound",
+   "(iii): 0-1 knapsack subproblem, bound between LP and (ii)",
+   "General principle: the more (non-integral) structure is kept in the subproblem, the stronger the bound and the harder the subproblem"
+  ],
+  "explain": "The strength of a Lagrangian dual is the optimum over the convex hull of the kept constraints intersected with the dualised ones, so keeping more constraints can only tighten it.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 6.0.4 (p. 48)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-lag-ufl-zu",
+  "topic": "t401",
+  "type": "num",
+  "q": "Uncapacitated facility location with 6 clients (rows) and 5 facilities (columns): delivery costs $$c=\\begin{pmatrix}6&2&1&3&5\\\\4&10&2&6&1\\\\3&2&4&1&3\\\\2&0&4&1&4\\\\1&8&6&2&5\\\\3&2&4&8&1\\end{pmatrix}$$ and fixed costs $f=(4,8,11,7,5)$. Dualising the constraints $\\sum_jx_{ij}=1$ with the multipliers $u=(5,6,3,1,2,1)$ gives the lower bound $z(u)=\\sum_iu_i+\\sum_j\\min\\{0,\\ f_j+\\sum_i\\min(0,\\ c_{ij}-u_i)\\}$. What is $z(u)$?",
+  "difficulty": 2,
+  "answer": 18,
+  "explain": "Sums of the negative parts of $c_{ij}-u_i$ by column: facility 1: $-2-1=-3$; facility 2: $-3-1-1=-5$; facility 3: $-4-4=-8$; facility 4: $-2-2=-4$; facility 5: $-5$. Adding the fixed costs gives the reduced costs $(1,3,3,3,0)$: none is negative, so no facility is opened in the subproblem (facility 5 is a tie) and $z(u)=\\sum_iu_i=18$. The true optimum is 21, so $18\\le z^*$ is a valid but not tight bound.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 6.0.5 (p. 49)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-lag-ufl-primal",
+  "topic": "t401",
+  "type": "mcq",
+  "q": "Uncapacitated facility location with 6 clients (rows) and 5 facilities (columns): delivery costs $$c=\\begin{pmatrix}6&2&1&3&5\\\\4&10&2&6&1\\\\3&2&4&1&3\\\\2&0&4&1&4\\\\1&8&6&2&5\\\\3&2&4&8&1\\end{pmatrix}$$ and fixed costs $f=(4,8,11,7,5)$. A Lagrangian heuristic opens a set of facilities and serves each client from its cheapest open facility. Which of the following sets gives the cheapest feasible solution?",
+  "difficulty": 2,
+  "options": [
+   "Facility 5 only",
+   "Facilities 1 and 5",
+   "Facilities 4 and 5",
+   "Facility 1 only"
+  ],
+  "answer": 2,
+  "explain": "$\\{4,5\\}$: fixed 12, service $3+1+1+1+2+1=9$, total 21. $\\{5\\}$: $5+19=24$. $\\{1,5\\}$: $9+13=22$. $\\{1\\}$: $4+19=23$. The value 21 is in fact optimal (all 31 subsets were enumerated); facilities 5 and 1 are the ones with the smallest reduced costs at $u=(5,6,3,1,2,1)$, and together with the Lagrangian bound $z(u)=18$ this gives $18\\le z^*=21$.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 6.0.5 (p. 49)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-lag-subgrad-formula",
+  "topic": "t401",
+  "type": "card",
+  "q": "State the subgradient update used to solve a Lagrangian dual when the constraints $Dx\\le d$ have been dualised, and name each ingredient.",
+  "difficulty": 2,
+  "a": "$$u_{k+1}=u_k-\\epsilon_k\\,\\frac{z(u_k)-\\underline z}{\\lVert d-Dx(u_k)\\rVert^2}\\,\\big(d-Dx(u_k)\\big)$$ where $x(u_k)$ solves the Lagrangian subproblem at $u_k$, $z(u_k)$ is its value (the current bound), $\\underline z$ is a known bound from the other side (e.g. the value of a feasible solution), $d-Dx(u_k)$ is a subgradient (the slack of the dualised constraints) and $\\epsilon_k$ is a step parameter. Multipliers of inequality constraints are kept nonnegative by projecting onto $u\\ge 0$.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 6.0.3 (p. 48)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-dp-712",
+  "topic": "t105e",
+  "type": "num",
+  "q": "Solve the knapsack problem $\\max\\ 4w+5x+3y+z$ subject to $5w+6x+4y+2z\\le 14$, $w,x\\in\\{0,1\\}$, $y,z\\in\\mathbb{Z}_+$. What is the optimal value?",
+  "difficulty": 2,
+  "answer": 11,
+  "explain": "$x=1$, $y=2$ uses the whole capacity ($6+8=14$) for a value of $5+6=11$. It is optimal: the LP relaxation (ratios $x$: 0.833, $w$: 0.8, $y$: 0.75, $z$: 0.5) gives $x=w=1$, $y=\\tfrac34$ with value $11.25$, so no integer solution exceeds 11. A DP over the capacities $0,\\dots,14$ (0-1 recursion for $w,x$, unbounded recursion for $y,z$) gives the same value.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 7.1.2 (p. 53)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-dp-713",
+  "topic": "t105e",
+  "type": "num",
+  "q": "Solve the integer knapsack problem $\\max\\ 5w+4x+7y+13z$ subject to $4w+4x+5y+9z\\le 13$, $w,x,y,z\\in\\mathbb{Z}_+$. What is the optimal value?",
+  "difficulty": 2,
+  "answer": 18,
+  "explain": "Unbounded-knapsack DP $f(\\lambda)=\\max_j\\{c_j+f(\\lambda-a_j)\\}$: $f(4)=5$, $f(5)=7$, $f(8)=10$, $f(9)=13$, and $f(13)=\\max\\{5+f(9),\\ 4+f(9),\\ 7+f(8),\\ 13+f(4)\\}=18$, attained by $w=1$, $z=1$ (weight 13). Consistent with the LP bound $13\\cdot\\tfrac{13}{9}\\approx 18.8$.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 7.1.3 (p. 53)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-dp-714",
+  "topic": "t105e",
+  "type": "num",
+  "q": "Solve the knapsack problem $\\max\\ 7w+9x+12y+3z$ subject to $5w+6x+8y+3z\\le 15$, $w,x,y\\in\\{0,1\\}$, $z\\in\\mathbb{Z}_+$. What is the optimal value?",
+  "difficulty": 2,
+  "answer": 21,
+  "explain": "$x=y=1$ (weight 14) gives $9+12=21$. The alternatives are worse: $w+y$: 19; $w+x+z$: 19; $y+2z$: 18; $x+3z$: 18; $w+3z$: 16; $5z$: 15; and $w+x+y$ does not fit ($19\\gt 15$). The LP bound is $21+\\tfrac15\\cdot 7=22.4$, so the DP (or this enumeration) is needed to exclude 22.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 7.1.4 (p. 54)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-dp-715-dual",
+  "topic": "t105e",
+  "type": "num",
+  "q": "A binary knapsack has five items with values $c=(3,4,6,5,8)$, weights $a=(412,507,714,671,920)$ and capacity $1794$. What is the optimal value?",
+  "difficulty": 2,
+  "answer": 14,
+  "explain": "Dual view: the total value is 26 and the total weight 3224, so items of total weight at least $3224-1794=1430$ must be left out, at minimum value. A DP over the value left out shows that value 11 can free at most weight 1385, while value 12 (items 1, 2, 4) frees 1590. Hence the optimum is $26-12=14$: take items 3 and 5 (weight 1634), the book's answer.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 7.1.5 (p. 54)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-dp-716",
+  "topic": "t105e",
+  "type": "num",
+  "q": "Solve by the dual knapsack technique: $\\max\\ 3w+4x+6y+8z$ subject to $412w+507x+714y+881z\\le 1394$, all variables binary. What is the optimal value?",
+  "difficulty": 2,
+  "answer": 12,
+  "explain": "Let $h(t)$ be the minimum weight needed to reach value at least $t$; then the optimum is $\\max\\{t:\\ h(t)\\le 1394\\}$. Here $h(12)=1388$ ($x$ and $z$: $507+881$) while $h(13)=1595$ ($y$ and $z$), so the optimum is 12. Equivalent 'leave-out' view: total value 21, total weight 2514; at least $2514-1394=1120$ must be left out, and the cheapest way is $w$ and $y$ (value 9, weight 1126), giving $21-9=12$. The table has 22 value states instead of 1395 capacity states.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 7.1.6 (p. 55)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-dp-duality",
+  "topic": "t105e",
+  "type": "short",
+  "q": "For a finite set $X\\subseteq\\mathbb{R}^n$ and vectors $c,a$, define $f(\\lambda)=\\max\\{c^Tx:\\ a^Tx\\le\\lambda,\\ x\\in X\\}$ and $h(t)=\\min\\{a^Tx:\\ c^Tx\\ge t,\\ x\\in X\\}$ (knapsack and 'dual knapsack'). Prove (a) $f(\\lambda)\\ge t$ if and only if $h(t)\\le\\lambda$, and (b) $f(\\lambda)=\\max\\{t:\\ h(t)\\le\\lambda\\}$. Why is (b) useful for knapsacks with large weights and small values?",
+  "difficulty": 3,
+  "model": "(a) If $f(\\lambda)\\ge t$, an optimal $x$ of $f(\\lambda)$ satisfies $a^Tx\\le\\lambda$ and $c^Tx\\ge t$; it is feasible for $h(t)$, so $h(t)\\le a^Tx\\le\\lambda$. Conversely, if $h(t)\\le\\lambda$, an optimal $x$ of $h(t)$ satisfies $c^Tx\\ge t$ and $a^Tx\\le\\lambda$; it is feasible for $f(\\lambda)$, so $f(\\lambda)\\ge c^Tx\\ge t$. (b) $f(\\lambda)=\\max\\{t:\\ f(\\lambda)\\ge t\\}$, and by (a) the condition $f(\\lambda)\\ge t$ can be replaced by $h(t)\\le\\lambda$. Use: $h(t)$ is computed by a DP indexed by the value $t$ (from 0 to $\\sum_jc_j$), so its size depends on the total value instead of the capacity; when the weights are large and the values small, this table is much smaller.",
+  "rubric": [
+   "($\\Rightarrow$) an optimal solution of $f(\\lambda)$ is feasible for $h(t)$ with weight at most $\\lambda$",
+   "($\\Leftarrow$) an optimal solution of $h(t)$ is feasible for $f(\\lambda)$ with value at least $t$",
+   "(b) obtained by substituting (a) into $f(\\lambda)=\\max\\{t: f(\\lambda)\\ge t\\}$",
+   "Application: DP over value states instead of capacity states"
+  ],
+  "explain": "The book gives only hints (argue with the optimal $x$, then inject (a) into the maximum); the proof above follows them.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 7.1.5 (p. 54)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-ls-recursion",
+  "topic": "t105e",
+  "type": "card",
+  "q": "Uncapacitated lot sizing with demands $d_t$, set-up costs $f_t$, unit production costs $p_t$ and unit holding costs $h_t$ (per unit in stock at the end of period $t$). State the dynamic-programming recursion for $H(k)$, the minimum cost of satisfying periods $1,\\dots,k$ with no stock left at the end of period $k$.",
+  "difficulty": 2,
+  "a": "$H(0)=0$ and $$H(k)=\\min_{1\\le t\\le k}\\Big\\{H(t-1)+f_t+p_t\\sum_{i=t}^{k}d_i+\\sum_{i=t}^{k-1}h_i\\sum_{j=i+1}^{k}d_j\\Big\\}.$$ Here $t$ is the last period with production: it produces the demands of periods $t,\\dots,k$, and the demand of period $j$ is carried in stock during periods $t,\\dots,j-1$. The optimal cost is $H(T)$. (Equivalently, fold the holding costs into the unit costs, $c_t=p_t+\\sum_{i\\ge t}h_i$, and use $H(k)=\\min_t\\{H(t-1)+f_t+c_t\\sum_{i=t}^{k}d_i\\}$, which differs from the true cost by a constant.)",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 7.2.1 (pp. 55-56)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-ls-721-opt",
+  "topic": "t105e",
+  "type": "num",
+  "q": "Lot sizing over 4 weeks: demands $d=(8,5,13,4)$, unit production costs $p=(1,1,1,2)$, set-up costs $f=(20,10,45,15)$ and holding cost $h_t=1$ per unit in stock at the end of each week. With $H(k)$ = minimum cost of covering weeks $1,\\dots,k$ with zero final stock, what is the minimum total cost $H(4)$?",
+  "difficulty": 2,
+  "answer": 81,
+  "explain": "$H(1)=20+8=28$. $H(2)=\\min\\{20+13+5,\\ 28+10+5\\}=38$. $H(3)=\\min\\{77,\\ 28+10+18+13,\\ 38+45+13\\}=69$. $H(4)=\\min\\{93,\\ 28+10+22+21,\\ 38+45+17+4,\\ 69+15+8\\}=\\min\\{93,81,104,92\\}=81$. Optimal plan: produce 8 in week 1 and 22 in week 2 (covering weeks 2 to 4). The book gives the recursion but not the numbers.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 7.2.1 (pp. 55-56)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-ls-721-folded",
+  "topic": "t105e",
+  "type": "num",
+  "q": "Lot sizing over 4 weeks: demands $d=(8,5,13,4)$, unit production costs $p=(1,1,1,2)$, set-up costs $f=(20,10,45,15)$ and holding cost $h_t=1$ per unit in stock at the end of each week. Fold the holding costs into the unit costs, $c_t=p_t+\\sum_{i=t}^{4}h_i=(5,4,3,3)$, and run $H'(k)=\\min_{1\\le t\\le k}\\{H'(t-1)+f_t+c_t\\sum_{i=t}^{k}d_i\\}$ with $H'(0)=0$; this gives $H'(4)=158$. Which constant must be subtracted from $H'(4)$ to obtain the true minimum cost (set-up + production + holding)?",
+  "difficulty": 3,
+  "answer": 77,
+  "explain": "With $s_t=\\sum_{i\\le t}x_i-\\sum_{i\\le t}d_i$, the holding cost is $\\sum_th_ts_t=\\sum_ix_i\\sum_{t\\ge i}h_t-\\sum_th_tD_t$, where $D_t$ is the cumulative demand $(8,13,26,30)$. The folded costs account for the first term; the constant is $\\sum_th_tD_t=8+13+26+30=77$, and $158-77=81$ is the true optimum. (Check: $H'(1)=60$, $H'(2)=85$, $H'(3)=142$, $H'(4)=60+10+4\\cdot 22=158$.)",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 7.2.1 (pp. 55-56)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-ls-722-opt",
+  "topic": "t105e",
+  "type": "num",
+  "q": "Lot sizing over 4 periods: demands $d=(5,2,7,3)$, set-up costs $f=(20,20,25,15)$, unit production costs $p=(3,3,4,2)$ and inventory cost $h_t=1$ per unit in stock at the end of each period. Using the dynamic program $H(k)$ = minimum cost of covering periods $1,\\dots,k$ with zero final stock, what is the minimum total cost?",
+  "difficulty": 2,
+  "answer": 96,
+  "explain": "$H(1)=20+15=35$. $H(2)=\\min\\{20+21+2,\\ 35+20+6\\}=43$. $H(3)=\\min\\{20+42+16,\\ 35+20+27+7,\\ 43+25+28\\}=\\min\\{78,89,96\\}=78$. $H(4)=\\min\\{20+51+25,\\ 35+20+36+13,\\ 43+25+40+3,\\ 78+15+6\\}=\\min\\{96,104,111,99\\}=96$. (Checked by enumerating the set-up patterns.)",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 7.2.2 (p. 56)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-ls-steel",
+  "topic": "t105e",
+  "type": "num",
+  "q": "A steel mill plans 12 weeks. Weekly demands (in units of 10 beams): $7,5,3,5,5,9,1,8,5,6,2,2$. Every week: set-up cost 16, production cost 2 per unit, storage cost 1 per unit in stock at the end of the week (costs in thousands of euros); no capacity limit, no initial or final stock. What is the minimum total cost?",
+  "difficulty": 3,
+  "answer": 224,
+  "explain": "Apply $H(k)=\\min_{t\\le k}\\{H(t-1)+16+2\\sum_{i=t}^{k}d_i+\\text{holding}\\}$: $H=(30,45,57,82,98,132,135,167,182,206,216,224)$. Optimal plan: produce in weeks 1 (15 units, for weeks 1-3), 4 (10, weeks 4-5), 6 (10, weeks 6-7), 8 (13, weeks 8-9) and 10 (10, weeks 10-12). Check: set-ups $5\\cdot 16=80$, production $2\\cdot 58=116$, holding $11+5+1+5+6=28$, total 224. (The book asks for the MILP only; solved here with the lot-sizing DP.)",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 2.1.4 (p. 16)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-ls-milp",
+  "topic": "t104",
+  "type": "short",
+  "q": "Uncapacitated lot sizing over periods $t=1,\\dots,T$ with demands $d_t$, set-up costs $f_t$, unit production costs $p_t$ and unit holding costs $h_t$. Write a MILP formulation and say which value of the big-M constant is advisable.",
+  "difficulty": 2,
+  "model": "Variables: $x_t\\ge 0$ production, $s_t\\ge 0$ stock at the end of period $t$, $y_t\\in\\{0,1\\}$ set-up. $$\\min\\sum_{t=1}^{T}\\big(f_ty_t+p_tx_t+h_ts_t\\big)\\quad\\text{s.t.}\\quad s_t=s_{t-1}+x_t-d_t\\ \\ (t=1,\\dots,T),\\quad s_0=0,\\quad x_t\\le M_t\\,y_t\\ \\ \\forall t.$$ Any $M_t\\ge\\sum_{\\tau=1}^{T}d_\\tau$ is valid (the book's choice), but $M_t=\\sum_{\\tau=t}^{T}d_\\tau$ (the demand still to be served from period $t$ on; no optimal plan produces more) gives a tighter LP relaxation.",
+  "rubric": [
+   "Production, stock and binary set-up variables",
+   "Objective: set-up + production + holding costs",
+   "Stock balance $s_t=s_{t-1}+x_t-d_t$ with $s_0=0$",
+   "Fixed-charge link $x_t\\le M_ty_t$",
+   "A valid and preferably tight big-M: $M_t=\\sum_{\\tau\\ge t}d_\\tau$"
+  ],
+  "explain": "This is the book's formulation (it prints the balance equations only for $t\\ge 2$; the equation for $t=1$ is needed as well). The big-M link is what makes the LP relaxation weak, hence the interest of tightening $M_t$ or of extended formulations.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 7.2.1 (p. 55)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-sp-tcsp-dp",
+  "topic": "t105a",
+  "type": "short",
+  "q": "Time-constrained shortest path: in a directed graph with travel times $c_{ij}\\ge 0$, node $i$ cannot be left before its opening time $r_i$ (arriving earlier means waiting). The traveller leaves node 1 at time 0 and wants to reach node $n$ as early as possible. Give a Bellman-Ford-type recursion for $t_k(j)$, the earliest time at which node $j$ can be passed using at most $k$ arcs, and say how the answer is obtained.",
+  "difficulty": 3,
+  "model": "Initialisation: $t_1(j)=\\max\\{r_j,\\ c_{1j}\\}$ if $(1,j)$ is an arc, and $+\\infty$ otherwise. For $k\\ge 2$: $$t_k(j)=\\max\\Big\\{r_j,\\ \\min\\big\\{t_{k-1}(j),\\ \\min_{i\\in\\delta^-(j)}\\{t_{k-1}(i)+c_{ij}\\}\\big\\}\\Big\\}.$$ The term $t_{k-1}(j)$ keeps the best path with fewer arcs; $t_{k-1}(i)+c_{ij}$ extends a best path to a predecessor $i$ (its waiting is already included); the outer maximum makes the traveller wait until $r_j$. After $k=|V|-1$ rounds, $t_k(n)$ is the minimum travel time. The principle of optimality holds because arriving earlier at a node is never worse.",
+  "rubric": [
+   "Initialisation from node 1 with $\\max\\{r_j, c_{1j}\\}$ (infinite if no arc)",
+   "Relaxation over the predecessors: $\\min_i\\{t_{k-1}(i)+c_{ij}\\}$, keeping $t_{k-1}(j)$",
+   "Waiting modelled by the maximum with $r_j$",
+   "Stops after $|V|-1$ rounds and reads $t(n)$"
+  ],
+  "explain": "It is Bellman-Ford with the label of each node clipped from below by its release time; the book presents it as a variation of the Bellman-Ford algorithm.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 7.3.1 (pp. 56-57)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-flow-921-value",
+  "topic": "t105c",
+  "type": "num",
+  "q": "Directed network with arc capacities $s\\to 1$: 8, $s\\to 3$: 1, $1\\to 2$: 4, $1\\to 3$: 3, $3\\to 2$: 4, $2\\to 3$: 2, $2\\to t$: 8, $3\\to t$: 1. What is the value of a maximum flow from $s$ to $t$?",
+  "difficulty": 2,
+  "answer": 8,
+  "explain": "Augment along $s$-3-$t$ (1 unit), $s$-1-2-$t$ (4 units) and $s$-1-3-2-$t$ (3 units): total 8, the book's answer. Certificate: the cut $S=\\{s,1\\}$ has capacity $c_{s3}+c_{12}+c_{13}=1+4+3=8$, so no larger flow exists.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 9.2.1 (p. 67)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-flow-921-ek",
+  "topic": "t105c",
+  "type": "mcq",
+  "q": "Directed network with arc capacities $s\\to 1$: 8, $s\\to 3$: 1, $1\\to 2$: 4, $1\\to 3$: 3, $3\\to 2$: 4, $2\\to 3$: 2, $2\\to t$: 8, $3\\to t$: 1. The shortest augmenting path algorithm (Edmonds-Karp) always augments along a path with the fewest arcs in the residual network. Which sequence of augmentations does it perform, starting from the zero flow?",
+  "difficulty": 2,
+  "options": [
+   "$s$-1-2-$t$ (4 units), then $s$-1-3-$t$ (1 unit), then $s$-3-2-$t$ (1 unit), then $s$-1-3-2-$t$ (2 units)",
+   "$s$-1-3-2-$t$ (3 units), then $s$-1-2-$t$ (4 units), then $s$-3-$t$ (1 unit)",
+   "$s$-3-$t$ (1 unit), then $s$-1-2-$t$ (4 units), then $s$-1-3-2-$t$ (3 units)",
+   "$s$-3-$t$ (1 unit), then $s$-1-2-$t$ (8 units)"
+  ],
+  "answer": 2,
+  "explain": "The only path with 2 arcs is $s$-3-$t$ (bottleneck 1); it saturates $s\\to 3$ and $3\\to t$. Among paths with 3 arcs, $s$-1-3-$t$ is now blocked and $s$-1-2-$t$ has bottleneck 4 (arc $1\\to 2$). The next shortest residual path has 4 arcs: $s$-1-3-2-$t$ with bottleneck 3 (arc $1\\to 3$). Then node 1 has no outgoing residual capacity: the flow of value 8 is maximum.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 9.2.1 (p. 67)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-flow-921-cut",
+  "topic": "t105c",
+  "type": "mcq",
+  "q": "Directed network with arc capacities $s\\to 1$: 8, $s\\to 3$: 1, $1\\to 2$: 4, $1\\to 3$: 3, $3\\to 2$: 4, $2\\to 3$: 2, $2\\to t$: 8, $3\\to t$: 1. The maximum flow value is 8. Which source side $S$ defines a minimum $s$-$t$ cut?",
+  "difficulty": 2,
+  "options": [
+   "$S=\\{s\\}$",
+   "$S=\\{s,1,3\\}$",
+   "$S=\\{s,1\\}$",
+   "$S=\\{s,1,2,3\\}$"
+  ],
+  "answer": 2,
+  "explain": "$S=\\{s,1\\}$: arcs leaving are $s\\to 3$ (1), $1\\to 2$ (4), $1\\to 3$ (3), capacity 8 = flow value. The others have capacity 9: $\\{s\\}$: $8+1$; $\\{s,1,3\\}$: $4+4+1$; $\\{s,1,2,3\\}$: $8+1$. $S=\\{s,1\\}$ is exactly the set of nodes reachable from $s$ in the final residual network.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 9.2.1 (p. 67)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-flow-fair",
+  "topic": "t105c",
+  "type": "short",
+  "q": "A village fair gathers $p$ families (family $i$ has $a_i$ members) around $q$ tables (table $j$ has $b_j$ seats). At most three members of the same family may sit at the same table. Model the question 'can everybody be seated?' as a maximum-flow problem.",
+  "difficulty": 2,
+  "model": "Nodes: a source $s$, one node per family, one node per table, a sink $t$. Arcs: $s\\to$ family $i$ with capacity $a_i$; family $i\\to$ table $j$ with capacity 3, for every pair $(i,j)$; table $j\\to t$ with capacity $b_j$. The flow on the arc (family $i$, table $j$) is the number of members of family $i$ seated at table $j$. Everybody can be seated if and only if the maximum flow equals $\\sum_ia_i$, i.e. all arcs out of the source are saturated; because the capacities are integers, there is an integral maximum flow, which gives the seating plan.",
+  "rubric": [
+   "Source, one node per family, one node per table, sink",
+   "Source-family arcs of capacity $a_i$ and table-sink arcs of capacity $b_j$",
+   "Family-table arcs of capacity 3",
+   "Feasible iff the max flow equals $\\sum_ia_i$ (integrality of the flow mentioned)"
+  ],
+  "explain": "The book only indicates the nodes (family $i$ sends $a_i$ units, table $j$ absorbs at most $b_j$); the arc capacities and the saturation test complete the model.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 9.1.1 (p. 65)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-flow-nurses",
+  "topic": "t105c",
+  "type": "num",
+  "q": "Nurses work one of three shifts in one of three departments. Bounds on the number of nurses per (shift, department): shift 1: Emergency 6 to 8, Neonatology 11 to 12, Orthopaedics 7 to 12; shift 2: 4 to 6, 11 to 12, 7 to 12; shift 3: 2 to 4, 10 to 12, 5 to 7. Each shift needs in total at least 26, 24 and 19 nurses respectively, and each department needs over the three shifts at least 13, 32 and 22 nurses respectively. Modelled as a minimum-flow problem (source to shifts to departments to sink, with lower bounds on the arcs), what is the minimum total number of nurses?",
+  "difficulty": 2,
+  "answer": 69,
+  "explain": "The shift requirements alone impose $26+24+19=69$ nurses (the department requirements only $13+32+22=67$). A plan with exactly 69 exists: shift 1: $(6,11,9)$; shift 2: $(5,11,8)$; shift 3: $(4,10,5)$; all cell bounds hold and the department totals are $15,32,22$. Hence the minimum flow is 69. The book only indicates the network (one node per shift and per department).",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 9.1.2 (pp. 65-66)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-flow-931-required",
+  "topic": "t105c",
+  "type": "num",
+  "q": "Feasible-flow problem with bounds $[l,u]$ on the arcs: $s\\to 1$ $[3,5]$; $s\\to 3$ $[0,2]$; $1\\to 2$ $[1,2]$; $1\\to 3$ $[0,7]$; $3\\to 2$ $[1,2]$; $2\\to t$ $[1,2]$; $3\\to t$ $[0,4]$. In the standard reduction to a maximum-flow problem, each arc gets capacity $u-l$, an arc $t\\to s$ of infinite capacity is added, every node $v$ with $b(v)=\\sum_{\\text{in}}l-\\sum_{\\text{out}}l\\gt 0$ receives an arc of capacity $b(v)$ from a super-source, and every node with $b(v)\\lt 0$ sends an arc of capacity $-b(v)$ to a super-sink. Which value must the maximum flow from the super-source to the super-sink reach for a feasible flow to exist?",
+  "difficulty": 2,
+  "answer": 4,
+  "explain": "$b(s)=-3$, $b(1)=3-1=+2$, $b(2)=(1+1)-1=+1$, $b(3)=0-1=-1$, $b(t)=+1$. The arcs out of the super-source have total capacity $2+1+1=4$ (equal to $3+1$ into the super-sink): a feasible flow exists iff the maximum flow is 4. It does: adding the lower bounds back gives for instance $s\\to 1$: 3, $1\\to 2$: 1, $1\\to 3$: 2, $3\\to 2$: 1, $2\\to t$: 2, $3\\to t$: 1, $s\\to 3$: 0.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 9.3.1 (pp. 67-68)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-flow-932-feasible",
+  "topic": "t105c",
+  "type": "short",
+  "q": "Directed graph with lower and upper bounds $[l,u]$ on the arcs: $0\\to 1$ $[3,7]$; $0\\to 2$ $[2,4]$; $2\\to 1$ $[1,7]$; $1\\to 3$ $[1,6]$; $1\\to 4$ $[2,3]$; $3\\to 4$ $[1,5]$; $3\\to 5$ $[0,10]$; $2\\to 4$ $[2,5]$; $4\\to 5$ $[0,10]$. Node 0 is the source and node 5 the sink. (a) Explain how a feasible flow can be found with a maximum-flow computation. (b) Give the node imbalances $b(v)=\\sum_{\\text{in}}l-\\sum_{\\text{out}}l$ and one feasible flow.",
+  "difficulty": 3,
+  "model": "(a) Give each arc the capacity $u-l$; add an arc $5\\to 0$ of infinite capacity; add a super-source $S^*$ with an arc $S^*\\to v$ of capacity $b(v)$ for every node with $b(v)\\gt 0$, and a super-sink $T^*$ with an arc $v\\to T^*$ of capacity $-b(v)$ for every node with $b(v)\\lt 0$. A feasible flow exists iff the maximum $S^*$-$T^*$ flow saturates all arcs out of $S^*$; the feasible flow is this flow plus the lower bounds. (b) $b(0)=-5$, $b(1)=(3+1)-(1+2)=+1$, $b(2)=2-(1+2)=-1$, $b(3)=1-1=0$, $b(4)=2+1+2=+5$, $b(5)=0$, so the maximum flow must equal 6. A feasible flow: $0\\to 1$: 3, $0\\to 2$: 3, $2\\to 1$: 1, $2\\to 4$: 2, $1\\to 3$: 2, $1\\to 4$: 2, $3\\to 4$: 1, $3\\to 5$: 1, $4\\to 5$: 5 (value 6).",
+  "rubric": [
+   "Reduced capacities $u-l$ and a return arc from the sink to the source",
+   "Super-source and super-sink arcs sized by the lower-bound imbalances",
+   "Feasibility criterion: all super-source arcs saturated (max flow 6)",
+   "Correct imbalances $(-5,+1,-1,0,+5,0)$",
+   "A flow satisfying all bounds and conservation at nodes 1 to 4"
+  ],
+  "explain": "Check of the proposed flow: node 1 receives $3+1=4$ and sends $2+2$; node 2 receives 3 and sends $1+2$; node 3 receives 2 and sends $1+1$; node 4 receives $2+1+2=5$ and sends 5. Exam question (January 2017) without printed solution.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 9.3.2 (p. 68)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-flow-lotsizing",
+  "topic": "t105c",
+  "type": "short",
+  "q": "A steel mill plans 12 weeks with weekly demands (in units of 10 beams) $7,5,3,5,5,9,1,8,5,6,2,2$. At most 100 beams (10 units) can be produced per week and at most 300 beams (30 units) can be kept in stock. Only a feasible production plan is wanted (no costs). Formulate this as a feasible-flow problem.",
+  "difficulty": 2,
+  "model": "Nodes: a source, one node per week $t=1,\\dots,12$, and a sink. Arcs: source $\\to t$ with capacity 10 (production of week $t$); $t\\to t+1$ for $t=1,\\dots,11$ with capacity 30 (stock carried from week $t$ to week $t+1$); $t\\to$ sink with lower bound = upper bound = $d_t$ (the demand of week $t$ must be delivered). Any feasible flow is a plan: the flow on source $\\to t$ is the production of week $t$. Equivalently, put capacity $d_t$ on the demand arcs and check that the maximum flow equals $\\sum_td_t=58$. (Here every $d_t\\le 10$, so producing each week's demand in that week is already feasible.)",
+  "rubric": [
+   "One node per week plus source and sink",
+   "Production arcs source $\\to t$ with capacity 10",
+   "Inventory arcs $t\\to t+1$ with capacity 30",
+   "Demand arcs $t\\to$ sink forced to carry $d_t$ (lower = upper bound, or saturation test with total 58)"
+  ],
+  "explain": "The book's hint is 'one node per time period'; flow conservation at the week nodes is exactly the stock-balance equation of lot sizing.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 9.1.3 (p. 66)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-flow-941-mincut",
+  "topic": "t105c",
+  "type": "num",
+  "q": "Undirected network (each edge can carry flow in either direction up to its capacity): $s$-1: 9, $s$-3: 6, 1-2: 4, 1-3: 3, 1-4: 5, 2-3: 3, 2-4: 4, 2-$t$: 3, 3-4: 2, 4-$t$: 9. What is the capacity of a minimum $(s,t)$-cut (equivalently, the value of a maximum flow)?",
+  "difficulty": 2,
+  "answer": 12,
+  "explain": "A flow of value 12: $s$-1-2-$t$ (3), $s$-1-4-$t$ (5), $s$-3-4-$t$ (2), $s$-3-2-4-$t$ (2). The cut separating $t$ from all other nodes has capacity $3+9=12$, so both are optimal (max-flow min-cut). Warning: the book prints $S=\\{s\\}$ as a minimum cut for this exercise, but with these capacities that cut is worth $9+6=15$; the value 12 was recomputed independently (max-flow computation and enumeration of all 16 cuts). The capacities were read from the book's figure, which has no arrowheads.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 9.4.1 (p. 69)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-match-1012-size",
+  "topic": "t105d",
+  "type": "num",
+  "q": "Bipartite graph with left vertices 1 to 6, right vertices 7 to 12 and edges 1-9, 1-11, 2-8, 2-10, 2-11, 3-7, 3-12, 4-9, 5-11, 6-11, 6-12. What is the size of a maximum matching?",
+  "difficulty": 2,
+  "answer": 5,
+  "explain": "$\\{1\\text{-}9,\\ 2\\text{-}8,\\ 3\\text{-}7,\\ 5\\text{-}11,\\ 6\\text{-}12\\}$ is a matching of size 5 (the book's answer). Size 6 is impossible: vertices 1, 4 and 5 only have neighbours in $\\{9,11\\}$, so at most two of them can be matched (Hall's condition fails).",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 10.1.2 (p. 72)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-match-1012-proof",
+  "topic": "t105d",
+  "type": "short",
+  "q": "Bipartite graph with left vertices 1 to 6, right vertices 7 to 12 and edges 1-9, 1-11, 2-8, 2-10, 2-11, 3-7, 3-12, 4-9, 5-11, 6-11, 6-12. The matching $M=\\{1\\text{-}9,\\ 2\\text{-}8,\\ 3\\text{-}7,\\ 5\\text{-}11,\\ 6\\text{-}12\\}$ leaves vertex 4 unmatched. Prove that $M$ is a maximum matching.",
+  "difficulty": 2,
+  "model": "<b>No augmenting path</b> (Berge's theorem). An augmenting path must start at the only exposed left vertex, 4. Its only neighbour is 9, which is matched to 1; from 1 the only other edge goes to 11, matched to 5; and 5 has no other neighbour. The alternating search is stuck before reaching an exposed right vertex (10 is exposed but adjacent only to 2). Hence there is no augmenting path and $M$ is maximum. <b>Other certificates:</b> $N(\\{1,4,5\\})=\\{9,11\\}$, so at most 2 of these 3 vertices can be matched and no matching has 6 edges; or the vertex cover $\\{2,3,6,9,11\\}$ of size $5=|M|$ (Konig's theorem).",
+  "rubric": [
+   "States the criterion: a matching is maximum iff there is no augmenting path (or uses a Hall / vertex-cover certificate)",
+   "Explores alternating paths from the exposed vertex 4: 4-9-1-11-5 and stops",
+   "Concludes that no exposed right vertex can be reached",
+   "(Alternative) gives $N(\\{1,4,5\\})=\\{9,11\\}$ or a vertex cover of size 5"
+  ],
+  "explain": "The book's justification is 'there are no remaining augmenting paths'; the alternating search from vertex 4 makes it explicit.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 10.1.2 (p. 72)",
+   "url": null,
+   "solution": "source"
+  }
+ },
+ {
+  "id": "x5-match-1013-size",
+  "topic": "t105d",
+  "type": "num",
+  "q": "Bipartite graph with left vertices 1 to 5, right vertices a to e and edges 1-b, 1-c, 2-b, 2-d, 3-d, 4-a, 4-c, 4-e, 5-c. What is the maximum cardinality of a matching?",
+  "difficulty": 2,
+  "answer": 4,
+  "explain": "A matching of size 4: $\\{1\\text{-}b,\\ 3\\text{-}d,\\ 4\\text{-}a,\\ 5\\text{-}c\\}$. Size 5 is impossible: the four vertices 1, 2, 3, 5 only have neighbours in $\\{b,c,d\\}$, so at most three of them can be matched. Equivalently $\\{b,c,d,4\\}$ is a vertex cover of size 4 (Konig).",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 10.1.3 (pp. 72-73)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-assign-1021",
+  "topic": "t105d",
+  "type": "num",
+  "q": "Find the maximum total weight of an assignment (exactly one entry in each row and each column) for the weight matrix $$C=\\begin{pmatrix}6&2&3&4&1\\\\9&2&7&6&0\\\\8&2&1&4&9\\\\2&1&3&4&4\\\\1&6&2&9&1\\end{pmatrix}.$$",
+  "difficulty": 2,
+  "answer": 32,
+  "explain": "For example rows 1 to 5 assigned to columns $1,3,5,4,2$: $6+7+9+4+6=32$; the assignments $(1,3,5,2,4)$ and $(2,1,5,3,4)$ also give 32, and no permutation does better (all 120 were enumerated). Warning: the solution printed in the book assigns rows 1 to 5 to columns $1,3,5,4,4$: it uses column 4 twice and never column 2, so it is not an assignment (a typo); replacing its last pair by (row 5, column 2) gives the optimal assignment above.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 10.2.1 (p. 73)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-assign-1022-eq",
+  "topic": "t105d",
+  "type": "num",
+  "q": "Consider $\\max\\sum_{i,j}c_{ij}x_{ij}$ where every row and every column must be assigned <b>exactly</b> once ($x$ binary), with $$C=\\begin{pmatrix}4&-2&-2&-1\\\\7&2&1&-3\\\\2&3&0&1\\\\5&3&3&-1\\end{pmatrix}$$ What is the optimal value?",
+  "difficulty": 2,
+  "answer": 12,
+  "explain": "The optimal assignment is row 1 to column 4 ($-1$), row 2 to column 1 (7), row 3 to column 2 (3), row 4 to column 3 (3): total 12. It is the unique optimum (the next best permutation is worth 10; all 24 were enumerated).",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 10.2.2 (pp. 73-74)",
+   "url": null,
+   "solution": "worked"
+  }
+ },
+ {
+  "id": "x5-assign-1022-ineq",
+  "topic": "t105d",
+  "type": "num",
+  "q": "Consider $\\max\\sum_{i,j}c_{ij}x_{ij}$ where every row and every column may be assigned <b>at most</b> once ($\\sum_ix_{ij}\\le 1$, $\\sum_jx_{ij}\\le 1$, $x$ binary), with $$C=\\begin{pmatrix}4&-2&-2&-1\\\\7&2&1&-3\\\\2&3&0&1\\\\5&3&3&-1\\end{pmatrix}$$ What is the optimal value?",
+  "difficulty": 2,
+  "answer": 13,
+  "explain": "Start from the optimal solution of the equality version (1 to 4, 2 to 1, 3 to 2, 4 to 3, value 12) and drop the pair with negative weight (row 1, column 4, weight $-1$): the remaining pairs 2-1, 3-2, 4-3 give $7+3+3=13$, with row 1 and column 4 unassigned. Enumeration of all partial assignments confirms that 13 is optimal. Relaxing equalities to inequalities can only increase the maximum.",
+  "source": {
+   "label": "Discrete Optimisation Exercises Book, ex. 10.2.2 (pp. 73-74)",
+   "url": null,
+   "solution": "worked"
+  }
+ }
+]

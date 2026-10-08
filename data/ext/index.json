@@ -1,0 +1,10 @@
+{
+  "files": [
+    { "file": "x1.json", "label": "Exams and problem sets found on the web, part A (MIT OCW, EPFL, Bonn, TU Delft, Politecnico di Milano, KTH and others)" },
+    { "file": "x2.json", "label": "Exams and problem sets found on the web, part B (TU Delft, TU Berlin, Iowa, Ohio, IISc, NTNU and others)" },
+    { "file": "x3.json", "label": "Decomposition, heuristics and solver practice, part A (KTH, Fisher, DM872, Gurobi/JuMP documentation and others)" },
+    { "file": "x4.json", "label": "Decomposition, heuristics and solver practice, part B (KTH, Chalmers, column-generation primer and others)" },
+    { "file": "x5.json", "label": "Discrete Optimisation Exercises Book (course Resources folder)" },
+    { "file": "x6.json", "label": "Library notes and slides (Rothvoss lecture notes, Martins & Ning ch. 8, IBM slides, Practical Guide)" }
+  ]
+}
