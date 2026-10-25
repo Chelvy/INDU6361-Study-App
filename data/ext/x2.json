@@ -780,7 +780,8 @@
    "label": "J. Larsen and J. Clausen (DTU), slides \"Branch and Cut for TSP\" (copy hosted in the SDU DM515 course folder)",
    "url": "https://www.imada.sdu.dk/u/jbj/DM515/tsp.pdf",
    "solution": "source"
-  }
+  },
+  "explain": "Course version (slides 203): the TSP there is directed, the row is $x(\\delta^+(S))\\ge1$ and counts only arcs leaving $S$, and a set is violated when its cut capacity is below $1-\\varepsilon$. The symmetric TSP of this source has degree 2 at every vertex, hence the threshold 2."
  },
  {
   "id": "x2-larsen-16city-run",
@@ -838,7 +839,8 @@
    "label": "IISc Bangalore CE 205A Transportation Logistics (T. Rambha) — Lecture 13, \"Cuts for TSPs – Part I\"",
    "url": "https://cistup.iisc.ac.in/tarun/CE_205A/Lecture_13.pdf",
    "solution": "worked"
-  }
+  },
+  "explain": "Course version (slides 203): the TSP there is directed, the row is $x(\\delta^+(S))\\ge1$ and counts only arcs leaving $S$, and a set is violated when its cut capacity is below $1-\\varepsilon$. The symmetric TSP of this source has degree 2 at every vertex, hence the threshold 2. In the directed course version one root is enough because of the degree equations: $\\bar x(\\delta^+(S))=\\bar x(\\delta^+(V\\setminus S))$, so a set that avoids the root has a complement that contains it."
  },
  {
   "id": "x2-iisc13-dfj-vs-mtz",
@@ -874,7 +876,7 @@
   "difficulty": 2,
   "q": "True or false: in branch-and-cut for the TSP, even when the LP solution at a node satisfies all subtour elimination constraints, after branching on a fractional variable the LP solutions at the child nodes may violate subtour constraints again, so separation has to be repeated there.",
   "answer": true,
-  "explain": "Only the subtour constraints generated so far are in the LP. After branching, the child LPs have new optimal solutions, which may violate subtour constraints that were never added; connectivity cuts are therefore separated again at the child nodes and added as lazy cuts.",
+  "explain": "Only the subtour constraints generated so far are in the LP. After branching, the child LPs have new optimal solutions, which may violate subtour constraints that were never added; connectivity cuts are therefore separated again at the child nodes and added as lazy cuts. In the course's terms (slides 202–203): a row found at a fractional child LP solution is a <b>user cut</b> (it strengthens the relaxation); a row that rejects an integer candidate is a <b>lazy constraint</b> (it enforces feasibility).",
   "source": {
    "label": "IISc Bangalore CE 205A Transportation Logistics (T. Rambha) — Lecture 13, \"Cuts for TSPs – Part I\"",
    "url": "https://cistup.iisc.ac.in/tarun/CE_205A/Lecture_13.pdf",
@@ -894,7 +896,7 @@
    "(c) a cycle avoiding city 1 would force $u$ to increase strictly around the cycle: contradiction",
    "Concludes that the solution is a single tour through city 1 (and that tours are feasible with $u$ = position)"
   ],
-  "explain": "The formulation is compact (order $n^2$ constraints) and needs no subtour constraints, but its LP relaxation is weak because of the big-M coefficient $n$.",
+  "explain": "The formulation is compact (order $n^2$ constraints) and needs no subtour constraints, but its LP relaxation is weak because of the big-M coefficient $n$. Slides 201: any $M\\ge n-1$ is valid and the slides take the smallest value, $M=n-1$; this source uses $M=n$, which is valid but never gives a stronger LP relaxation.",
   "source": {
    "label": "TU Berlin / ZIB \"Computational Integer Programming\" (WS 2011/12, Borndörfer / Koch) — Exercise sheet 3",
    "url": "https://www.zib.de/userpage/borndoerfer/Homepage/Documents/WS11/WS11-CIP-UE-03.pdf",
@@ -1351,7 +1353,7 @@
    "MTZ = GG, then MCF, then DFJ"
   ],
   "answer": 1,
-  "explain": "According to the survey, MCF projects exactly onto the DFJ polyhedron (they are equivalent); $P(\\mathrm{DFJ})$ is a proper subset of the projection of GG, which in turn is a proper subset of the projection of MTZ. The average LP gaps over ten ATSP instances in its Table 2 show the same order: Claus MCF $1.073\\,\\%$, Desrochers–Laporte lifted MTZ $4.691\\,\\%$, GG $6.825\\,\\%$, MTZ $7.389\\,\\%$.",
+  "explain": "According to the survey, MCF projects exactly onto the DFJ polyhedron (they are equivalent); $P(\\mathrm{DFJ})$ is a proper subset of the projection of GG, which in turn is a proper subset of the projection of MTZ. The average LP gaps over ten ATSP instances in its Table 2 show the same order: Claus MCF $1.073\\,\\%$, Desrochers–Laporte lifted MTZ $4.691\\,\\%$, GG $6.825\\,\\%$, MTZ $7.389\\,\\%$. In the course: slides 201 show that MCF and the cutset (DFJ) formulation give the same region after projection, and EXTRA-202 proves $z_{LP}^{MCF}\\ge z_{LP}^{MTZ}$ (with $M=n-1$); the two bounds can be equal on a particular instance.",
   "source": {
    "label": "T. Öncan, İ. K. Altınel, G. Laporte, \"A comparative analysis of several asymmetric traveling salesman problem formulations\", Computers & Operations Research 36 (2009) 637–654 (copy hosted on a University of Pavia course page)",
    "url": "https://mate.unipv.it/~gualandi/famo2conti/papers/tsp_formulations.pdf",
@@ -1666,7 +1668,7 @@
    "$x_1+x_3+(1-y_1)+4(1-y_3)\\le 7+x_6$"
   ],
   "answer": 2,
-  "explain": "$\\lambda=(3+6)-3-4=2$, which is positive, so $(C_1,C_2)$ is a generalized cover. Then $(a_1-\\lambda)^+=1$, $(a_3-\\lambda)^+=4$, $b+\\sum_{C_2}a_j=4+3=7$, $\\lambda\\sum_{L_2}y_j=2y_5$, and $N_2\\setminus(C_2\\cup L_2)=\\{6\\}$ contributes $x_6$. Numerical check over all 64 choices of $y$: the maximum of left-hand side minus right-hand side over the feasible $x$ is 0 (valid and tight), whereas each of the other three inequalities (forgetting to subtract $\\lambda$, forgetting $\\sum_{C_2}a_j$, dropping the term $\\lambda y_5$) is violated by a feasible point.",
+  "explain": "$\\lambda=(3+6)-3-4=2$, which is positive, so $(C_1,C_2)$ is a generalized cover. Then $(a_1-\\lambda)^+=1$, $(a_3-\\lambda)^+=4$, $b+\\sum_{C_2}a_j=4+3=7$, $\\lambda\\sum_{L_2}y_j=2y_5$, and $N_2\\setminus(C_2\\cup L_2)=\\{6\\}$ contributes $x_6$. Numerical check over all 64 choices of $y$: the maximum of left-hand side minus right-hand side over the feasible $x$ is 0 (valid and tight), whereas each of the other three inequalities (forgetting to subtract $\\lambda$, forgetting $\\sum_{C_2}a_j$, dropping the term $\\lambda y_5$) is violated by a feasible point. Notation: this source writes $x_j$ for the flow and $y_j$ for the on/off binary, the reverse of slides 206 ($y_j$ flow, $x_j$ binary); the capacities $a_j$ and the bound $b$ have the slides' letters.",
   "source": {
    "label": "IISc Bangalore CE 205A Transportation Logistics (T. Rambha) — Lecture 9, \"Valid Inequalities\"",
    "url": "https://cistup.iisc.ac.in/tarun/CE_205A/Lecture_9.pdf",
@@ -1697,7 +1699,8 @@
    "label": "IISc Bangalore CE 205A Transportation Logistics (T. Rambha) — Lecture 9, \"Valid Inequalities\"",
    "url": "https://cistup.iisc.ac.in/tarun/CE_205A/Lecture_9.pdf",
    "solution": "source"
-  }
+  },
+  "explain": "Notation: this source writes $f_0=b-\\lfloor b\\rfloor$ for the “$\\le$” row and divides by $1-f_0$. Slides 205 write the row as $z+u\\ge k+f$; for a “$\\le$” row their $f$ is $1-f_0=\\lceil b\\rceil-b$ (for $b=2.3$: $f_0=0.3$, slides' $f=0.7$)."
  },
  {
   "id": "x2-uw409-dantzig-bound",

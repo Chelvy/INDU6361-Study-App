@@ -1,7 +1,9 @@
 // Today: exam countdown, readiness, recommended session, mastery map.
 import { h, rich, pct } from '../util.js';
 import { store } from '../store.js';
-import { MODULES, topicsOfModule } from '../data/topics.js';
+import { MODULES, SCOPES, topicsOfModule } from '../data/topics.js';
+import { allExercises } from '../data/exercises/index.js';
+import { partKey, exercisesDue } from './exercises.js';
 import { buildPlan, readiness, effectiveMastery, masteryLabel, nextExam } from '../plan.js';
 import { dueCount, questionsForTopic, bankStats } from '../bank.js';
 import { hasLesson } from '../data/lessons/index.js';
@@ -55,6 +57,24 @@ export function render(root) {
   session.appendChild(ol);
   session.appendChild(h('p', { class: 'small muted', style: 'margin-top:.7rem' }, 'The list puts weak, heavily weighted topics first and schedules reviews by spaced repetition. Change the daily target in ', h('a', { href: '#/settings' }, 'Settings'), '.'));
   root.appendChild(session);
+
+  // ---- the instructor's exercise sheets
+  const inScope = new Set((SCOPES[plan.scopeId] || SCOPES.all).topics);
+  const exList = allExercises();
+  const started = (ex) => ex.parts.some((p, k) => state.questions[partKey(ex, k)]);
+  const fresh = exList.filter((ex) => !started(ex) && inScope.has(ex.topic));
+  const dueEx = exercisesDue();
+  const exCard = h('section', { class: 'card' });
+  exCard.appendChild(h('div', { class: 'row between' }, h('h2', { style: 'margin:0' }, 'Instructor’s exercises'), h('span', { class: 'chip' }, `${exList.filter(started).length} of ${exList.length} started`)));
+  if (dueEx) exCard.appendChild(h('p', null, `${dueEx} exercise part${dueEx === 1 ? ' is' : 's are'} due for review.`));
+  if (fresh.length) {
+    const nx = fresh[0];
+    exCard.appendChild(h('div', { class: 'row between', style: 'margin-top:.4rem' },
+      rich(`<b>Next:</b> ${nx.sheetTitle.split(' · ')[0]}, Exercise ${nx.label || nx.n} — ${nx.title}`, 'div'),
+      h('a', { class: 'btn primary', href: `#/exercises/${nx.sheet}/${nx.n}` }, 'Open')));
+  } else exCard.appendChild(h('p', { class: 'muted' }, 'Every exercise in the current scope has been tried. Revisit the ones you marked “Not yet”.'));
+  exCard.appendChild(h('p', { class: 'small muted', style: 'margin-top:.5rem' }, 'These are the instructor’s own practice sheets (10E, 20E), the closest material to the exam. ', h('a', { href: '#/exercises' }, 'See all exercises'), '.'));
+  root.appendChild(exCard);
 
   // ---- mastery map
   root.appendChild(h('h2', { style: 'margin-top:1.6rem' }, 'Mastery map'));

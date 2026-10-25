@@ -7,17 +7,18 @@ export default {
     {
       title: 'Definition and weak duality',
       html: R`
-<p>Slides 103 already gave the equality version: for $X=\{x\in X_0:\ Ax=b\}$ and any $\lambda$, $L(\lambda)=\min_{x\in X_0}\{c(x)+\lambda^\top(Ax-b)\}\le z^*$. The general minimisation form with inequalities:</p>
-$$z^*=\min\{c^\top x:\ Ax\ge b,\ x\in X\},\qquad L(u)=\min_{x\in X}\ c^\top x+u^\top(b-Ax),\qquad u\ge 0 .$$
-<p>$Ax\ge b$ are the <b>complicating</b> constraints; $X$ (which keeps integrality) is the “easy” set.</p>
-<div class="callout"><div class="callout-title">Weak duality</div>For every $u\ge 0$, $L(u)\le z^*$. Proof: take an optimal $x^*$. It lies in $X$, and $b-Ax^*\le 0$ with $u\ge 0$ gives $u^\top(b-Ax^*)\le 0$. So $L(u)\le c^\top x^*+u^\top(b-Ax^*)\le z^*$.</div>
+<p>Slides 103 already gave the equality version: for $X=\{x\in X_0:\ Ax=b\}$ and any unrestricted multiplier $\lambda$, $L(\lambda)=\min_{x\in X_0}\{c(x)+\lambda^\top(Ax-b)\}\le z^*$. Here $X$ is the original feasible set and $X_0$ is the <b>easy set</b> that remains when the difficult constraints are taken out. The general minimisation form with inequalities, in the same notation:</p>
+$$z^*=\min\{c^\top x:\ x\in X\},\quad X=\{x\in X_0:\ Ax\ge b\},\qquad L(u)=\min_{x\in X_0}\ c^\top x+u^\top(b-Ax),\qquad u\ge 0 .$$
+<p>$Ax\ge b$ are the <b>complicating</b> constraints; $X_0$ (which keeps integrality) is the easy set. For inequalities this lesson writes the multipliers as $u$, as Wolsey does; the Lagrangian trainer calls the same multiplier $\lambda$.</p>
+<div class="callout"><div class="callout-title">Weak duality</div>For every $u\ge 0$, $L(u)\le z^*$. Proof: take an optimal $x^*$. It lies in $X\subseteq X_0$, and $b-Ax^*\le 0$ with $u\ge 0$ gives $u^\top(b-Ax^*)\le 0$. So $L(u)\le c^\top x^*+u^\top(b-Ax^*)\le z^*$.</div>
 <table class="data-table left">
 <thead><tr><th>Dualised constraint (minimisation)</th><th>Penalty term</th><th>Multiplier</th></tr></thead>
 <tbody>
 <tr><td>$Ax\ge b$</td><td>$u^\top(b-Ax)$</td><td>$u\ge 0$</td></tr>
 <tr><td>$Ax\le b$</td><td>$u^\top(Ax-b)$</td><td>$u\ge 0$</td></tr>
-<tr><td>$Ax=b$</td><td>$u^\top(b-Ax)$</td><td>$u$ free</td></tr>
+<tr><td>$Ax=b$</td><td>$\lambda^\top(Ax-b)$ (slides 103)</td><td>$\lambda$ free</td></tr>
 </tbody></table>
+<p>For equalities you will also see $u^\top(b-Ax)$ with $u$ free. It is the same family of penalties: put $u=-\lambda$, which is allowed because neither multiplier has a sign restriction.</p>
 <p>Rule of thumb: a feasible point must never be penalised, so the penalty term is $\le 0$ on feasible points of a minimisation. For a maximisation everything flips: $L(u)$ is an <b>upper</b> bound and one minimises it.</p>`,
     },
     {
@@ -25,10 +26,10 @@ $$z^*=\min\{c^\top x:\ Ax\ge b,\ x\in X\},\qquad L(u)=\min_{x\in X}\ c^\top x+u^
       html: R`
 <p>The best bound is the <b>Lagrangian dual</b></p>
 $$w_{LD}=\max_{u\ge 0}L(u).$$
-<div class="callout"><div class="callout-title">Strength theorem</div>$$w_{LD}=\min\{c^\top x:\ Ax\ge b,\ x\in\operatorname{conv}(X)\}.$$ Hence $z_{LP}\le w_{LD}\le z^*$, and $w_{LD}=z_{LP}$ when the LP relaxation of $X$ already equals $\operatorname{conv}(X)$ (the <b>integrality property</b>).</div>
+<div class="callout"><div class="callout-title">Strength theorem</div>$$w_{LD}=\min\{c^\top x:\ Ax\ge b,\ x\in\operatorname{conv}(X_0)\}.$$ Hence $z_{LP}\le w_{LD}\le z^*$, and $w_{LD}=z_{LP}$ when the LP relaxation of $X_0$ already equals $\operatorname{conv}(X_0)$ (the <b>integrality property</b>).</div>
 <p>Consequences for the choice of what to dualise:</p>
 <ul>
-<li>If the subproblem over $X$ can be solved as an LP (network matrix, simple bounds), Lagrangian relaxation gives exactly the LP bound: no gain in strength, although the bound may be cheaper to compute.</li>
+<li>If the subproblem over $X_0$ can be solved as an LP (network matrix, simple bounds), Lagrangian relaxation gives exactly the LP bound: no gain in strength, although the bound may be cheaper to compute.</li>
 <li>To beat the LP bound the subproblem must be a genuinely integer problem that is still tractable (a knapsack, a spanning tree, a shortest path with a twist).</li>
 <li>The trade-off is always: an <b>easier</b> subproblem gives a <b>weaker</b> bound.</li>
 </ul>
@@ -37,13 +38,13 @@ $$w_{LD}=\max_{u\ge 0}L(u).$$
     {
       title: 'Shape of L and the subgradient method',
       html: R`
-<p>For each fixed $x\in X$, $c^\top x+u^\top(b-Ax)$ is linear in $u$; $L$ is the minimum of finitely many such functions, so it is <b>concave and piecewise linear</b>. It is not differentiable at the breakpoints, but a <b>subgradient</b> is always available for free:</p>
+<p>For each fixed $x\in X_0$, $c^\top x+u^\top(b-Ax)$ is linear in $u$; $L$ is the minimum of finitely many such functions, so it is <b>concave and piecewise linear</b>. It is not differentiable at the breakpoints, but a <b>subgradient</b> is always available for free:</p>
 $$g=b-Ax(u),\qquad x(u)\ \text{an optimal solution of the subproblem at } u .$$
 <div class="callout move"><div class="callout-title">Subgradient iteration</div>
 <ol>
 <li>Solve the subproblem at $u^k$: get $x^k$ and the bound $L(u^k)$. Keep the best bound.</li>
 <li>Compute $g^k=b-Ax^k$. If $g^k\le 0$ (so $x^k$ is feasible) and $u^{k\top}g^k=0$, then $x^k$ is optimal: stop.</li>
-<li>Update $u^{k+1}=\max\{0,\ u^k+\mu_kg^k\}$ (no projection for equality constraints).</li>
+<li>Update $u^{k+1}=\max\{0,\ u^k+\mu_kg^k\}$ (no projection for equality constraints written as $u^\top(b-Ax)$ with $u$ free).</li>
 </ol></div>
 <p>Reading the update: a violated constraint ($g_i\gt 0$) gets a higher price, an over-satisfied one a lower price. Step sizes: any sequence with $\mu_k\to 0$ and $\sum_k\mu_k=\infty$ converges; in practice $\mu_k=\varepsilon_k\,\dfrac{\bar w-L(u^k)}{\|g^k\|^2}$ with a target value $\bar w$ (for example the best known primal value) and $0\lt\varepsilon_k\le 2$, halved when the bound stalls. $L(u^k)$ does <b>not</b> increase monotonically.</p>`,
     },

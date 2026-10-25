@@ -160,11 +160,16 @@ export function plotFigure(p) {
   };
   p.cons.forEach((k) => drawLine(k, `con-line ${k.cls || ''}`));
   (p.extra || []).forEach((k) => drawLine(k, `cut-line ${k.cls || ''}`));
-  // integer lattice
+  // integer lattice (lattice:false for mixed-integer plots, which draw feasible segments instead)
   const feasible = (x, y) => all.every((k) => num(k.a) * x + num(k.b) * y <= num(k.c) + 1e-9);
-  for (let i = 0; i <= Math.floor(xmax); i++) for (let j = 0; j <= Math.floor(ymax); j++) {
-    root.appendChild(s('circle', { cx: X(i), cy: Y(j), r: feasible(i, j) ? 3.6 : 2, class: feasible(i, j) ? 'lattice in' : 'lattice out' }));
+  if (p.lattice !== false) {
+    for (let i = 0; i <= Math.floor(xmax); i++) for (let j = 0; j <= Math.floor(ymax); j++) {
+      root.appendChild(s('circle', { cx: X(i), cy: Y(j), r: feasible(i, j) ? 3.6 : 2, class: feasible(i, j) ? 'lattice in' : 'lattice out' }));
+    }
   }
+  (p.segments || []).forEach((g) => {
+    root.appendChild(s('line', { x1: X(num(g.x1)), y1: Y(num(g.y1)), x2: X(num(g.x2)), y2: Y(num(g.y2)), class: `seg ${g.cls || ''}` }));
+  });
   (p.marks || []).forEach((m) => {
     const x = num(m.x), y = num(m.y);
     root.appendChild(s('circle', { cx: X(x), cy: Y(y), r: 6, class: `mark ${m.cls || ''}` }));

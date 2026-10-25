@@ -4,6 +4,8 @@ import m1a from './bank/m1a.js';
 import m1b from './bank/m1b.js';
 import m2a from './bank/m2a.js';
 import m2b from './bank/m2b.js';
+import m2c from './bank/m2c.js';
+import m2d from './bank/m2d.js';
 import m3 from './bank/m3.js';
 
 // Options are rotated by an amount derived from the question id, so that the position of the correct option
@@ -18,4 +20,4 @@ function rotate(q) {
   return { ...q, options: q.options.map((_, i) => q.options[(i + k) % n]), answer: (q.answer - k + n) % n };
 }
 
-export const CORE = [].concat(m1a, m1b, m2a, m2b, m3).map(rotate);
+export const CORE = [].concat(m1a, m1b, m2a, m2b, m2c, m2d, m3).map(rotate);

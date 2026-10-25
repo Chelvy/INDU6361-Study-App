@@ -2,7 +2,7 @@ const R = String.raw;
 
 export default {
   id: 't105a',
-  lead: R`Not every discrete problem needs a general MIP solver. A problem has <b>structure</b> when properties of its feasible solutions let us avoid generic enumeration. Shortest paths with nonnegative lengths are the first example: Dijkstra's algorithm solves them in polynomial time, and its trace is a standard exam exercise.`,
+  lead: R`Not every discrete problem needs a general MIP solver. A problem has <b>structure</b> when properties of its feasible solutions let us avoid generic enumeration. Shortest paths with nonnegative lengths are the first example: Dijkstra's algorithm solves them in polynomial time, and the solved exercises (10E) practise its trace step by step.`,
   sections: [
     {
       title: 'Well-solved problems: the big picture',
@@ -35,7 +35,7 @@ export default {
 <li>Repeat until no unsettled vertex has a finite distance.</li>
 </ol>
 <p>Follow predecessors backwards to recover a shortest path. Unreachable vertices keep distance $\infty$.</p>
-<div class="callout"><div class="callout-title">Exam tie rules (solved exercises)</div>When several unsettled vertices have the same smallest label, select them <b>alphabetically</b>. Change a predecessor only when the label <b>strictly</b> improves (the test in step 3 is “$\lt$”).</div>`,
+<div class="callout"><div class="callout-title">Tie rules stated in the solved exercises (10E)</div>“Tie rules: select vertices alphabetically when labels tie. Change a predecessor only when its label strictly improves.” So when several unsettled vertices have the same smallest label, take them in <b>alphabetical</b> order, and keep the old predecessor on an equal label (the test in step 3 is “$\lt$”).</div>`,
     },
     {
       title: 'The lecture example',
@@ -76,8 +76,9 @@ export default {
 <tr><td>$t$</td><td>4</td><td>4</td><td>2</td><td>4</td><td>7</td></tr>
 </tbody></table>
 <p>Points the solution insists on: when $c$ is selected, $d_b$ drops from 7 to 4 and $p_b$ changes from $s$ to $c$; then $d_a=d_b=4$ and $a$ goes first by the alphabetical rule, where $\min\{4,4+1\}=4$ keeps $p_b=c$. The zero-length arc $b\to d$ gives $d_d=4$: a zero-length arc can give consecutive selected vertices the same distance. At $d$, the arc $(d,a)$ is skipped because $a$ is already permanent (its candidate $4+1=5$ would not improve $d_a$ anyway), and $4+3\lt 12$ changes $p_t$ to $d$. Final predecessors: $p_a=s$, $p_b=c$, $p_c=s$, $p_d=b$, $p_t=d$. The directed cycle $a\to b\to d\to a$ has length 2, so going around it can never shorten a path.</p>
-<p><b>Exercise 1B.</b> Reverse every arc and run Dijkstra from $t$: the order is $t,d,b,a,c,s$ and $d_s=7$ along $t\to d\to b\to c\to s$. Reversing all arcs turns “shortest paths <i>to</i> $t$ from everywhere” into a single run from $t$.</p>
-<p>Both are in the trainer, graded step by step with the same tie rules.</p>`,
+<p><b>Exercise 1B.</b> <b>Reversing</b> an arc turns $u\to v$ into $v\to u$ with the same length. “In the original graph, $t$ has no outgoing arcs, so reversing the arcs is essential for this run.” Run Dijkstra from $t$ on the reversed graph: the order is $t,d,b,a,c,s$ and $d_s=7$ along $t\to d\to b\to c\to s$ ($3+0+2+2$). Labels now measure distance from $t$ in the reversed graph, which equals the distance to $t$ in the original graph. Reversing all arcs turns “shortest paths <i>to</i> $t$ from everywhere” into a single run from $t$.</p>
+<p>Point to watch: the predecessor of $s$ changes twice. Selecting $b$ gives $d_s=3+7=10$ with $p_s=b$; selecting $a$ gives $\min\{10,4+4\}=8$ with $p_s=a$; selecting $c$ gives $\min\{8,5+2\}=7$ with $p_s=c$. When $a$ is selected, the arc $(a,d)$ is skipped because $d$ is already permanent.</p>
+<p>Full worked solutions: <a href="#/exercises/10e/1">sheet 10E, exercise 1</a> and <a href="#/exercises/10e/2">exercise 1B</a>. Both are also in the trainer, graded step by step with the same tie rules.</p>`,
     },
   ],
   moves: [

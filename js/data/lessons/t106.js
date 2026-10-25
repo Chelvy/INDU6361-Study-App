@@ -9,7 +9,10 @@ export default {
       html: R`
 <div class="callout"><div class="callout-title">Definition</div>A polyhedron $P$ is <b>integral</b> when $P=\operatorname{conv}(P\cap\mathbb{Z}^n)$. For a nonempty polytope this is equivalent to: <b>all extreme points are integer</b>.</div>
 <p>If an LP has an integral feasible polyhedron and a finite optimum, at least one optimal solution is integer, and an optimal <b>extreme point</b> gives it. An arbitrary point of an optimal <b>face</b> can still be fractional.</p>
-<p><b>Example: rank assignment with two jobs</b> and $c_1=c_2=1$. Every feasible rank assignment has value $1+2=3$. Both permutation matrices are optimal, and so is their average:</p>
+<p>The slides open with the workshop example of deck 102 (numbers as in lesson 104): the natural relaxation has root UB 51.3, adding $x+y\le 6$ gives 49.65, and the integer hull gives 42, whose LP optimum $(2,4)$ is already the integer optimum.</p>
+<p><b>Rank assignment</b> (slides 106, as in lesson 104): $y_{ik}=1$ if job $i$ gets rank $k$, and</p>
+$$\min\sum_{i=1}^n\sum_{k=1}^n k\,c_i\,y_{ik}\quad\text{s.t.}\quad\sum_{k=1}^ny_{ik}=1\ \ (i=1,\dots,n),\qquad\sum_{i=1}^ny_{ik}=1\ \ (k=1,\dots,n),\qquad y_{ik}\in\{0,1\}.$$
+<p><b>Example: two jobs</b> and $c_1=c_2=1$. Every feasible rank assignment has value $1+2=3$. Both permutation matrices are optimal, and so is their average:</p>
 $$\tfrac12\begin{pmatrix}1&0\\0&1\end{pmatrix}+\tfrac12\begin{pmatrix}0&1\\1&0\end{pmatrix}=\begin{pmatrix}\tfrac12&\tfrac12\\\tfrac12&\tfrac12\end{pmatrix}.$$
 <p>The two permutation matrices are integer optimal vertices; the fractional average lies between them on the same optimal face. Either vertex supplies a rank assignment. A formulation with the integrality property “can be solved without branch and bound”.</p>`,
     },
@@ -21,7 +24,7 @@ $$\tfrac12\begin{pmatrix}1&0\\0&1\end{pmatrix}+\tfrac12\begin{pmatrix}0&1\\1&0\e
 <li>This is a statement about the problem, not about every algorithm. The <b>simplex method</b> moves between adjacent extreme points and is very effective in practice (bases, warm starts, sensitivity information), but standard pivot rules have examples that visit exponentially many extreme points: no polynomial worst-case guarantee.</li>
 <li>Modern solvers offer simplex variants and polynomial-time <b>interior-point</b> methods, with extensive preprocessing.</li>
 </ul>
-<p>Consequence: “integral polyhedron” really does mean “solvable in polynomial time”.</p>`,
+<p><b>What this gives, and what it does not.</b> If the formulation has polynomially many constraints and its polyhedron is integral, the integer problem is solvable in polynomial time: solve the LP with a polynomial-time method and take an optimal extreme point, which is integer. Integrality alone is <b>not</b> enough: the convex hull of the TSP tours is an integral polyhedron (every extreme point is a tour), yet the TSP is not solved this way, because describing that hull takes far too many inequalities. <i>(This summary is ours, beyond the slides; slides 201 show that even the subtour family alone has $2^n-n-2$ rows.)</i></p>`,
     },
     {
       title: 'Network flow models',
@@ -35,7 +38,8 @@ $$\min\sum_{(i,j)\in A}u_{ij}y_{ij}\qquad\text{s.t.}\qquad y_{ij}\ge z_i-z_j,\qu
 <p>An arc leaving $S$ has $z_i-z_j=1$ and forces $y_{ij}\ge 1$, so its capacity is charged; for every other arc the right-hand side is $0$ or $-1$ and $y_{ij}=0$ is allowed.</p>
 <p>In the example, $S=\{s,a\}$ means $z_s=z_a=1$, $z_b=z_t=0$; the outgoing arcs are $(s,b),(a,b),(a,t)$ and the objective is $2+1+2=5$.</p>
 <div class="callout"><div class="callout-title">Max-flow / min-cut theorem</div>The maximum flow value equals the minimum $s$–$t$ cut capacity. Here a flow of value 5 and a cut of capacity 5 prove optimality on both sides.</div>
-<p>This theorem is reused in slides 203: a fractional TSP solution $\bar x$ supplies the arc capacities, and a cut of capacity below 1 identifies a violated connectivity inequality.</p>
+<p class="small muted">Our check (beyond the slides): here the minimum cut is not unique. The source sides $\{s\}$, $\{s,a\}$ and $\{s,a,b\}$ all give capacity 5 ($\{s,b\}$ gives 6); the slides use $S=\{s,a\}$.</p>
+<p>The theorem is used again in slides 201 (“From cutsets to flows”: the capacities $x_{ij}$ support one unit of flow from vertex 1 to $k$) and in slides 203, where a fractional TSP solution $\bar x$ supplies the arc capacities and a cut of capacity below 1 identifies a violated connectivity inequality.</p>
 <h3>Network-flow integrality</h3>
 <p>With <b>integer</b> supplies, demands and capacities, the feasible polyhedron of the minimum-cost flow formulation is integral, so every linear objective with a finite optimum has an integer optimal solution. This covers assignment, transportation, shortest path and many flow problems.</p>
 <p><b>Lab 106</b> shows both sides. A 10-arc network sending 5 units has LP optimum = IP optimum = 25 with an integer flow. Changing a single capacity to the fractional value 2.5 gives an LP optimum of 27.5 with fractional flows, while the integer optimum is 30: integer data is part of the hypothesis.</p>`,
@@ -46,7 +50,7 @@ $$\min\sum_{(i,j)\in A}u_{ij}y_{ij}\qquad\text{s.t.}\qquad y_{ij}\ge z_i-z_j,\qu
 <div class="callout"><div class="callout-title">Definition and theorem</div>A matrix is <b>totally unimodular</b> (TU) if every square submatrix has determinant $0$, $1$ or $-1$. If $A$ is TU and $b$ is integer, then $\{x:\ Ax\le b,\ x\ge 0\}$ is integral.</div>
 <p>TU is one <i>sufficient</i> condition for the integrality property. A sufficient condition for TU itself, as taught:</p>
 <div class="callout move"><div class="callout-title">Recognition criterion</div>A matrix is TU if every coefficient is in $\{-1,0,1\}$ <b>and</b> every column contains at most one $+1$ and at most one $-1$.</div>
-<p>It applies immediately to the node–arc incidence matrix of a directed network. For the arcs $sa,sb,ab,at,bt$ with the inflow-minus-outflow convention:</p>
+<p>It applies immediately to the node–arc incidence matrix of a directed network. For the arcs $sa,sb,ab,at,bt$ the slides “use the inflow-minus-outflow incidence convention (the negative of the earlier balance equations)”, which were written as outflow minus inflow. Multiplying a whole matrix by $-1$ multiplies every $k\times k$ subdeterminant by $(-1)^k$: at most its sign changes, so total unimodularity is not affected (our remark).</p>
 <table class="data-table">
 <thead><tr><th>Node</th><th>$sa$</th><th>$sb$</th><th>$ab$</th><th>$at$</th><th>$bt$</th></tr></thead>
 <tbody>
@@ -82,11 +86,12 @@ $$\min\sum_{(i,j)\in A}u_{ij}y_{ij}\qquad\text{s.t.}\qquad y_{ij}\ge z_i-z_j,\qu
     R`“The LP solution is fractional, so the polyhedron is not integral.” A point on an optimal face may be fractional; integrality is about <b>extreme points</b>.`,
     R`Assuming a model keeps the integrality property after a side constraint is added.`,
     R`Saying “LP is polynomial because simplex is polynomial”. Polynomiality of LP comes from the ellipsoid (and interior-point) methods.`,
+    R`“Integral polyhedron, therefore polynomial-time.” That needs a formulation of polynomial size as well; an integral polyhedron with exponentially many rows gives no such guarantee.`,
     R`Counting arcs entering $S$ in a cut: in the min-cut IP they have $z_i-z_j=-1$ and are not charged.`,
   ],
   refs: [
-    R`Slides 106, <i>The Integrality Property</i> (T. Schettini), all 23 pages.`,
+    R`Slides 106, <i>The Integrality Property</i> (T. Schettini), all 23 pages, and the reading version <code>106-integrality-property.reading.html</code> (same text).`,
     R`Lab 106, network-flow integrality (min-cost flow with integer and fractional capacities).`,
-    R`L. A. Wolsey, <i>Integer Programming</i>, 2nd ed., chapter 3; Ahuja, Magnanti and Orlin, <i>Network Flows</i>.`,
+    R`Cited on the slides: L. A. Wolsey, <i>Integer Programming</i>, 2nd ed., chapters 1–3; Ahuja, Magnanti and Orlin, <i>Network Flows</i> (1993); A. Schrijver, <i>Combinatorial Optimization</i> (2003).`,
   ],
 };

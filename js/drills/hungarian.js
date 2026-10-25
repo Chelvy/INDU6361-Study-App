@@ -57,10 +57,13 @@ function build(inst) {
       matrixTable(before, { ...heads, cls: zeroCls(before, assignBefore) }),
       `Current assignment: ${assignBefore.some((j) => j >= 0) ? assignBefore.map((j, i) => (j >= 0 ? `${W(i)}→${J(j)}` : null)).filter(Boolean).join(', ') : 'none yet'}.`,
     );
+    const resumeText = `Resume the search from ${W(ev.root)}: keep the reached workers $S$, the reached jobs $T$ and the tree, and continue through the new zero(s) in the reached rows (reached workers in the order they were reached, jobs in numerical order).`;
     if (ev.type === 'stall') {
       steps.push({
-        title: `Search from ${W(ev.root)} stalls`,
-        text: () => frag(context(), `Search from the unassigned worker ${W(ev.root)} through zero reduced costs (jobs in numerical order), returning along existing assignments. The search reaches no free job. Give the reached sets and the label update.`),
+        title: ev.resumed ? `Resumed search from ${W(ev.root)} stalls again` : `Search from ${W(ev.root)} stalls`,
+        text: () => frag(context(), ev.resumed
+          ? `${resumeText} The search still reaches no free job. Give the reached sets and the next label update.`
+          : `Search from the unassigned worker ${W(ev.root)} through zero reduced costs (jobs in numerical order), returning along existing assignments. The search reaches no free job. Give the reached sets and the label update.`),
         fields: [
           { type: 'set', label: 'Reached workers $S$', answer: ev.S.map((i) => `w${i + 1}`), placeholder: 'e.g. W1, W2', expected: setText(ev.S.map(W)) },
           { type: 'set', label: 'Reached jobs $T$', answer: ev.T.map((j) => `j${j + 1}`), placeholder: 'e.g. J2', expected: setText(ev.T.map(J)) },
@@ -82,15 +85,17 @@ function build(inst) {
       const pathShown = ev.path.map((p) => (p.kind === 'W' ? W(p.index) : J(p.index))).join(' → ');
       const direct = ev.pairs.length === 1;
       steps.push({
-        title: `Search from ${W(ev.root)} reaches a free job`,
-        text: () => frag(context(), `Search from ${W(ev.root)} through zeros (jobs in numerical order), returning along existing assignments. Give the alternating path to the first free job reached, and the assignment after reversing along it.`),
+        title: ev.resumed ? `Resumed search from ${W(ev.root)} reaches a free job` : `Search from ${W(ev.root)} reaches a free job`,
+        text: () => frag(context(), ev.resumed
+          ? `${resumeText} Give the alternating path from ${W(ev.root)} to the first free job reached, and the assignment after reversing along it.`
+          : `Search from ${W(ev.root)} through zeros (jobs in numerical order), returning along existing assignments. Give the alternating path to the first free job reached, and the assignment after reversing along it.`),
         fields: [
           { type: 'seq', label: 'Alternating path', answer: path, expected: pathShown, placeholder: direct ? `e.g. ${W(ev.root)} - J1` : 'e.g. W3 - J1 - W1 - J2' },
           vecField('Job of each worker afterwards (0 if unassigned)', 'W', ev.jobOf.map((j) => j + 1)),
         ],
         explain: direct
           ? `${W(ev.root)} has a zero at the free job ${J(ev.pairs[0][1])}, so it is assigned at once.`
-          : `The path is ${pathShown}. Reversing along it adds ${ev.pairs.map(([i, j]) => `${W(i)}${J(j)}`).join(', ')} and removes the assignments it passes back through, so one more worker is assigned.`,
+          : `${ev.resumed ? 'The new zero extends the search. ' : ''}The path is ${pathShown}. Reversing along it adds ${ev.pairs.map(([i, j]) => `${W(i)}${J(j)}`).join(', ')} and removes the assignments it passes back through, so one more worker is assigned.`,
       });
       assign = ev.jobOf.slice();
     }
@@ -110,7 +115,7 @@ function build(inst) {
   return {
     id: 'hungarian', topic: 't105d', title: inst.title || 'Hungarian method',
     statement: () => frag('Assign each worker to exactly one job and each job to exactly one worker at <b>minimum total cost</b>. Rows are workers, columns are jobs.', matrixTable(cost, { ...heads, corner: '$c_{ij}$' })),
-    rules: 'Apply row then column reductions. Assign workers in numerical order; search zero reduced-cost pairs by BFS, visiting jobs in numerical order. When a search stalls, update the labels and search again from the same worker. (The slides sometimes pick the obvious zeros first and only then search; the order changes the intermediate steps, not the optimal cost.)',
+    rules: 'Apply row then column reductions. Assign workers in numerical order; search zero reduced-cost pairs by BFS, visiting jobs in numerical order. When a search stalls, update the labels and <b>resume</b> the same search: keep the reached workers $S$, the reached jobs $T$ and the tree, and continue from the new zero(s), scanning the reached workers in the order they were reached (solved exercise 4; slides 105: “update the reduced costs and resume it”). (The slides sometimes pick the obvious zeros first and only then search; the order changes the intermediate steps, not the optimal cost.)',
     steps,
     wrapup: 'Original cost = ∑u + ∑v + total reduced cost for every complete assignment, so a complete assignment on zeros attains the lower bound. A stalled search exhibits more workers than zero-cost jobs (|S| = |T| + 1), which is why the labels must change.',
   };

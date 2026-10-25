@@ -40,7 +40,7 @@ export function render(root) {
     const left = h('div');
     left.appendChild(h('div', { class: 'row', style: 'margin-bottom:.3rem' },
       topic ? h('span', { class: 'chip blue' }, topic.short) : null,
-      h('span', { class: 'chip' }, m.kind === 'drill' ? 'Trainer' : 'Question'),
+      h('span', { class: 'chip' }, m.kind === 'drill' ? 'Trainer' : m.kind === 'exercise' ? 'Exercise sheet' : 'Question'),
       h('span', { class: 'muted small' }, ago(m.when)),
       typeof m.score === 'number' ? h('span', { class: 'muted small' }, `scored ${Math.round(m.score * 100)}%`) : null));
     left.appendChild(rich(m.title || '', 'h4'));
@@ -57,6 +57,8 @@ export function render(root) {
         if (m.meta && (m.meta.seed || m.meta.preset)) right.appendChild(h('a', { class: 'btn small', href: hrefForMeta(m.meta) }, 'Same instance'));
         right.appendChild(h('a', { class: 'btn small primary', href: `#/train/${d.id}?level=${(m.meta && m.meta.level) || 2}&seed=${newSeed()}` }, 'Fresh instance'));
       }
+    } else if (m.kind === 'exercise') {
+      right.appendChild(h('a', { class: 'btn small primary', href: `#/exercises/${m.ref}` }, 'Try again'));
     } else {
       right.appendChild(h('a', { class: 'btn small primary', href: `#/bank?q=${encodeURIComponent(m.ref)}` }, 'Try again'));
     }

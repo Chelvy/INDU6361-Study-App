@@ -1,4 +1,5 @@
-// Tangent (gradient) cuts and perspective cuts for the extra lecture E201.
+// Tangent (gradient) cuts and perspective cuts for the extra lecture EXTRA-201 "Nonlinear Cutting Planes"
+// (formerly E201; the slide text and numbers are unchanged).
 import { Frac, ZERO, ONE } from './frac.js';
 
 const fr = (v) => Frac.of(v);
@@ -36,8 +37,9 @@ export function solveTangentMaster(cuts, lo, hi) {
 }
 
 /**
- * Kelley / outer-approximation refinement on a one-variable convex quadratic (slides E201, pp. 12-21).
- * Returns the initial cuts and one record per master solve: x, L (master bound), f(x), violation, U (best cost so far).
+ * Tangent relaxation refinement (the slides' name; Kelley's method / outer approximation in textbooks)
+ * on a one-variable convex quadratic (slides EXTRA-201, pp. 12-21).
+ * Returns the initial cuts and one record per master solve: x, L (master bound), f(x), violation f(x) - L, U (best cost so far).
  */
 export function kelley(f, lo, hi, startPoints, iterations) {
   const cuts = startPoints.map((a) => tangentCut(f, a));

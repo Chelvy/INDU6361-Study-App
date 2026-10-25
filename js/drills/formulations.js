@@ -12,7 +12,8 @@ const YN = [{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }];
 function buildBigM(inst) {
   const { a, lo, hi, b } = inst;
   const n = a.length;
-  const names = a.map((_, j) => `x${j + 1}`);
+  const idx = inst.index || a.map((_, j) => j + 1); // subscripts of the variables (a preset may keep the slides' numbering)
+  const names = idx.map((k) => `x${k}`);
   const pick = a.map((aj, j) => (aj >= 0 ? hi[j] : lo[j]));
   const contrib = a.map((aj, j) => aj * pick[j]);
   const maxLhs = contrib.reduce((s, v) => s + v, 0);
@@ -28,7 +29,7 @@ function buildBigM(inst) {
       title: 'Largest possible left-hand side',
       text: `Over the box, each term $a_j x_j$ is maximised separately: take the upper bound when $a_j \\gt 0$ and the lower bound when $a_j \\lt 0$.`,
       fields: [
-        { type: 'table', label: 'Value of $x_j$ that maximises $a_jx_j$, and the term it gives', corner: '', columns: names.map((nm, j) => ({ key: `k${j}`, head: `$x_{${j + 1}}$`, kind: 'num', plain: nm })),
+        { type: 'table', label: 'Value of $x_j$ that maximises $a_jx_j$, and the term it gives', corner: '', columns: names.map((nm, j) => ({ key: `k${j}`, head: `$x_{${idx[j]}}$`, kind: 'num', plain: nm })),
           rows: [{ head: 'best $x_j$', cells: Object.fromEntries(pick.map((v, j) => [`k${j}`, v])) }, { head: '$a_jx_j$', cells: Object.fromEntries(contrib.map((v, j) => [`k${j}`, v])) }] },
         { type: 'num', label: '$\\max_{x\\in X_0} a^\\top x$', answer: maxLhs },
       ],
@@ -55,14 +56,15 @@ function buildBigM(inst) {
         { type: 'num', label: `Largest $z$ with a loose $M=${loose}$`, answer: zLoose },
         { type: 'choice', label: 'Which value of $M$ gives the stronger LP relaxation?', options: [{ value: 'tight', label: `$M=${M}$` }, { value: 'loose', label: `$M=${loose}$` }, { value: 'same', label: 'They are equally strong' }], answer: 'tight' },
       ],
-      explain: `From $a^\\top\\bar x\\le b+M(1-z)$: $z\\le 1-\\dfrac{a^\\top\\bar x-b}{M}$. With $M=${M}$: $z\\le ${zTight.toLatex()}$; with $M=${loose}$: $z\\le ${zLoose.toLatex()}$. The loose constant lets the relaxation keep $z$ almost at 1 while violating the constraint, so its feasible region is larger and its bound is weaker. Both formulations have the same integer solutions.`,
+      explain: `From $a^\\top\\bar x\\le b+M(1-z)$: $z\\le 1-\\dfrac{a^\\top\\bar x-b}{M}$. With $M=${M}$: $z\\le ${zTight.toLatex()}$; with $M=${loose}$: $z\\le ${zLoose.toLatex()}$. The loose constant lets the relaxation keep a larger fractional $z$ at a point that violates the constraint, so its feasible region is larger and its bound is weaker. Both formulations have the same integer solutions.`,
     });
   }
   return {
     id: 'bigm', topic: 't104', title: inst.title || 'Smallest valid big-M',
     statement: () => frag(
       `A binary variable $z$ must switch a constraint on: $$z=1\\ \\Rightarrow\\ ${linTex(a, names)}\\le ${b}.$$ The variables live in the box $X_0$:`,
-      dataTable(['Variable'].concat(names.map((_, j) => `$x_{${j + 1}}$`)), [['Lower bound'].concat(lo), ['Upper bound'].concat(hi), ['Coefficient $a_j$'].concat(a)], 'compact'),
+      dataTable(['Variable'].concat(idx.map((k) => `$x_{${k}}$`)), [['Lower bound'].concat(lo), ['Upper bound'].concat(hi), ['Coefficient $a_j$'].concat(a)], 'compact'),
+      inst.note || null,
     ),
     rules: 'Model the implication as $a^\\top x\\le b+M(1-z)$ and use the smallest valid constant.',
     steps,
@@ -90,7 +92,12 @@ function randomBigM(rng, level) {
 export const bigMDrill = {
   id: 'bigm', title: 'Smallest valid big-M', topic: 't104', minutes: 5,
   blurb: 'Compute M* from variable bounds, write the on/off constraint, and see what a loose M does to the relaxation.',
-  presets: [{ id: 'basic', label: 'Two-variable example', make: () => ({ a: [2, 3], lo: [0, 0], hi: [4, 5], b: 12, delta: 5, loose: 100, title: 'Smallest valid big-M — worked example' }) }],
+  presets: [
+    { id: 'basic', label: 'Two-variable example', make: () => ({ a: [2, 3], lo: [0, 0], hi: [4, 5], b: 12, delta: 5, loose: 100, title: 'Smallest valid big-M — worked example' }) },
+    // Slides 104, exclusive production: x2 <= M2 (1 - z) is the implication z = 1 => x2 <= 0 with 0 <= x2 <= 5.
+    // The loose constant 10 is M2 = 5 alpha with alpha = 2 (HTML slider).
+    { id: 'exclusive2', label: 'Exclusive production, product 2 (slides 104)', make: () => ({ a: [1], lo: [0], hi: [5], b: 0, index: [2], delta: 5, loose: 10, note: '<p>Slides 104, exclusive production: $0\\le x_1\\le 6$, $0\\le x_2\\le 5$, $x_1\\le M_1z$, $x_2\\le M_2(1-z)$. The row $x_2\\le M_2(1-z)$ says “if $z=1$, then $x_2\\le 0$”. (The row for product 1 has the opposite form: if $z=0$, then $x_1\\le 0$.) The loose constant $10$ is $M_2=5\\alpha$ with $\\alpha=2$.</p>', title: 'Smallest valid big-M — exclusive production, product 2 (slides 104)' }) },
+  ],
   random: (rng, level) => ({ ...randomBigM(rng, level), title: 'Smallest valid big-M — practice' }),
   build: buildBigM,
 };
@@ -129,8 +136,9 @@ function buildFixed(inst) {
           { type: 'num', label: 'Right-hand side $My$ at this point', answer: M.mul(ybar) },
           { type: 'choice', label: 'Is the point feasible for the LP relaxation?', options: YN, answer: 'yes' },
           { type: 'choice', label: 'Is it feasible for the integer problem?', options: YN, answer: ybar.isInt() ? 'yes' : 'no' },
+          { type: 'num', label: `With a looser constant $M=${P(M.mul(2))}$ (that is $M=${P(M)}\\alpha$ with $\\alpha=2$), the smallest $y$ the LP relaxation allows at $q=${P(qbar)}$`, answer: qbar.div(M.mul(2)), mis: [{ value: ybar, msg: 'That is the value for the smallest $M$. A larger $M$ lets $y$ go lower: $y\\ge q/M$.' }] },
         ],
-        explain: `$q+t=${P(lhs)}\\le ${A}$, $q+${beta}t=${P(qbar.add(fr(beta * tbar)))}\\le ${B}$ and $q=${P(qbar)}\\le My=${P(M.mul(ybar))}$: every constraint holds, so the relaxation accepts it. It pays only ${ybar.toLatex()} of the set-up cost while producing, which is why the LP bound is too optimistic.`,
+        explain: `$q+t=${P(lhs)}\\le ${A}$, $q+${beta}t=${P(qbar.add(fr(beta * tbar)))}\\le ${B}$ and $q=${P(qbar)}\\le My=${P(M.mul(ybar))}$: every constraint holds, so the relaxation accepts it. It pays only $${ybar.toLatex()}$ of the set-up cost while producing, which is why the LP bound is too optimistic. The constraint $q\\le My$ only asks $y\\ge q/M$, so with $M=${P(M.mul(2))}$ the LP may take $y=${P(qbar)}/${P(M.mul(2))}=${qbar.div(M.mul(2)).toLatex()}$: the larger $M$, the smaller the share of the set-up cost the LP pays (the $\\alpha$ slider of slides 104).`,
       },
       {
         title: 'Derive a valid inequality',
@@ -138,9 +146,9 @@ function buildFixed(inst) {
         fields: [
           { type: 'num', label: 'Largest $q+t$ when $y=0$', answer: T0 },
           { type: 'num', label: 'Largest $q+t$ when $y=1$', answer: T1 },
-          { type: 'ineq', label: 'Inequality $q+t\\le \\alpha+\\beta y$ that is tight in both cases', answer: cutText, answerText: cutText, order: ['q', 't', 'y'], placeholder: 'e.g. q + t <= 4 + 2y' },
+          { type: 'ineq', label: 'Inequality $q+t\\le c_0+c_1 y$ that is tight in both cases', answer: cutText, answerText: cutText, order: ['q', 't', 'y'], placeholder: 'e.g. q + t <= 4 + 2y' },
         ],
-        explain: `If $y=0$ then $q=0$ and $t\\le\\min\\{${A},\\ ${B}/${beta}\\}=${P(T0)}$. If $y=1$ the best is $q+t=${P(T1)}$. The line through the two cases is $q+t\\le ${P(T0)}+${P(slope)}y$; it holds for every integer solution, so it is a valid inequality.`,
+        explain: `If $y=0$ then $q=0$ and $t\\le\\min\\{${A},\\ ${B}/${beta}\\}=${P(T0)}$. If $y=1$ the best is $q+t=${P(T1)}$. The line through the two cases is $q+t\\le ${P(T0)}+${P(slope)}y$ (so $c_0=${P(T0)}$ and $c_1=${P(slope)}$); it holds for every solution with $y\\in\\{0,1\\}$, so it is a valid inequality.`,
       },
       {
         title: 'Does it cut off the fractional point?',

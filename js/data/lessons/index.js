@@ -24,12 +24,13 @@ import t402 from './t402.js';
 import t403 from './t403.js';
 import t001 from './t001.js';
 import t002 from './t002.js';
+import t003 from './t003.js';
 import t501 from './t501.js';
 
 const LESSONS = Object.fromEntries([
   t101, t102, t103, t104, t105a, t105b, t105c, t105d, t105e, t106,
   t201, t202, t203, t204, t205, t206a, t206b, t206c, tE201,
-  t301, t401, t402, t403, t001, t002, t501,
+  t301, t401, t402, t403, t001, t002, t003, t501,
 ].map((l) => [l.id, l]));
 
 export const getLesson = (id) => LESSONS[id] || null;

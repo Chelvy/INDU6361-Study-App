@@ -2,7 +2,7 @@ const R = String.raw;
 
 export default {
   id: 't105b',
-  lead: R`A minimum spanning tree connects all vertices of an undirected weighted graph at minimum total weight. The greedy rule “take the cheapest edge that does not close a cycle” is optimal, and the reason (the cut property) is as examinable as the trace.`,
+  lead: R`A minimum spanning tree connects all vertices of an undirected weighted graph at minimum total weight. The greedy rule “take the cheapest edge that does not close a cycle” is optimal; learn the reason (the cut property) as well as the trace.`,
   sections: [
     {
       title: "Kruskal's algorithm",
@@ -15,7 +15,7 @@ export default {
 <li>Stop after selecting $n-1$ edges, or after examining every edge.</li>
 </ol>
 <p>For a connected graph the result is a minimum spanning tree; for a disconnected graph, a minimum spanning forest.</p>
-<div class="callout"><div class="callout-title">Exam conventions (solved exercises)</div>Edges of equal weight are examined in alphabetical order of their names. For every edge examined, say “accept” or “reject”, and for a rejection name the cycle it would close. Edges after the $(n-1)$-th acceptance need not be examined.</div>`,
+<div class="callout"><div class="callout-title">Conventions stated in the solved exercises (10E)</div>“Break equal-weight ties alphabetically by edge name.” The solutions record every acceptance or rejection and name the cycle a rejected edge would close. They stop as soon as $n-1$ edges are accepted (exercise 2: “Stop after accepting $n-1=4$ edges”); later edges need not be examined.</div>`,
     },
     {
       title: 'The lecture example',
@@ -49,12 +49,13 @@ export default {
     {
       title: 'Solved exercises 2 and 2B',
       html: R`
-<p><b>Exercise 2.</b> Edges $ab\,(1)$, $ac\,(2)$, $bc\,(2)$, $bd\,(4)$, $cd\,(3)$, $ce\,(5)$, $de\,(3)$, $ae\,(8)$. Kruskal with alphabetical ties accepts $ab$, $ac$, rejects $bc$ (cycle $a,b,c$), accepts $cd$ and $de$: tree $\{ab,ac,cd,de\}$ of weight 9.</p>
+<p><b>Exercise 2.</b> Edges $ab\,(1)$, $ac\,(2)$, $bc\,(2)$, $bd\,(4)$, $cd\,(3)$, $ce\,(5)$, $de\,(3)$, $ae\,(8)$. Kruskal with alphabetical ties accepts $ab$, $ac$, rejects $bc$ (it would close the cycle $a,b,c,a$), accepts $cd$ and $de$: tree $\{ab,ac,cd,de\}$ of weight 9.</p>
 <ul>
 <li><b>Not unique:</b> swapping $ac$ for $bc$ (both weight 2) gives another tree of weight 9.</li>
 <li><b>Lower-bound argument from the solution:</b> every spanning tree on 5 vertices needs 4 edges. The four smallest weights sum to $1+2+2+3=8$, but any four-edge selection of weight 8 contains the cycle $ab,ac,bc$. So weight 8 is impossible; with integer weights the bound is 9, and the tree attains it.</li>
 </ul>
 <p><b>Exercise 2B.</b> A $2\times4$ grid ($a,b,c,d$ on top, $e,f,g,h$ below) with edges $ab\,1$, $ef\,2$, $ae\,3$, $bf\,4$, $bc\,5$, $fg\,6$, $cg\,7$, $cd\,8$, $gh\,9$, $dh\,10$, $bg\,11$, $cf\,12$. Result: $\{ab,ef,ae,bc,fg,cd,gh\}$ with weight 34, unique because all weights are distinct.</p>
+<p>The two rejections: $bf$ (4) would close the cycle $b,a,e,f,b$, and $cg$ (7) would close $c,b,a,e,f,g,c$. The weight so far runs $1,3,6,6,11,17,17,25,34$. After $gh$ the tree has $7=n-1$ edges, so $dh$, $bg$ and $cf$ are never examined. Full worked solutions: <a href="#/exercises/10e/3">sheet 10E, exercise 2</a> and <a href="#/exercises/10e/4">exercise 2B</a>.</p>
 <p><b>Lab 105b</b> uses different data: edges $ab\,1$, $de\,2$, $ef\,3$, $df\,4$, $bc\,5$, $ac\,6$, $bd\,7$, $cd\,8$, $ce\,9$, with minimum weight 18 (Kruskal accepts $ab,de,ef,bc,bd$; Prim from $a$ adds $ab,bc,bd,de,ef$).</p>`,
     },
   ],

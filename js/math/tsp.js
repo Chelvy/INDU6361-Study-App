@@ -5,7 +5,8 @@ import { edmondsKarp } from './graphs.js';
 const fr = (v) => Frac.of(v);
 
 // succ: array where succ[i] is the successor of vertex i (vertices 1..n, index 0 unused).
-// Cycles are listed starting from the smallest unvisited vertex, as in lab 202a.
+// Lab 202a: "Follow these arcs until reaching a visited vertex, then restart from an unvisited vertex."
+// Restarting from the SMALLEST unvisited vertex is this app's convention (it fixes the listing order).
 export function cyclesFromSuccessor(succ) {
   const n = succ.length - 1;
   const seen = new Array(n + 1).fill(false);

@@ -12,15 +12,18 @@ import { cgDrill, gomoryDrill, mirDrill } from './cutdrills.js';
 import { coversDrill, liftingDrill, cliqueDrill, flowCoverDrill, lotDrill } from './covers.js';
 import { kelleyDrill, perspectiveDrill } from './convexdrills.js';
 import { twoOptDrill, lagrangeDrill, bendersDrill, pricingDrill } from './later.js';
+import { surrogateDrill } from './surrogate.js';
+import { facetsDrill } from './facets.js';
+import { mcfMtzDrill } from './proofs.js';
 
 export const DRILLS = [
-  bbDrill, gapsDrill,
+  bbDrill, gapsDrill, surrogateDrill,
   bigMDrill, fixedChargeDrill, uflDrill,
   dijkstra, kruskalDrill, primDrill, maxflow, hungarian, knapsackdp,
   tuDrill, cutDrill,
-  subtourDrill, mtzDrill, rowGenDrill, fracSepDrill,
+  subtourDrill, mtzDrill, mcfMtzDrill, rowGenDrill, fracSepDrill,
   cgDrill, gomoryDrill, mirDrill,
-  cliqueDrill, coversDrill, liftingDrill, flowCoverDrill, lotDrill,
+  cliqueDrill, coversDrill, liftingDrill, facetsDrill, flowCoverDrill, lotDrill,
   kelleyDrill, perspectiveDrill,
   twoOptDrill, lagrangeDrill, bendersDrill, pricingDrill,
 ];

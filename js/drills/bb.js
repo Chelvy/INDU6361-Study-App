@@ -69,7 +69,9 @@ function buildBB(inst) {
   const res = branchAndBound(model, { incumbent: incPoint ? { x: incPoint } : undefined, branchRule: inst.branchRule || 'first' });
   if (res.status !== 'optimal') throw new Error(res.status === 'infeasible' ? 'The LP relaxation is infeasible.' : 'The search tree is too large for this trainer.');
   const root = res.nodes[0];
-  if (!res.log.some((L) => L.action.startsWith('branch on'))) throw new Error('The LP relaxation is already integral: there is nothing to branch on.');
+  // Slides 102, "What if the LP optimum is integer?": then it is optimal and there is nothing to branch on.
+  const rootIntegral = root.fate === 'integral';
+  if (!rootIntegral && !res.log.some((L) => L.action.startsWith('branch on'))) throw new Error('The root node is closed without branching: there is nothing to practise.');
   const incVal0 = incPoint ? incPoint.reduce((s, v, j) => s.add(fr(model.c[j]).mul(fr(v))), fr(0)) : null;
   const steps = replay(res, incVal0);
   const order = inst.branchRule === 'last' ? [...names].reverse() : names;
@@ -85,7 +87,8 @@ function buildBB(inst) {
     cons: model.rows.map((r) => ({ a: r.a[0], b: r.a[1], c: r.b })), extra: extra || [],
     marks, caption: 'Shaded: LP relaxation. Large dots: feasible integer points.',
   });
-  const nodeLines = (nd) => (nd.lp.status === 'optimal' ? [`#${nd.id}   ${P(nd.bound)}`, `(${nd.lp.x.map((v) => P(v)).join(', ')})`] : [`#${nd.id}`, 'infeasible']);
+  // As on the slides' trees: a node shows its upper bound (UB); a leaf that becomes the incumbent shows LB.
+  const nodeLines = (nd) => (nd.lp.status === 'optimal' ? [`#${nd.id}  ${nd.newIncumbent ? 'LB' : 'UB'} ${P(nd.bound)}`, `(${nd.lp.x.map((v) => P(v)).join(', ')})`] : [`#${nd.id}`, 'INFEASIBLE']);
   const edgeText = (nd) => (nd.branch ? `${names[nd.branch.var]} ${nd.branch.op === '<=' ? '≤' : '≥'} ${nd.branch.val}` : '');
   const tree = (status, cur, caption) => treeFigure(
     res.nodes.filter((nd) => status[nd.id] !== undefined).map((nd) => ({
@@ -113,10 +116,15 @@ function buildBB(inst) {
         { type: 'num', label: 'Primal bound from the incumbent, $z_P$', answer: incVal0 },
         { type: 'num', label: 'Relative gap $|z_P-z_D|/|z_P|$ in %', answer: pctOf(g0), tol: 0.06, suffix: '%', mis: [{ value: root.bound.sub(incVal0).div(root.bound).mul(100), msg: 'Divide by the incumbent value $|z_P|$, not by the bound.' }] },
       ] : []),
+      ...(rootIntegral ? [{ type: 'choice', stack: true, label: 'Do we need to branch?', answer: 'no', options: [
+        { value: 'no', label: 'No. The LP optimum is integer, so it is feasible, and the LP proves that nothing is better: it is optimal.' },
+        { value: 'yes', label: 'Yes. Branch and bound always branches at least once to prove optimality.' },
+      ], mis: { yes: 'An integer LP optimum is already a feasible point whose value equals the upper bound: lower and upper bound are equal.' } }] : []),
     ],
     explain: () => frag(
-      `The LP optimum is $(${root.lp.x.map((v) => v.toLatex()).join(',\\ ')})$ with value $${root.bound.toLatex()}$${root.bound.isInt() ? '' : ` $= ${P(root.bound)}$`}. It is fractional, so it is only an upper bound.`,
-      incVal0 !== null ? ` The incumbent gives $z_P=${P(incVal0)}$, so $${P(incVal0)}\\le z^*\\le ${P(root.bound)}$ and the gap is $(${P(root.bound)}-${P(incVal0)})/${P(incVal0)}=${pctTex(g0)}$.` : '',
+      `The LP optimum is $(${root.lp.x.map((v) => v.toLatex()).join(',\\ ')})$ with value $${root.bound.toLatex()}$${root.bound.isInt() ? '' : ` $= ${P(root.bound)}$`}. `,
+      rootIntegral ? `It is <b>integer</b>, so it is feasible for the integer problem, and no integer point can have a higher value. The lower and upper bounds are equal ($z_P=z_D=${P(root.bound)}$): this point is optimal and we do not need to branch (slides 102, “What if the LP optimum is integer?”).` : 'It is fractional, so it is only an upper bound.',
+      incVal0 !== null ? ` The ${rootIntegral ? 'known point gave' : 'incumbent gives'} $z_P=${P(incVal0)}$, so $${P(incVal0)}\\le z^*\\le ${P(root.bound)}$ and the gap is $(${P(root.bound)}-${P(incVal0)})/${P(incVal0)}=${pctTex(g0)}$.${rootIntegral && root.bound.gt(incVal0) ? ' The integer LP optimum is better, so it becomes the incumbent and the gap closes.' : ''}` : '',
       plot([{ x: root.lp.x[0], y: root.lp.x[1], cls: 'lp', label: 'LP' }].concat(incPoint ? [{ x: incPoint[0], y: incPoint[1], cls: 'opt', label: 'incumbent' }] : [])),
     ),
   });
@@ -164,7 +172,7 @@ function buildBB(inst) {
         kids.forEach((kid, i) => {
           const where = `Node ${kid.id} ($${names[kid.branch.var]} ${kid.branch.op === '<=' ? '\\le' : '\\ge'} ${kid.branch.val}$)`;
           if (kid.lp.status !== 'optimal') lines.push(`${where}: the LP is infeasible, so the node is closed.`);
-          else lines.push(`${where}: LP optimum $(${kid.lp.x.map((x) => P(x)).join(', ')})$ with value ${P(kid.bound)} — <b>${outText[outcome[i]]}</b>${outcome[i] === 'bound' ? ` (${P(kid.bound)} ≤ incumbent ${P(s.incAfter)})` : ''}.`);
+          else lines.push(`${where}: LP optimum $(${kid.lp.x.map((x) => P(x)).join(', ')})$ with value ${P(kid.bound)} — <b>${outText[outcome[i]]}</b>${outcome[i] === 'bound' ? ` (${P(kid.bound)} ≤ incumbent ${P(s.incAfter)})` : ''}${outcome[i] === 'integral-old' ? `. Its value is not better than the incumbent ${P(s.incAfter)}, so the bound test would also close it. (In the workshop trees of slides 102 and 104 such a node is drawn as “UB 41”, and the reading versions say it closes by bound.) This trainer files every integer LP optimum under integrality, as the slides' fathoming table does: “update the incumbent if it improves”` : ''}.`);
         });
         if (s.otherClosed.length) lines.push(`The new incumbent ${P(s.incAfter)} also closes node${s.otherClosed.length > 1 ? 's' : ''} ${s.otherClosed.join(', ')} by bound.`);
         return frag(ul(lines), tree(s.after, null, `After this step. Incumbent value: ${s.incAfter === null ? 'none' : P(s.incAfter)}`));
@@ -181,11 +189,12 @@ function buildBB(inst) {
       ...(optima.length === 1 ? names.map((nm, j) => ({ type: 'num', label: `Optimal $${nm}$`, answer: res.incumbent.x[j] })) : []),
       { type: 'int', label: 'Nodes in the tree (root included)', answer: res.nodes.length },
       { type: 'int', label: 'Leaves closed by infeasibility', answer: count('infeasible') },
-      { type: 'int', label: 'Leaves closed by integrality', answer: count('integral') },
-      { type: 'int', label: 'Leaves closed by bound', answer: count('bound') },
+      { type: 'int', label: 'Leaves whose LP optimum is integer', answer: count('integral') },
+      { type: 'int', label: '<b>Fractional</b> leaves closed by bound', answer: count('bound') },
     ],
     explain: () => frag(
       `$z^*=${P(best)}$ at $(${res.incumbent.x.map((x) => P(x)).join(', ')})$${optima.length > 1 ? ` (other optimal points: ${optima.filter((p) => !p.every((v, j) => fr(v).eq(res.incumbent.x[j]))).map((p) => `(${p.join(', ')})`).join(', ')})` : ''}. Every leaf is closed for one of the three reasons, so no unexplored region can contain a better integer point: the tree is the optimality certificate.`,
+      res.nodes.some((nd) => nd.fate === 'integral' && !nd.newIncumbent) ? ` An integer leaf that does not improve the incumbent (node ${res.nodes.filter((nd) => nd.fate === 'integral' && !nd.newIncumbent).map((nd) => nd.id).join(', ')}) passes both the integrality test and the bound test. The slides' fathoming table files it under integrality, so it is counted here with the integer leaves; the count of fractional leaves closed by bound does not include it.` : '',
       dataTable(['Node', 'Depth', 'Local bound', 'Incumbent', 'Best bound', 'Gap', 'Action'], res.log.map((L) => [L.node, L.depth, P(L.local), P(L.incumbent), P(L.best), pctText(L.gap), `${L.action}${L.closed.length ? `; close ${L.closed.join(', ')}` : ''}`]), 'compact'),
       tree(steps.length ? steps[steps.length - 1].after : { 0: 'inc' }, null, 'Complete tree'),
     ),
@@ -195,6 +204,7 @@ function buildBB(inst) {
     id: 'bb2d', topic: 't102', title: inst.title || 'Branch and bound',
     statement: () => frag(
       `Solve by LP-based branch and bound: $$\\max\\ ${linTex(model.c, names)}\\quad\\text{s.t.}\\quad ${model.rows.map((r) => rowTex(r, names)).join(',\\quad ')},\\quad ${names.join(', ')}\\in\\mathbb{Z}_+ .$$`,
+      inst.note || null,
       plot([]),
     ),
     rules: `Branch on the first fractional variable in the order $${order.join(', ')}$. Solve both children as soon as they are created (left child: $\\le$, right child: $\\ge$; nodes are numbered in order of creation). A child is closed at once if it is infeasible, integer, or its value is no better than the incumbent. Always process the open node with the best bound next. Gap $=|z_P-z_D|/|z_P|$.`,
@@ -243,13 +253,20 @@ function randomBB(rng, level) {
   return { c: [1, 10], rows: WORKSHOP, incumbent: [1, 4], incumbentNote: 'Rounding the LP optimum and repairing it gives a feasible point', xmax: 4, ymax: 6 };
 }
 
+const RULE_NOTE = (rule, nodes, drawing) => `<p class="small muted">The slides do not state a branching rule. Branching on $${rule}$ first reproduces their count of ${nodes} nodes${drawing ? '; the tree drawn on the slide is illustrative' : ''}.</p>`;
+
 export const bbDrill = {
+  // Not tagged t103: the surrogate trainer is the relaxations lesson's trainer, and an extra tag would list this
+  // trainer (workshop preset first) on that lesson and make it the topic's "first run".
   id: 'bb2d', title: 'Branch and bound: tree and log', topic: 't102', minutes: 14,
   blurb: 'Process the tree node by node with best-bound selection: child LPs, fathoming reason, incumbent, bound and gap, exactly as in the lecture log.',
   presets: [
     { id: 'workshop', label: 'Workshop example (slides 102)', make: () => ({ c: [1, 10], rows: WORKSHOP, incumbent: [1, 4], incumbentNote: 'Rounding the LP optimum and repairing it gives a feasible point', xmax: 4, ymax: 6, title: 'Branch and bound — workshop example (slides 102)' }) },
-    { id: 'plus-xy6', label: 'Workshop + x + y ≤ 6 (slides 104)', make: () => ({ c: [1, 10], rows: WORKSHOP.concat([{ a: [1, 1], b: '6' }]), incumbent: [1, 4], incumbentNote: 'The same starting incumbent is used', xmax: 4, ymax: 6, title: 'Branch and bound — stronger formulation with x + y ≤ 6 (slides 104)' }) },
-    { id: 'plus-yx3', label: 'Workshop + y ≤ x + 3, branch on y first (slides 104)', make: () => ({ c: [1, 10], rows: WORKSHOP.concat([{ a: [-1, 1], b: '3' }]), incumbent: [1, 4], incumbentNote: 'The same starting incumbent is used', branchRule: 'last', xmax: 4, ymax: 6, title: 'Branch and bound — with y ≤ x + 3, branching on y first (slides 104)' }) },
+    { id: 'separate', label: 'Separate example: integer at the root (slides 102)', make: () => ({ c: [1, 10], rows: [{ a: [1, 0], b: '3' }, { a: [-1, 1], b: '2' }, { a: [1, 1], b: '6' }], xmax: 4, ymax: 6, title: 'Branch and bound — LP optimum already integer (slides 102)' }) },
+    { id: 'plus-xy6', label: 'Workshop + x + y ≤ 6 (slides 104)', make: () => ({ c: [1, 10], rows: WORKSHOP.concat([{ a: [1, 1], b: '6' }]), incumbent: [1, 4], incumbentNote: 'The same starting incumbent is used', note: RULE_NOTE('x', 5), xmax: 4, ymax: 6, title: 'Branch and bound — stronger formulation with x + y ≤ 6 (slides 104)' }) },
+    { id: 'plus-yx3', label: 'Workshop + y ≤ x + 3, branch on y first (slides 104)', make: () => ({ c: [1, 10], rows: WORKSHOP.concat([{ a: [-1, 1], b: '3' }]), incumbent: [1, 4], incumbentNote: 'The same starting incumbent is used', branchRule: 'last', note: RULE_NOTE('y', 5, true), xmax: 4, ymax: 6, title: 'Branch and bound — with y ≤ x + 3, branching on y first (slides 104)' }) },
+    { id: 'surrogate-orig', label: 'Surrogate example: the original problem (slides 103)', make: () => ({ c: [3, 2], rows: [{ a: [2, 1], b: '5' }, { a: [1, 2], b: '5' }], xmax: 4, ymax: 4, note: '<p>Slides 103 state that the optimum of this problem is $(2,1)$, worth 8. Branch and bound proves it.</p>', title: 'Branch and bound — surrogate example, original problem (slides 103)' }) },
+    { id: 'surrogate-relaxed', label: 'Surrogate relaxation with u = (1, 1) (slides 103)', make: () => ({ c: [3, 2], rows: [{ a: [3, 3], b: '10' }], xmax: 4, ymax: 4, note: '<p>The two rows $2x+y\\le5$ and $x+2y\\le5$ are added with weights $u_1=u_2=1$ into one row, $3x+3y\\le10$. Slides 103: the relaxed optimum is $(3,0)$, worth 9, so $z^*=8\\le z_R=9$. In this run, “optimal value” means the optimum of the surrogate problem you solve, that is $z_R$.</p>', title: 'Branch and bound — surrogate relaxation with u = (1, 1) (slides 103)' }) },
   ],
   random: (rng, level) => ({ ...randomBB(rng, level), title: 'Branch and bound — practice instance' }),
   build: buildBB,
@@ -305,6 +322,7 @@ function buildGaps(inst) {
     statement: () => frag(
       `A <b>${word}</b> problem is being solved by branch and bound. The incumbent has value <b>${inc}</b>. The open nodes have LP values:`,
       dataTable(['Open node'].concat(open.map((_, i) => String.fromCharCode(65 + i))), [['LP value'].concat(open)], 'compact'),
+      inst.note || null,
     ),
     rules: 'Primal bound = value of the best feasible solution known. Dual bound = the best value still possible according to the relaxations. Solver gap $=|z_P-z_D|/|z_P|$.',
     steps: [
@@ -375,7 +393,10 @@ export const gapsDrill = {
   id: 'gaps', title: 'Bounds and gaps', topic: 't102', minutes: 5,
   blurb: 'Primal versus dual bound for max and min problems, global bound from open nodes, pruning, and the two gap formulas.',
   presets: [
-    { id: 'slides', label: 'Workshop numbers (slides 102, 104)', make: () => ({ sense: 'max', inc: 41, open: [48, 45], cand: { index: 1, value: 42 }, zr: 51.3, zstar: 42, title: 'Bounds and gaps — workshop numbers (slides 102, 104)' }) },
+    // Node A = node 1 (x ≤ 1, bound 48), node B = node 2 (x ≥ 2, bound 45). Processing node 1 gives the integer
+    // child 41 (node 3) and an infeasible child (node 4): log rows 1 and 2 of slides 102.
+    { id: 'log-rows-1-2', label: 'Workshop log, rows 1 to 2 (slides 102)', make: () => ({ sense: 'max', inc: 41, open: [48, 45], cand: { index: 0, value: 41 }, zr: 51.3, zstar: 42, note: '<p>This is the workshop tree of slides 102 after the root is branched: A is node 1 ($x\\le1$) and B is node 2 ($x\\ge2$).</p>', title: 'Bounds and gaps — workshop log rows 1 to 2 (slides 102)' }) },
+    { id: 'slides', label: 'Workshop-like numbers (a hypothetical step)', make: () => ({ sense: 'max', inc: 41, open: [48, 45], cand: { index: 1, value: 42 }, zr: 51.3, zstar: 42, note: '<p>A made-up step with the workshop numbers. In the slides’ log node 1 (bound 48) is processed first, and the value 42 appears later, at node 7 (a child of node 5).</p>', title: 'Bounds and gaps — workshop-like numbers (a hypothetical step)' }) },
   ],
   random: (rng, level) => {
     const inst = randomGaps(rng, level);

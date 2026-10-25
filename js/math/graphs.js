@@ -244,8 +244,11 @@ export function minCutBrute(nodes, arcs, s, t) {
 
 // ---------------------------------------------------------------- Hungarian method
 // Follows the classroom procedure (exercise 4 / lab 105c): row reduction, column reduction, then assign
-// workers in numerical order by BFS over zero reduced costs (jobs visited numerically); on a stalled
-// search update labels with Delta = min over reached rows / unreached columns and search again.
+// workers in numerical order by BFS over zero reduced costs (jobs visited numerically). On a stalled
+// search, update labels with Delta = min over reached rows / unreached columns and RESUME the same search
+// (slides 105: "update the reduced costs and resume it"; "Keep the tree and predecessors throughout the phase";
+// 10E solution 4: "A new zero ... extends the search"): S, T and the tree are kept, and the reached workers are
+// scanned again, in the order they were reached and jobs numerically, for the new zeros.
 export function hungarian(cost) {
   const n = cost.length;
   const u = cost.map((row) => Math.min(...row));
@@ -262,14 +265,16 @@ export function hungarian(cost) {
   const workerOf = new Array(n).fill(-1);
   for (let root = 0; root < n; root++) {
     let guard = 0;
+    // One phase: the search tree (S, T, predecessors) lives until a free job is reached.
+    const S = new Array(n).fill(false);
+    const T = new Array(n).fill(false);
+    S[root] = true;
+    const prevWorker = new Array(n).fill(-1);
+    const queue = [root];
+    let qi = 0;
+    let resumed = false;
     while (jobOf[root] === -1) {
       if (++guard > 4 * n * n) throw new Error('Hungarian method did not terminate');
-      const S = new Array(n).fill(false);
-      const T = new Array(n).fill(false);
-      S[root] = true;
-      const prevWorker = new Array(n).fill(-1);
-      const queue = [root];
-      let qi = 0;
       let freeJob = -1;
       const visits = [];
       while (qi < queue.length && freeJob === -1) {
@@ -298,7 +303,7 @@ export function hungarian(cost) {
         // alternating path as W.. J.. W.. J.. starting from the root worker
         const path = [];
         pairs.forEach(([i, jj]) => { path.push({ kind: 'W', index: i }); path.push({ kind: 'J', index: jj }); });
-        events.push({ type: 'augment', root, visits, path, pairs, jobOf: jobOf.slice() });
+        events.push({ type: 'augment', root, visits, path, pairs, jobOf: jobOf.slice(), resumed });
       } else {
         let delta = Infinity;
         for (let i = 0; i < n; i++) if (S[i]) for (let j = 0; j < n; j++) if (!T[j]) delta = Math.min(delta, cost[i][j] - u[i] - v[j]);
@@ -306,12 +311,15 @@ export function hungarian(cost) {
         for (let i = 0; i < n; i++) if (S[i]) u[i] += delta;
         for (let j = 0; j < n; j++) if (T[j]) v[j] -= delta;
         events.push({
-          type: 'stall', root, visits,
+          type: 'stall', root, visits, resumed,
           S: S.map((b, i) => (b ? i : -1)).filter((i) => i >= 0),
           T: T.map((b, j) => (b ? j : -1)).filter((j) => j >= 0),
           delta, before, u: u.slice(), v: v.slice(), reduced: reducedNow(),
           lb: u.reduce((a, b) => a + b, 0) + v.reduce((a, b) => a + b, 0),
         });
+        // Resume: keep S, T and the tree; scan the reached workers again for the new zeros (S x not-T).
+        resumed = true;
+        qi = 0;
       }
     }
   }

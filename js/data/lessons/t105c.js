@@ -29,7 +29,7 @@ export default {
 <li>Repeat from step 2.</li>
 </ol>
 <p>Each augmentation raises the flow value by $\delta$. “Shortest” means <b>fewest arcs</b>, regardless of capacity.</p>
-<div class="callout"><div class="callout-title">Exam conventions (solved exercises)</div>BFS visits the neighbours of a vertex in <b>alphabetical</b> order and stops as soon as the sink is reached. Write each augmenting path, its bottleneck and the flow value after it.</div>`,
+<div class="callout"><div class="callout-title">Conventions stated in the solved exercises (10E)</div>“BFS visits residual neighbours alphabetically and marks a vertex on first discovery. Use only positive residual capacities.” For each BFS path the exercise asks for its residual capacities and its bottleneck; then write the flow value after the augmentation. (Stopping the BFS as soon as $t$ is discovered gives the same path; the trainer does this.)</div>`,
     },
     {
       title: 'Why reverse arcs are needed: the unit-capacity example',
@@ -59,11 +59,12 @@ export default {
       html: R`
 <p><b>Exercise 3.</b> Capacities $sa\,3$, $sb\,2$, $ac\,4$, $ad\,2$, $bc\,2$, $ct\,3$, $dt\,2$.</p>
 <ul>
-<li>Path 1: $s\to a\to c\to t$, $\delta=3$.</li>
-<li>Path 2: $s\to b\to c\to a\to d\to t$ (uses the reverse arc $c\to a$), $\delta=2$.</li>
-<li>Final flows: $sa\,3$, $sb\,2$, $ac\,1$, $ad\,2$, $bc\,2$, $ct\,3$, $dt\,2$. Value 5. Minimum cut $S=\{s\}$ with capacity $3+2=5$.</li>
+<li>Path 1: $s\to a\to c\to t$, residual capacities $3,4,3$, so $\delta=\min\{3,4,3\}=3$. Now $sa$ and $ct$ are saturated, while $ac$ has one unit left: $r_{ac}=4-3=1$ and the reverse arc has $r_{ca}=f_{ac}=3$.</li>
+<li>Path 2: $s\to b\to c\to a\to d\to t$ (uses the reverse arc $c\to a$), residual capacities $2,2,3,2,2$, so $\delta=2$. The reverse step lowers $f_{ac}$ from 3 to 1.</li>
+<li>Final flows: $sa\,3$, $sb\,2$, $ac\,1$, $ad\,2$, $bc\,2$, $ct\,3$, $dt\,2$. Flow conservation (inflow = outflow) holds: at $a$, $3=1+2$; at $b$, $2=2$; at $c$, $1+2=3$; at $d$, $2=2$. Value 5. Minimum cut $S=\{s\}$ with capacity $3+2=5$.</li>
 </ul>
-<p><b>Exercise 3B.</b> Capacities $sa\,5$, $sb\,4$, $ac\,4$, $ad\,2$, $cd\,2$, $ct\,3$, $bd\,4$, $dt\,5$. Paths $s\to a\to c\to t$ (3), $s\to a\to d\to t$ (2), $s\to b\to d\to t$ (3). Value 8. At the end every vertex except $t$ is reachable: $S=\{s,a,b,c,d\}$ and the cut consists of $ct$ and $dt$ with capacity $3+5=8$.</p>
+<p><b>Exercise 3B.</b> Capacities $sa\,5$, $sb\,4$, $ac\,4$, $ad\,2$, $cd\,2$, $ct\,3$, $bd\,4$, $dt\,5$. Paths $s\to a\to c\to t$ (residuals $5,4,3$, $\delta=3$), $s\to a\to d\to t$ (residuals $2,2,5$, $\delta=2$), $s\to b\to d\to t$ (residuals $4,4,3$, $\delta=3$). Value 8. At the end $r_{sb}=1$, so BFS can still leave $s$, but “no positive residual arc enters $t$”. Every vertex except $t$ is reachable: $S=\{s,a,b,c,d\}$ and the cut consists of $ct$ and $dt$ with capacity $3+5=8$. Arc $cd$ ends with flow 0.</p>
+<p>Full worked solutions: <a href="#/exercises/10e/5">sheet 10E, exercise 3</a> and <a href="#/exercises/10e/6">exercise 3B</a>.</p>
 <p><b>Lab 105c.</b> Capacities $sa\,2$, $sb\,1$, $ac\,3$, $ad\,1$, $bc\,1$, $ct\,2$, $dt\,1$: paths $s\to a\to c\to t$ (2) and $s\to b\to c\to a\to d\to t$ (1), value 3.</p>`,
     },
   ],

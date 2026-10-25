@@ -39,7 +39,8 @@ $$\Delta=\min_{i\in S,\ j\notin T}\bar c_{ij},\qquad u_i\leftarrow u_i+\Delta\ \
 <tr><td>unreached row, reached column</td><td>$+\Delta$</td></tr>
 <tr><td>unreached row, unreached column</td><td>$0$</td></tr>
 </tbody></table>
-<p>Existing assigned zeros are preserved, at least one new zero connects a reached worker to an unreached job, and the lower bound rises by $\Delta(|S|-|T|)=\Delta$.</p>`,
+<p>Existing assigned zeros are preserved, at least one new zero connects a reached worker to an unreached job, and the lower bound rises by $\Delta(|S|-|T|)=\Delta$.</p>
+<div class="callout move"><div class="callout-title">Resume the search; do not restart it</div>After the update, keep the reached workers $S$, the reached jobs $T$ and the search tree with its predecessors, and <b>continue</b> the same search from the new zero. Slides 105: “If the search is exhausted, update the reduced costs and resume it”; “Keep the tree and predecessors throughout the phase.” Solved exercise 4: “A new zero at $W_1J_2$ extends the search.”</div>`,
     },
     {
       title: 'The lecture example',
@@ -66,11 +67,12 @@ $$C=\begin{pmatrix}2&3&6\\4&1&1\\3&5&8\end{pmatrix}$$
 <li>$u=(2,1,3)$; every column already has a zero so $v=(0,0,0)$; bound 6. Reduced matrix $\begin{pmatrix}0&1&4\\3&0&0\\0&2&5\end{pmatrix}$.</li>
 <li>W1 takes J1. W2 has zeros at J2 and J3 and takes J2, the first free job in numerical order.</li>
 <li>Search from W3: $W_3\to J_1\to W_1$, and nothing else. $S=\{W_1,W_3\}$, $T=\{J_1\}$.</li>
-<li>$\Delta=\min\{1,4,2,5\}=1$. $u=(3,1,4)$, $v=(-1,0,0)$, bound 7. A new zero appears at W1–J2.</li>
+<li>$\Delta=\min\{1,4,2,5\}=1$. $u=(3,1,4)$, $v=(-1,0,0)$, bound 7. The reduced costs become $\begin{pmatrix}0&0&3\\4&0&0\\0&1&4\end{pmatrix}$: rows W1 and W3 lose 1 outside column J1, row W2 gains 1 in column J1 ($3\to 4$), and the entries W1–J1, W3–J1 stay 0. A new zero appears at W1–J2.</li>
 <li>The search continues: $W_3\to J_1\to W_1\to J_2\to W_2\to J_3$. J3 is free: reverse all assignments along the path.</li>
 </ol>
 <p>Final assignment $W_1\mapsto J_2$, $W_2\mapsto J_3$, $W_3\mapsto J_1$ with cost $3+1+3=7$.</p>
-<p><b>Certificate, as written in the solution:</b> the labels satisfy $u_i+v_j\le c_{ij}$ for every pair, so every assignment costs at least $\sum_iu_i+\sum_jv_j=7$; this assignment attains the bound and is optimal.</p>`,
+<p><b>Certificate, as written in the solution:</b> the labels satisfy $u_i+v_j\le c_{ij}$ for every pair, so every assignment costs at least $\sum_iu_i+\sum_jv_j=7$; this assignment attains the bound and is optimal.</p>
+<p>Full worked solution: <a href="#/exercises/10e/7">sheet 10E, exercise 4</a>.</p>`,
     },
     {
       title: 'Complexity',

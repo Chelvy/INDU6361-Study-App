@@ -53,7 +53,8 @@ $$F(i,c)=\begin{cases}F(i-1,c) & \text{if } w_i\gt c,\\[2pt] \max\{F(i-1,c),\ p_
 <tr><th>3</th><td>0</td><td>0</td><td>4</td><td>5</td><td>7</td><td>9</td><td>11</td><td>12</td><td>12</td></tr>
 <tr><th>4</th><td>0</td><td>0</td><td>4</td><td>5</td><td>7</td><td>9</td><td>11</td><td>13</td><td>14</td></tr>
 </tbody></table>
-<p>Reconstruction: $(4,8)$: $14\gt 12$, take item 4, capacity 3. $(3,3)$: item 3 (weight 4) does not fit, the entry equals the one above: skip. $(2,3)$: $5\gt 4$, take item 2, capacity 0. Subset $\{2,4\}$, weight $3+5=8$, profit $5+9=14$.</p>`,
+<p>Sample comparisons from the solution: $F(1,2)=\max\{0,\ 4+0\}=4$, and it “stays 4 for every larger capacity because the item is available only once”; $F(2,5)=\max\{4,\ 5+F(1,2)\}=9$ (items 1 and 2); $F(3,8)=\max\{9,\ 7+F(2,4)\}=12$; $F(4,8)=\max\{12,\ 9+F(3,3)\}=14$; at capacity 7 item 4 improves the value from 12 to 13.</p>
+<p>Reconstruction: $(4,8)$: $14\gt 12$, take item 4, capacity 3. $(3,3)$: item 3 (weight 4) does not fit, the entry equals the one above: skip. $(2,3)$: $5\gt 4$, take item 2, capacity 0; “capacity is now zero, so no other item fits”. Subset $\{2,4\}$, weight $3+5=8$, profit $5+9=14$. Full worked solution: <a href="#/exercises/10e/8">sheet 10E, exercise 5</a>.</p>`,
     },
     {
       title: 'Memory, and why the order of the loop matters',

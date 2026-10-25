@@ -37,7 +37,7 @@ $$\max\sum_{i\in I}v_ix_i\qquad\text{s.t.}\qquad\sum_{i\in I}a_ix_i\le b,\qquad 
 <h3>Assignment</h3>
 <p>Match equally many workers and tasks at minimum cost; $x_{ij}=1$ if worker $i$ gets task $j$.</p>
 $$\min\sum_{i\in W}\sum_{j\in J}c_{ij}x_{ij}\qquad\text{s.t.}\qquad\sum_{j\in J}x_{ij}=1\ \ \forall i\in W,\qquad\sum_{i\in W}x_{ij}=1\ \ \forall j\in J,\qquad x_{ij}\in\{0,1\}.$$
-<p>The first family says every worker receives exactly one task (this is the readiness-check question: $\sum_{j=1}^3x_{ij}=1$ means worker $i$ gets exactly one of the three tasks); the second says every task goes to exactly one worker.</p>
+<p>The first family says every worker receives exactly one task (this is the “Notation” question of the slides' Preliminary knowledge part: $\sum_{j=1}^3x_{ij}=1$ means worker $i$ gets exactly one of the three tasks); the second says every task goes to exactly one worker.</p>
 <h3>Set covering</h3>
 <p>Choose a minimum-cost collection of sets that covers every requirement; $a_{ij}=1$ if set $j$ covers requirement $i$, and $y_j=1$ if set $j$ is chosen.</p>
 $$\min\sum_{j\in J}c_jy_j\qquad\text{s.t.}\qquad\sum_{j\in J}a_{ij}y_j\ge 1\ \ \forall i\in I,\qquad y_j\in\{0,1\}.$$
@@ -50,18 +50,20 @@ $$\min\sum_{j\in J}c_jy_j\qquad\text{s.t.}\qquad\sum_{j\in J}a_{ij}y_j\ge 1\ \ \
 <ul>
 <li>9 points, start fixed: $8!=40{,}320$ directed tours; with symmetric costs a tour and its reverse have the same length, leaving $8!/2=20{,}160$ distinct tours. A computer can try them all.</li>
 <li>100 points, start fixed: $99!\approx 9.33\times10^{155}$ directed tours. At one million tours per second, enumeration needs about $3\times10^{142}$ years; the universe is about $1.4\times10^{10}$ years old.</li>
-<li>Yet a tour through all 24,727 pubs of the United Kingdom has been solved to proven optimality (University of Waterloo TSP project). It was not done by enumeration.</li>
+<li>Yet the slides show a tour through all 24,727 pubs of the United Kingdom (source: University of Waterloo TSP project). Enumeration is hopeless at that size; such instances are attacked with the methods this course teaches.</li>
 </ul>
+<p><b>Where discrete optimisation is used</b> (slides 101, “Applications”): train scheduling, airline crew scheduling, production planning, electricity generation, telecommunications network design, cutting and packing, radiation-therapy planning, kidney exchange, very-large-scale integration (placing and wiring chip components), molecular biology, statistics and machine learning, public systems.</p>
 <p>The purpose of the course is to learn how to solve such problems well: branch and bound and formulations; optimality, bounds, relaxations, well-solved problems and total unimodularity; exponential formulations, cutting planes, valid inequalities and lifting; primal heuristics; decompositions.</p>`,
     },
     {
-      title: 'The readiness check, answered',
+      title: 'Preliminary knowledge, answered',
       html: R`
+<p>The slides open with three warm-up questions (“Preliminary knowledge”). The 9 September version called them a readiness check and had a fourth question.</p>
 <ol>
-<li>$\sum_{j=1}^3x_{ij}=1$ with binary $x_{ij}$: worker $i$ receives exactly one of the three tasks.</li>
-<li>With $x,y\ge 0$ and $2x+y\le 4$: $(1,2)$ gives $2x+y=4$, feasible (on the boundary); $(2,1)$ gives $5$, infeasible; $(0.5,1)$ gives $2$, feasible.</li>
-<li>$0\le q\le 10y$, $y\in\{0,1\}$: if $y=0$ then $q=0$. If $y=1$ then $0\le q\le 10$; $q$ need <b>not</b> equal 10.</li>
-<li>Arcs $s\to a$, $a\to t$, $s\to t$: the path through $a$ is $s\to a\to t$. Travelling from $t$ to $s$ is impossible, because arcs are directed and none leaves $t$.</li>
+<li><b>Notation.</b> $\sum_{j=1}^3x_{ij}=1$ with binary $x_{ij}$: worker $i$ receives exactly one of the three tasks. For a fixed worker the only allowed rows $(x_{i1},x_{i2},x_{i3})$ are $(1,0,0)$, $(0,1,0)$, $(0,0,1)$: task 1, 2 or 3.</li>
+<li><b>Feasible points.</b> With $x,y\ge 0$ and $2x+y\le 4$: $(1,2)$ gives $2x+y=4$, feasible (on the boundary); $(2,1)$ gives $5$, infeasible; $(0.5,1)$ gives $2$, feasible. The feasible region is the closed triangle with corners $(0,0)$, $(2,0)$, $(0,4)$. “Closed” means its edges belong to it, which is why $(1,2)$, on the edge $2x+y=4$, counts as feasible.</li>
+<li><b>Logic constraints.</b> $0\le q\le 10y$, $y\in\{0,1\}$: if $y=0$ then $0\le q\le 0$, so $q=0$. If $y=1$ then $0\le q\le 10$; $q$ need <b>not</b> equal 10. “Opening the warehouse permits shipping; it imposes no positive minimum quantity.”</li>
+<li><i>Only in the 9 September version (no answer printed; this answer is ours):</i> arcs $s\to a$, $a\to t$, $s\to t$. The path through $a$ is $s\to a\to t$. Travelling from $t$ to $s$ is impossible, because arcs are directed and none leaves $t$.</li>
 </ol>`,
     },
     {
@@ -70,7 +72,9 @@ $$\min\sum_{j\in J}c_jy_j\qquad\text{s.t.}\qquad\sum_{j\in J}a_{ij}y_j\ge 1\ \ \
 <ul>
 <li>Assessment: assignments 15%, midterm 20%, individual project 25%, final examination 40%. <b>To pass you need at least 50% on the final examination and at least 50% on the project</b>, regardless of the weighted total (course outline).</li>
 <li>The final-examination period is 9–22 December 2026; the date for this course, the exam duration and the permitted materials are announced separately.</li>
-<li>Exams permit neither AI nor outside communication unless authorised. You must be able to do every trace and derivation on paper.</li>
+<li>Individual project (25%): it is expected to “develop a clear understanding of the selected problem; formulate and implement an optimization model; and implement one or more methods studied in the course”.</li>
+<li>Ground rules (slides 101): collaboration only when an assessment says so; authorised AI assistance must be disclosed; acknowledge sources, data, code, software and collaborators; exams permit neither AI nor outside communication unless authorised. “In short: you are responsible for every submitted model, result, and line of code, and you must be prepared to defend the choices you made.” Our advice, not a slide rule: practise every trace and derivation by hand.</li>
+<li>Classes: Wednesdays 17:45–20:30, 9 September to 2 December, no class on 14 October. Office hours: Mondays at 14:00, EV 4.217.</li>
 <li>Textbook: L. A. Wolsey, <i>Integer Programming</i>, 2nd edition (Wiley, 2021).</li>
 <li>Software in the labs: Julia with JuMP and Gurobi.</li>
 </ul>`,
@@ -88,8 +92,8 @@ $$\min\sum_{j\in J}c_jy_j\qquad\text{s.t.}\qquad\sum_{j\in J}a_{ij}y_j\ge 1\ \ \
     R`Confusing covering ($\ge 1$), packing ($\le 1$) and partitioning ($=1$).`,
   ],
   refs: [
-    R`Slides 101, <i>Course Introduction</i> (T. Schettini), all 13 pages.`,
+    R`Slides 101, <i>Course Introduction</i> (T. Schettini): the 13-page PDF of 9 September and the reading version <code>101-introduction.reading.html</code>, which renames the readiness check “Preliminary knowledge”, adds the answers and drops question 4.`,
     R`Course outline INDU 6361, Fall 2026.`,
-    R`L. A. Wolsey, <i>Integer Programming</i>, 2nd ed., chapter 1.`,
+    R`L. A. Wolsey, <i>Integer Programming</i>, 2nd ed., Wiley 2021, chapters 1 and 7–9 (the reference given on the slides).`,
   ],
 };

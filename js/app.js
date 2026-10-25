@@ -9,12 +9,15 @@ import * as learn from './views/learn.js';
 import * as train from './views/train.js';
 import * as bank from './views/bank.js';
 import * as exam from './views/exam.js';
+import * as exercises from './views/exercises.js';
+import { exercisesDue } from './views/exercises.js';
 import * as mistakes from './views/mistakes.js';
 import * as sheet from './views/sheet.js';
+import * as glossary from './views/glossary.js';
 import * as sources from './views/sources.js';
 import * as settings from './views/settings.js';
 
-const VIEWS = { home, learn, train, bank, exam, mistakes, sheet, sources, settings };
+const VIEWS = { home, learn, train, bank, exercises, exam, mistakes, sheet, glossary, sources, settings };
 
 const ICON = {
   home: 'M3 11l9-8 9 8M5 10v10h14V10M10 20v-6h4v6',
@@ -22,8 +25,10 @@ const ICON = {
   train: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM10 8.5v7l6-3.5z',
   bank: 'M4 5h16v11H9l-5 4zM9 9h6M9 12h4',
   exam: 'M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM9 2h6',
+  exercises: 'M9 4h6v3H9zM7 5H5v16h14V5h-2M8 12l2 2 4-4M8 17h8',
   mistakes: 'M12 9v4M12 17h.01M10.3 3.9L2.5 17.5A2 2 0 0 0 4.2 20.5h15.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z',
   sheet: 'M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h6',
+  glossary: 'M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3zM5 17a3 3 0 0 1 3-3h11M9 8h6',
   sources: 'M4 6c0-1.7 3.6-3 8-3s8 1.3 8 3-3.6 3-8 3-8-1.3-8-3zM4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6',
   settings: 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1',
 };
@@ -32,10 +37,12 @@ const NAV = [
   { id: 'learn', label: 'Learn', hash: '#/learn' },
   { id: 'train', label: 'Train', hash: '#/train' },
   { id: 'bank', label: 'Questions', hash: '#/bank' },
+  { id: 'exercises', label: 'Exercises', hash: '#/exercises', count: exercisesDue },
   { id: 'exam', label: 'Mock exam', hash: '#/exam' },
   { sep: true },
   { id: 'mistakes', label: 'Mistakes', hash: '#/mistakes', count: () => store.get().mistakes.length },
   { id: 'sheet', label: 'Cheat sheet', hash: '#/sheet' },
+  { id: 'glossary', label: 'Glossary', hash: '#/glossary' },
   { id: 'sources', label: 'Sources', hash: '#/sources' },
   { id: 'settings', label: 'Settings', hash: '#/settings' },
 ];

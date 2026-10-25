@@ -44,14 +44,16 @@ function build(inst) {
     const settled = new Set(st ? st.settled : []);
     const predArc = new Set();
     if (st) Object.entries(st.pred).forEach(([v, p]) => { if (p) predArc.add(p + '>' + v); });
+    const examined = new Set(st ? st.relax.map((x) => x.u + '>' + x.v) : []);
     const badges = {};
     inst.nodes.forEach((v) => { badges[v] = `d=${inf(st ? st.dist[v] : (v === inst.source ? 0 : Infinity))}`; });
     return graphFigure({
       nodes: inst.nodes, pos, directed: true,
-      edges: inst.arcs.map((a) => ({ u: a.u, v: a.v, label: a.w, t: a.t, cls: predArc.has(a.u + '>' + a.v) ? 'sel' : '' })),
+      edges: inst.arcs.map((a) => ({ u: a.u, v: a.v, label: a.w, t: a.t, cls: examined.has(a.u + '>' + a.v) ? 'hl' : predArc.has(a.u + '>' + a.v) ? 'sel' : '' })),
       nodeCls: Object.fromEntries(inst.nodes.map((v) => [v, settled.has(v) ? (st && st.selected === v ? 'cur' : 'settled') : ''])),
       badges,
-      caption: upto < 0 ? 'Arc labels: length' : 'Blue: predecessor arcs and permanent labels. Orange: vertex just selected.',
+      // the legend of the solved exercises (10E)
+      caption: upto < 0 ? 'Arc labels: length' : 'Blue: predecessor arcs and permanent labels. Orange: current vertex and examined arcs.',
     });
   };
   const traceTable = (upto) => dataTable(
@@ -121,7 +123,7 @@ export default {
   id: 'dijkstra',
   title: "Dijkstra's algorithm",
   topic: 't105a',
-  blurb: 'Fill the label table iteration by iteration with the exam tie rules, then recover the path from predecessors.',
+  blurb: 'Fill the label table iteration by iteration with the tie rules of the solved exercises (10E), then recover the path from predecessors.',
   minutes: 8,
   presets: [
     { id: 'lecture', label: 'Slides 105 example', make: () => ({ nodes: ['s', 'a', 'b', 'c', 'd', 't'], arcs: LECTURE, source: 's', target: 't', pos: { s: [0, 1], a: [1, 0], b: [1, 2], c: [2.4, 0], d: [2.4, 2], t: [3.4, 1] }, title: "Dijkstra — slides 105 example" }) },

@@ -23,7 +23,8 @@ export function chvatalGomory(rows, u) {
 
 // --------------------------------------------------------------- Gomory cuts from the tableau
 // Classroom row rule: among basic DECISION variables with fractional value choose the largest fractional
-// part of the right-hand side; break ties by row order.
+// part of the right-hand side; break ties by row order (the row listed first: rows are sorted by basic column,
+// decision variables before slacks, as in the slide tableaux).
 export function gomorySourceRow(tableau) {
   let best = -1;
   let bestF = ZERO;
@@ -39,6 +40,39 @@ export function gomorySourceRow(tableau) {
 export function gomoryFloorCut(tableau, rowIndex) {
   const row = tableau.rows[rowIndex];
   return { coef: row.coef.map((v) => v.floor()), rhs: row.rhs.floor(), source: row };
+}
+
+// Fractional form of the same cut (20E ex. 5-6): sum_j f_j col_j >= f_0, with f = a - floor(a) for every
+// coefficient and for the right-hand side. It is the tableau row minus the floored row.
+export function gomoryFractionalForm(tableau, rowIndex) {
+  const row = tableau.rows[rowIndex];
+  return { coef: row.coef.map((v) => v.fracPart()), rhs: row.rhs.fracPart() };
+}
+
+// Row that enters the tableau with the cut's new slack once the basic variables are eliminated
+// (slides 204 p.22, 32, 38, 42): (floored row) - (source row) + s_new = floor(b) - b, i.e. -sum f_j col_j + s_new = -f_0.
+export function gomoryCutRow(tableau, rowIndex) {
+  const ff = gomoryFractionalForm(tableau, rowIndex);
+  return { coef: ff.coef.map((v) => v.neg()), rhs: ff.rhs.neg() };
+}
+
+// Divide a cut whose coefficients are all integers by their greatest common divisor (direction kept),
+// e.g. 2x + 2y <= 5 becomes x + y <= 5/2. Cuts with a fractional coefficient are returned unchanged.
+export function reduceCut(a, b) {
+  const A = a.map(fr);
+  if (!A.every((v) => v.isInt()) || A.every((v) => v.isZero())) return { a: A, b: fr(b), factor: ONE };
+  const g = (x, y) => { x = x < 0n ? -x : x; y = y < 0n ? -y : y; while (y) [x, y] = [y, x % y]; return x; };
+  const f = new Frac(A.reduce((s, v) => g(s, v.n), 0n));
+  return { a: A.map((v) => v.div(f)), b: fr(b).div(f), factor: f };
+}
+
+// Does inequality A (a.x <= b) imply inequality B on the polyhedron {x >= 0 : rows}? True when the largest value
+// of B's left-hand side over the polyhedron cut by A does not exceed B's right-hand side (or that set is empty).
+export function cutImplies(rows, A, B) {
+  const lp = solveLP({ sense: 'max', c: B.a, rows: rows.concat([{ a: A.a, op: '<=', b: A.b }]) });
+  if (lp.status === 'infeasible') return true;
+  if (lp.status !== 'optimal') return false;
+  return lp.obj.le(fr(B.b));
 }
 
 // Rewrite a cut over tableau columns (structural + slack) in the structural variables only,
@@ -119,6 +153,31 @@ export function mirMixedRow(aInt, c, b) {
   const { k, f, applicable } = mirParameters(B.neg());
   if (!applicable) return { applicable: false, k, f };
   return { applicable: true, k, f, intCoef: aInt.map(fr), contCoef: fr(c).div(f).neg(), rhs: k.add(ONE).neg() };
+}
+
+// sum_j a_j x_j + g y <= b with x integer, y >= 0 continuous, g != 0.
+//  g < 0: the nonnegative part is u = -g y (slides 205 PDF: x + y - z <= 2.5 gives x + y - 2z <= 2).
+//  g > 0: complement with the upper bound ub of y, u = g (ub - y) >= 0 (slides 205 reading version, 20E ex. 8):
+//         the row becomes sum a x - g (ub - y) <= b - g ub and the basic MIR applies to it.
+//         (x1 + x2 + y <= 4.4, y <= 1 gives 3x1 + 3x2 + 5y <= 14; x + y + z <= 3.5, z <= 1 gives x + y + 2z <= 4.)
+// The >= form is w + u >= k + f with w = -sum a x and k + f = basicRhs.
+// Returns the cut in the original variables, sum a x + coef y <= rhs, and its smallest-integer multiple intForm.
+export function mirContinuousRow(aInt, g, b, ub) {
+  const G = fr(g), B = fr(b);
+  if (G.isZero()) throw new Error('The continuous variable must appear in the row');
+  const complemented = G.sign() > 0;
+  if (complemented && (ub === undefined || ub === null)) throw new Error('A continuous variable with a plus sign needs an upper bound');
+  const U = complemented ? fr(ub) : null;
+  const shifted = complemented ? B.sub(G.mul(U)) : B;
+  const c = G.abs();
+  const m = mirMixedRow(aInt, c, shifted);
+  if (!m.applicable) return { applicable: false, k: m.k, f: m.f, complemented, shifted };
+  const uCoef = c.div(m.f);
+  const coef = complemented ? uCoef : uCoef.neg();
+  const rhs = complemented ? m.rhs.add(uCoef.mul(U)) : m.rhs;
+  const a = aInt.map(fr).concat([coef]);
+  const ints = scaleToIntegers(a, rhs);
+  return { applicable: true, k: m.k, f: m.f, complemented, shifted, basicRhs: shifted.neg(), uCoef, a, rhs, intForm: { a: ints.a, b: ints.b, factor: ints.factor } };
 }
 
 // --------------------------------------------------------------- flow cover (slides 206)

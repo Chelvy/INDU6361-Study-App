@@ -77,9 +77,14 @@ function strength(container) {
     const model = toModel({ c: [1, 10], rows: v.rows });
     const lp = solveLP(model);
     const bb = branchAndBound(model, { incumbent: { x: [1, 4] }, branchRule: v.rule });
+    // The slides do not state a branching rule, and the node count depends on it: show the other rule's count too.
+    const other = branchAndBound(model, { incumbent: { x: [1, 4] }, branchRule: v.rule === 'last' ? 'first' : 'last' });
+    const [mine, theirs] = v.rule === 'last' ? ['y', 'x'] : ['x', 'y'];
+    const nodes = (k) => `${k} node${k > 1 ? 's' : ''}`;
     const gap = lp.obj.sub(42).abs().div(42).mul(100).toNumber().toFixed(1);
-    host.appendChild(plotFigure({ xmax: 4, ymax: 6, cons: cons(v.rows), marks: [{ x: lp.x[0], y: lp.x[1], cls: 'lp', label: `LP ${P(lp.obj)}` }, { x: 2, y: 4, cls: 'opt', label: 'z* = 42' }], caption: `${v.label}: root bound ${P(lp.obj)}, root gap ${gap}%, ${bb.nodes.length} node${bb.nodes.length > 1 ? 's' : ''} in the tree${v.rule === 'last' ? ' (branching on y first, as on the slide)' : ''}.` }));
-    host.appendChild(rich('All four formulations contain exactly the same integer points (the large dots). Only the shaded LP region changes: the smaller it is, the lower the root bound and the smaller the tree.', 'p', 'small muted'));
+    host.appendChild(plotFigure({ xmax: 4, ymax: 6, cons: cons(v.rows), marks: [{ x: lp.x[0], y: lp.x[1], cls: 'lp', label: `LP ${P(lp.obj)}` }, { x: 2, y: 4, cls: 'opt', label: 'z* = 42' }], caption: `${v.label}: root bound ${P(lp.obj)}, root gap ${gap}%, ${nodes(bb.nodes.length)} in this trace, branching on ${mine} first (${nodes(other.nodes.length)} with ${theirs} first).` }));
+    host.appendChild(rich('All four formulations contain exactly the same integer points (the large dots). Only the shaded LP region changes: the smaller it is, the lower the root bound and, here, the smaller the tree.', 'p', 'small muted'));
+    host.appendChild(rich('The slides do not state a branching rule, and the number of nodes depends on it. The traces here branch on $x$ first, which reproduces the slide’s tree for $+\\,x+y\\le 6$. For $+\\,y\\le x+3$ they branch on $y$ first, because that reproduces the slide’s count of 5 nodes. The tree drawings on that slide are illustrative (the reading version says so), so do not try to match their shape.', 'p', 'small muted'));
   };
   variants.forEach((v, i) => {
     const b = h('button', { type: 'button', 'aria-pressed': String(i === 0) }, v.label);
@@ -109,12 +114,18 @@ function gomoryWorkshop(container) {
   });
 }
 
-// Kelley's method on (x - 1.3)^2 (slides E201): table of bounds.
+// Tangent relaxation refinement (Kelley's method) on (x - 1.3)^2 (slides EXTRA-201, pp. 15-21): table of bounds.
 function kelleyTable(container) {
   const K = kelley({ q: fr(1), c: Frac.parse('1.3'), d: fr(0) }, 0, 2, [0, 1, 2], 3);
+  const R = K.records;
   container.appendChild(rich('<b>Bounds after each master solve</b> for $f(x)=(x-1.3)^2$ on $[0,2]$, starting from tangents at 0, 1, 2:', 'p'));
-  container.appendChild(dataTable(['Cuts added', '$\\bar x$', '$L=\\bar t$', '$f(\\bar x)$', '$U$', '$U-L$', 'New tangent'], K.records.map((r) => [r.addedCuts, P(r.x), r.L.pretty(8), r.fx.pretty(8), r.U.pretty(8), r.gap.pretty(8), r.newCut ? `$t\\ge ${r.newCut.slope.pretty(6)}x ${r.newCut.intercept.sign() < 0 ? '-' : '+'} ${r.newCut.intercept.abs().pretty(8)}$` : '—']), 'compact'));
-  container.appendChild(rich('$L$ rises, $U$ falls, and the gap shrinks by roughly a factor of four per cut on this function.', 'p', 'small muted'));
+  container.appendChild(dataTable(['Cuts added', '$\\bar x$', '$L=\\bar t$', '$f(\\bar x)$', 'Violation $f(\\bar x)-\\bar t$', '$U$', '$U-L$', 'New tangent'], R.map((r) => [r.addedCuts, P(r.x), r.L.pretty(8), r.fx.pretty(8), r.violation.pretty(8), r.U.pretty(8), r.gap.pretty(8), r.newCut ? `$t\\ge ${r.newCut.slope.pretty(6)}x ${r.newCut.intercept.sign() < 0 ? '-' : '+'} ${r.newCut.intercept.abs().pretty(8)}$` : '—']), 'compact'));
+  // Caption computed from the records, so it always matches the table.
+  const ratio = (key) => R.slice(1).map((r, k) => R[k][key].div(r[key]).pretty(4));
+  const stuck = R.findIndex((r, k) => k > 0 && r.U.eq(R[k - 1].U));
+  const vr = ratio('violation'), gr = ratio('gap');
+  const differ = R.filter((r) => !r.violation.eq(r.gap)).map((r) => r.addedCuts);
+  container.appendChild(rich(`$L$ rises at every step and $U$ never increases${stuck > 0 ? ` (it stays at ${R[stuck].U.pretty(8)} in the row with ${R[stuck].addedCuts} added cuts, because $f(${P(R[stuck].x)})=${R[stuck].fx.pretty(8)}$ is not below the best cost seen)` : ''}. Both bounds tend to 0. The violation is divided by ${vr.every((x) => x === vr[0]) ? `exactly ${vr[0]}` : vr.join(', ')} at each step; the gap $U-L$ falls by the factors ${gr.slice(0, -1).join(', ')} and ${gr[gr.length - 1]}. The violation and the gap need not be equal${differ.length ? `: they differ in the row with ${differ.join(', ')} added cuts` : ''}.`, 'p', 'small muted'));
 }
 
 export const WIDGETS = { bbWorkshop, strength, gomoryWorkshop, kelleyTable };

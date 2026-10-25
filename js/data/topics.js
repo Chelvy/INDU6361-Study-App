@@ -1,8 +1,9 @@
 // Syllabus map. "released" = the instructor's slides for the topic were available when this app was built
-// (8 October 2026). "weight" is this app's planning weight for the study plan, not an official exam weight.
+// (8 October 2026; updated 24 October 2026 with the reading versions, EXTRA-202 and sheet 20E).
+// "weight" is this app's planning weight for the study plan, not an official exam weight.
 export const MODULES = [
-  { id: 'm1', title: 'Module 1 · Foundations', note: 'Slides 101–106 and the solved exercises (10E).' },
-  { id: 'm2', title: 'Module 2 · Exponential formulations and cutting planes', note: 'Slides 201–206 and E201.' },
+  { id: 'm1', title: 'Module 1 · Foundations', note: 'Slides 101–106 and exercise sheet 10E.' },
+  { id: 'm2', title: 'Module 2 · Exponential formulations and cutting planes', note: 'Slides 201–206, extra decks EXTRA-201 and EXTRA-202, and exercise sheet 20E.' },
   { id: 'm3', title: 'Module 3 · Heuristics and decomposition', note: 'Classes 7–10 of the outline. The slides were not yet released when this app was built, so these lessons follow the course outline and the textbook (Wolsey), not the instructor’s own examples.' },
   { id: 'm0', title: 'Refreshers and tools', note: 'Prerequisites the course assumes, and the software used in the labs.' },
 ];
@@ -13,11 +14,11 @@ export const TOPICS = [
   { id: 't102', module: 'm1', code: '102', title: 'Branch and bound', short: 'Branch & bound', released: true, weight: 5,
     blurb: 'Primal and dual bounds, incumbents, fathoming, gaps, the search-tree log and solver termination.' },
   { id: 't103', module: 'm1', code: '103', title: 'Relaxations', short: 'Relaxations', released: true, weight: 3,
-    blurb: 'What a relaxation is, which way its bound points, when its optimum is optimal, and how to compare two relaxations.' },
+    blurb: 'What a relaxation is, which way its bound points, when its optimum is optimal, surrogate and Lagrangian relaxations, and how to compare two relaxations.' },
   { id: 't104', module: 'm1', code: '104', title: 'Formulations and their strength', short: 'Formulations', released: true, weight: 5,
     blurb: 'Root gap, integer hull, fixed charges, disjunctions, the smallest valid big-M, extended formulations and projection.' },
   { id: 't105a', module: 'm1', code: '105', title: 'Shortest paths: Dijkstra', short: 'Dijkstra', released: true, weight: 4,
-    blurb: 'Label-setting with the exam tie rules; predecessors and path recovery.' },
+    blurb: 'Label-setting with the tie rules of the solved exercises (10E); predecessors and path recovery.' },
   { id: 't105b', module: 'm1', code: '105', title: 'Minimum spanning trees: Kruskal and Prim', short: 'Spanning trees', released: true, weight: 4,
     blurb: 'Greedy edge selection, cycle test, the cut property and uniqueness.' },
   { id: 't105c', module: 'm1', code: '105', title: 'Maximum flow and minimum cut', short: 'Max flow', released: true, weight: 4,
@@ -30,7 +31,7 @@ export const TOPICS = [
     blurb: 'Integral polyhedra, network flow models, min-cut as an integer program, recognising TU matrices.' },
 
   { id: 't201', module: 'm2', code: '201', title: 'TSP and exponential formulations', short: 'TSP formulations', released: true, weight: 5,
-    blurb: 'Degree constraints and cycle covers; MTZ, multicommodity flow and cutset formulations and their strength.' },
+    blurb: 'Degree constraints and cycle covers; MTZ, multicommodity flow and cutset formulations, and the proof that the flow model is at least as strong as MTZ (EXTRA-202).' },
   { id: 't202', module: 'm2', code: '202', title: 'Row generation and lazy constraints', short: 'Row generation', released: true, weight: 4,
     blurb: 'Master problem, separation, correctness and termination; callbacks and branch-and-cut.' },
   { id: 't203', module: 'm2', code: '203', title: 'Separating fractional points', short: 'Fractional cuts', released: true, weight: 3,
@@ -45,8 +46,8 @@ export const TOPICS = [
     blurb: 'Sequential lifting coefficients, faces and facets by affine independence, comparing inequalities.' },
   { id: 't206c', module: 'm2', code: '206', title: 'Flow cover and lot-sizing inequalities', short: 'Flow cover & lot sizing', released: true, weight: 3,
     blurb: 'Fixed-charge flow structures and cumulative set-up bounds.' },
-  { id: 'tE201', module: 'm2', code: 'E201', title: 'Cutting planes for convex functions', short: 'Tangent cuts', released: true, weight: 3,
-    blurb: 'Epigraph form, tangent cuts, the Kelley loop with its bounds, perspective cuts for on/off variables.' },
+  { id: 'tE201', module: 'm2', code: 'EXTRA-201', title: 'Nonlinear cutting planes (convex functions)', short: 'Tangent cuts', released: true, weight: 3,
+    blurb: 'Epigraph form, tangent cuts, the refinement loop with its bounds, perspective cuts for on/off variables.' },
 
   { id: 't301', module: 'm3', code: 'Class 7', title: 'Heuristics', short: 'Heuristics', released: false, weight: 3,
     blurb: 'Constructive methods, local search, metaheuristics, rounding and repair, MIP starts.' },
@@ -61,6 +62,8 @@ export const TOPICS = [
     blurb: 'Extreme points, the simplex tableau, weak and strong duality, complementary slackness.' },
   { id: 't002', module: 'm0', code: 'Prereq', title: 'Complexity and graph vocabulary', short: 'Complexity & graphs', released: true, weight: 1,
     blurb: 'Polynomial versus pseudo-polynomial algorithms, NP-hardness, cuts, cycles and trees.' },
+  { id: 't003', module: 'm0', code: 'Prereq', title: 'Geometry refresher: convex hulls, dimension and faces', short: 'Hulls & faces', released: true, weight: 1,
+    blurb: 'Convex combinations, convex hull, affine independence, the dimension of a set, faces and facets, in plain words.' },
   { id: 't501', module: 'm0', code: 'Labs', title: 'Julia, JuMP and Gurobi in the labs', short: 'JuMP & Gurobi', released: true, weight: 1,
     blurb: 'Building models, reading the solver log, termination status, callbacks.' },
 ];

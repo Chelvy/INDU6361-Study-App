@@ -129,7 +129,8 @@ export const tuDrill = {
   id: 'tu', title: 'Recognising total unimodularity', topic: 't106', minutes: 5,
   blurb: 'Apply the column criterion, find a ±2 determinant when the matrix is not TU, and state what follows for the LP.',
   presets: [
-    { id: 'flow', label: 'Node–arc incidence matrix (slides 106 network)', make: () => ({ M: incidenceMatrix(['s', 'a', 'b', 't'], [{ u: 's', v: 'a' }, { u: 's', v: 'b' }, { u: 'a', v: 'b' }, { u: 'a', v: 't' }, { u: 'b', v: 't' }]), note: 'Rows: vertices s, a, b, t. Columns: arcs sa, sb, ab, at, bt (+1 at the tail, −1 at the head).', title: 'Total unimodularity — flow conservation matrix' }) },
+    // Exactly the table of slides 106: inflow minus outflow, i.e. the negative of incidenceMatrix() (outflow minus inflow).
+    { id: 'flow', label: 'Node–arc incidence matrix (slides 106 network)', make: () => ({ M: incidenceMatrix(['s', 'a', 'b', 't'], [{ u: 's', v: 'a' }, { u: 's', v: 'b' }, { u: 'a', v: 'b' }, { u: 'a', v: 't' }, { u: 'b', v: 't' }]).map((r) => r.map((x) => (x === 0 ? 0 : -x))), note: 'Rows: vertices s, a, b, t. Columns: arcs sa, sb, ab, at, bt. As on slides 106, the table uses the <b>inflow-minus-outflow</b> convention: −1 at the tail of an arc, +1 at its head. This is the negative of the flow-balance rows (outflow minus inflow); multiplying a matrix by −1 does not change total unimodularity.', title: 'Total unimodularity — incidence matrix of slides 106' }) },
     { id: 'assign', label: 'Assignment constraints (2 workers, 2 jobs)', make: () => ({ M: [[1, 1, 0, 0], [0, 0, 1, 1], [1, 0, 1, 0], [0, 1, 0, 1]], note: 'Rows: worker 1, worker 2, job 1, job 2. Columns: $x_{11}, x_{12}, x_{21}, x_{22}$.', title: 'Total unimodularity — assignment constraints' }) },
     { id: 'odd', label: 'Odd-cycle matrix', make: () => ({ M: [[1, 1, 0], [0, 1, 1], [1, 0, 1]], note: 'Rows: the three edges of a triangle. Columns: its vertices.', title: 'Total unimodularity — triangle matrix' }) },
   ],
@@ -214,10 +215,10 @@ function buildCut(inst) {
           { type: 'set', label: 'Arcs with $y_{ij}=1$ in the cheapest solution for these $z$', answer: forward.map(arcName), placeholder: 'e.g. sb, at' },
           { type: 'num', label: 'Objective value', answer: cap },
         ],
-        explain: `$z_i=1$ exactly for the vertices of $S$. Then $y_{ij}\\ge z_i-z_j$ forces $y_{ij}=1$ only on arcs from $S$ to $\\bar S$ (for arcs entering $S$ the right-hand side is $-1$, so $y=0$ is allowed). The objective is the cut capacity ${cap.pretty()}. The constraint matrix is a network matrix, so the LP relaxation already has integer optimal solutions.`,
+        explain: `$z_i=1$ exactly for the vertices of $S$. Then $y_{ij}\\ge z_i-z_j$ forces $y_{ij}=1$ only on arcs from $S$ to $\\bar S$ (for arcs entering $S$ the right-hand side is $-1$, so $y=0$ is allowed). The objective is the cut capacity ${cap.pretty()}. (Beyond the slides: the constraint matrix is a network matrix, so the LP relaxation already has integer optimal solutions.)`,
       },
     ],
-    wrapup: 'Max-flow and min-cut are LP duals of each other with totally unimodular constraint matrices: both LPs have integer optima and equal values.',
+    wrapup: 'A feasible flow and a cut with equal value prove that both are optimal (slides 106). Beyond the slides: max-flow and min-cut are LP duals of each other with totally unimodular constraint matrices, so both LPs have integer optima and equal values.',
   };
 }
 

@@ -52,6 +52,16 @@ function build(inst) {
     });
   }
   const optima = knapsackAllOptima(weights, profits, C);
+  // Walk-back in the words of solved exercise 5: an item heavier than the remaining capacity "cannot fit",
+  // and once the capacity is 0 "no other item fits".
+  const walkLines = [];
+  for (const s of dp.walk) {
+    const w = weights[s.i - 1];
+    if (s.take) walkLines.push(`$(${s.i},${s.c})$: $F=${s.value}>F(${s.i - 1},${s.c})=${s.above}$, so <b>take item ${s.i}</b>; capacity becomes $${s.c}-${w}=${s.next}$.`);
+    else if (s.c === 0) { walkLines.push(`$(${s.i},0)$: the capacity is now 0, so no other item fits.`); break; }
+    else if (w > s.c) walkLines.push(`$(${s.i},${s.c})$: item ${s.i} has weight ${w}, more than ${s.c}, so it cannot fit: skip it ($F=${s.value}=F(${s.i - 1},${s.c})$).`);
+    else walkLines.push(`$(${s.i},${s.c})$: $F=${s.value}=F(${s.i - 1},${s.c})$, so skip item ${s.i}.`);
+  }
   steps.push({
     title: 'Recover an optimal subset',
     text: () => frag('Completed table:', tableUpTo(n), `Start at $(i,c)=(${n},${C})$ and compare each entry with the one above it. Tie rule: if $F(i,c)=F(i-1,c)$, <b>skip</b> item $i$.`),
@@ -61,9 +71,7 @@ function build(inst) {
       { type: 'num', label: 'Their total weight', answer: dp.weight },
     ],
     explain: () => frag(
-      ul(dp.walk.map((s) => (s.take
-        ? `$(${s.i},${s.c})$: $F=${s.value}>F(${s.i - 1},${s.c})=${s.above}$, so <b>take item ${s.i}</b>; capacity becomes $${s.c}-${weights[s.i - 1]}=${s.next}$.`
-        : `$(${s.i},${s.c})$: $F=${s.value}=F(${s.i - 1},${s.c})$, so skip item ${s.i}.`))),
+      ul(walkLines),
       `Selected items ${setText(dp.items)}: weight ${dp.weight}, profit ${dp.value}.`,
       optima.sets.length > 1 ? ` Other optimal subsets exist (${optima.sets.filter((x) => x.join() !== dp.items.join()).map(setText).join(', ')}); the table gives the optimal value and the tie rule picks one subset.` : '',
       tableUpTo(n, (i, c) => (dp.walk.some((s) => s.i === i && s.c === c) ? 'cell-pick' : '')),

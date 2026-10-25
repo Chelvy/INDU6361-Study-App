@@ -99,6 +99,17 @@ export function minimalCovers(a, b) {
   }
   return out.sort((p, q) => p.length - q.length || p.join(',').localeCompare(q.join(',')));
 }
+// Every cover, minimal or not (20E, Exercise 10 asks for the full list), smallest sets first.
+export function allCovers(a, b) {
+  const n = a.length;
+  const out = [];
+  for (let mask = 1; mask < 1 << n; mask++) {
+    const set = [];
+    for (let j = 0; j < n; j++) if (mask & (1 << j)) set.push(j);
+    if (isCover(a, b, set)) out.push(set);
+  }
+  return out.sort((p, q) => p.length - q.length || p.join(',').localeCompare(q.join(',')));
+}
 // E(C) = C plus every item at least as heavy as the heaviest item of C.
 export function extendedCover(a, set) {
   const M = Math.max(...set.map((j) => a[j]));

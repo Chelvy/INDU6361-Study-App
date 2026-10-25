@@ -9,6 +9,7 @@ import { mountQuestion } from '../question-ui.js';
 import { masteryLabel, effectiveMastery } from '../plan.js';
 import { WIDGETS } from '../widgets.js';
 import { titleOf } from './bank.js';
+import { allExercises } from '../data/exercises/index.js';
 
 function index(root) {
   const state = store.get();
@@ -66,7 +67,7 @@ function lessonPage(root, topic) {
   const article = h('article', { class: 'lesson' });
   article.appendChild(h('h1', null, topic.title));
   article.appendChild(h('div', { class: 'row', style: 'margin-bottom:.8rem' },
-    h('span', { class: 'chip' }, topic.released ? `Slides ${topic.code}` : topic.code),
+    h('span', { class: 'chip' }, topic.released && topic.module !== 'm0' ? `Slides ${topic.code}` : topic.module === 'm0' ? (topic.code === 'Labs' ? 'Labs' : 'Refresher') : topic.code),
     h('span', { class: `chip ${lab.cls}` }, st && st.n ? `${lab.text} · ${Math.round(effectiveMastery(st) * 100)}%` : lab.text),
     topic.released ? null : h('span', { class: 'chip warn' }, 'Ahead of released slides')));
   if (lesson && lesson.lead) article.appendChild(rich(lesson.lead, 'p', 'lead'));
@@ -80,6 +81,12 @@ function lessonPage(root, topic) {
   drills.forEach((d) => actions.appendChild(h('a', { class: 'btn primary', href: `#/train/${d.id}${d.presets && d.presets.length ? `?p=${d.presets[0].id}` : ''}` }, `Trainer: ${d.title}`)));
   actions.appendChild(h('a', { class: 'btn', href: `#/bank?topic=${topic.id}&n=10` }, 'Practise questions'));
   article.appendChild(actions);
+  const exs = allExercises().filter((ex) => ex.topic === topic.id);
+  if (exs.length) {
+    const row = h('div', { class: 'row', style: 'margin:-.4rem 0 1rem' }, h('span', { class: 'small muted' }, 'Instructor’s exercises on this topic:'));
+    exs.forEach((ex) => row.appendChild(h('a', { class: 'chip blue', href: `#/exercises/${ex.sheet}/${ex.n}`, style: 'text-decoration:none' }, `${ex.sheet.toUpperCase()} · Ex. ${ex.label || ex.n}`)));
+    article.appendChild(row);
+  }
 
   if (lesson) {
     if (lesson.sections.length > 2) {

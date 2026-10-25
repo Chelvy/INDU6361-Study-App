@@ -34,17 +34,30 @@ function randomEdges(rng, level) {
   return generateUntil(rng, make, accept);
 }
 
-function figureFor(inst, selected = [], last = null, lastCls = 'hl') {
+// Legend as in the solved exercises: blue = selected, orange dashed = rejected.
+function figureFor(inst, selected = [], rejected = []) {
   const sel = new Set(selected);
+  const rej = new Set(rejected);
   const pos = inst.pos || LAYOUTS[inst.layout] || circleLayout(inst.nodes);
   return graphFigure({
     nodes: inst.nodes, pos, directed: false,
     edges: inst.edges.map((e) => {
       const nm = edgeName(e.u, e.v);
-      return { u: e.u, v: e.v, label: e.w, cls: nm === last ? lastCls : sel.has(nm) ? 'sel' : '' };
+      return { u: e.u, v: e.v, label: e.w, cls: rej.has(nm) ? 'hl dash' : sel.has(nm) ? 'sel' : '' };
     }),
-    caption: selected.length ? 'Blue: selected edges.' : 'Edge labels: weight',
+    caption: selected.length ? `Blue: selected edges.${rejected.length ? ' Orange dashed: edges rejected.' : ''}` : 'Edge labels: weight',
   });
+}
+
+// Every way of writing the same closed cycle: any starting vertex, either direction, with or without repeating the start.
+function cycleSpellings(closed) {
+  const ring = closed.slice(0, -1);
+  const out = [];
+  [ring, ring.slice().reverse()].forEach((r) => r.forEach((_, k) => {
+    const rot = r.slice(k).concat(r.slice(0, k));
+    out.push(rot.concat([rot[0]]), rot);
+  }));
+  return out;
 }
 
 function buildKruskal(inst) {
@@ -55,6 +68,7 @@ function buildKruskal(inst) {
   r.trace.forEach((t) => { decision[t.edge] = t.accept ? 'A' : 'R'; });
   const options = [{ value: 'A', label: 'Accept', short: 'Accept' }, { value: 'R', label: 'Reject (cycle)', short: 'Reject' }, { value: 'N', label: 'Not examined', short: 'Not examined' }];
   const n = inst.nodes.length;
+  const rejected = r.trace.filter((t) => !t.accept);
   const steps = [
     {
       title: 'Order the edges',
@@ -75,10 +89,20 @@ function buildKruskal(inst) {
       }],
       explain: () => frag(
         dataTable(['Edge', 'Decision', 'Components after the decision', 'Weight so far'],
-          r.trace.map((t) => [`${t.edge} (${t.w})`, t.accept ? 'Accept' : `Reject — closes the cycle ${t.cycle.join(', ')}`, t.components.map(setText).join(', '), t.weight])),
+          r.trace.map((t) => [`${t.edge} (${t.w})`, t.accept ? 'Accept' : 'Reject', t.components.map(setText).join(', '), t.weight])),
+        rejected.length ? `Reject ${rejected.map((t) => t.edge).join(', ')}: the endpoints already share a component. ` : '',
         r.unexamined.length ? `Edges ${r.unexamined.join(', ')} need not be examined: the tree already has ${n - 1} edges.` : 'Every edge was examined.',
       ),
     },
+    ...(rejected.length ? [{
+      title: 'The cycle each rejected edge would close',
+      text: 'The solved exercises name the cycle that a rejected edge would close, as a list of vertices that returns to its start (for example <code>a, b, c, a</code>).',
+      fields: rejected.map((t) => ({ type: 'seq', label: `Cycle closed by ${t.edge}`, answer: t.cycle, alts: cycleSpellings(t.cycle), chars: true, joiner: ', ', placeholder: 'e.g. a, b, c, a' })),
+      explain: () => frag(
+        ul(rejected.map((t) => `${t.edge}: the tree edges already join ${t.u} and ${t.v} along ${t.cycle.slice(0, -1).join(' – ')}, so adding ${t.edge} closes the cycle <b>${t.cycle.join(', ')}</b>.`)),
+        'A cycle can be written from any of its vertices and in either direction: for example a, b, c, a and b, a, c, b are the same cycle.',
+      ),
+    }] : []),
     {
       title: 'The tree and its uniqueness',
       text: 'Give the minimum spanning tree found, its total weight, and say whether the minimum spanning tree is unique.',
@@ -96,7 +120,7 @@ function buildKruskal(inst) {
           const other = all.find((t) => t.slice().sort().join() !== r.tree.slice().sort().join());
           why = `It is not unique: ${setText(other)} is another spanning tree of weight ${r.weight} (${all.length} minimum spanning trees in total). Ties in the edge weights make this possible.`;
         }
-        return frag(`$T=${'\\{'}${r.tree.join(', ')}${'\\}'}$ with $w(T)=${r.trace.filter((t) => t.accept).map((t) => t.w).join('+')}=${r.weight}$. ${why}`, figureFor(inst, r.tree));
+        return frag(`$T=${'\\{'}${r.tree.join(', ')}${'\\}'}$ with $w(T)=${r.trace.filter((t) => t.accept).map((t) => t.w).join('+')}=${r.weight}$. ${why}`, figureFor(inst, r.tree, rejected.map((t) => t.edge)));
       },
     },
   ];

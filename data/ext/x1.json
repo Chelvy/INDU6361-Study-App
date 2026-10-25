@@ -261,7 +261,7 @@
    "Concludes validity on the union of the two pieces and hence on the convex hull"
   ],
   "difficulty": 2,
-  "explain": "It is a split (disjunctive) cut for the split $x\\le\\lfloor b\\rfloor$ or $x\\ge\\lfloor b\\rfloor+1$. At $y=0$ it reduces to the plain rounding $x\\le\\lfloor b\\rfloor$.",
+  "explain": "It is a split (disjunctive) cut for the split $x\\le\\lfloor b\\rfloor$ or $x\\ge\\lfloor b\\rfloor+1$. At $y=0$ it reduces to the plain rounding $x\\le\\lfloor b\\rfloor$. Notation: this source writes $f_0=b-\\lfloor b\\rfloor$ for the “$\\le$” row and divides by $1-f_0$. Slides 205 write the row as $z+u\\ge k+f$; for a “$\\le$” row their $f$ is $1-f_0=\\lceil b\\rceil-b$ (for $b=2.3$: $f_0=0.3$, slides' $f=0.7$).",
   "source": {
    "label": "MIT OCW 15.083J / 6.859J (Fall 2009) — Final Exam and Final Exam Solutions",
    "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/8516510b21065391c45b723f82bb2394_MIT15_083JF09_final_sol.pdf",
@@ -281,7 +281,7 @@
    "Applies the basic MIR and expands the coefficients correctly"
   ],
   "difficulty": 3,
-  "explain": "Rounding up when $f_j \\gt f_0$ is what improves on plain rounding: the coefficient $\\lfloor a_j\\rfloor+\\frac{f_j-f_0}{1-f_0}$ exceeds $\\lfloor a_j\\rfloor$. Applied to a simplex tableau row written with its slack, this inequality is exactly the Gomory mixed-integer cut (the source's next question; the identity was re-checked symbolically for this bank).",
+  "explain": "Rounding up when $f_j \\gt f_0$ is what improves on plain rounding: the coefficient $\\lfloor a_j\\rfloor+\\frac{f_j-f_0}{1-f_0}$ exceeds $\\lfloor a_j\\rfloor$. Applied to a simplex tableau row written with its slack, this inequality is exactly the Gomory mixed-integer cut (the source's next question; the identity was re-checked symbolically for this bank). Notation: this source writes $f_0=b-\\lfloor b\\rfloor$ for the “$\\le$” row and divides by $1-f_0$. Slides 205 write the row as $z+u\\ge k+f$; for a “$\\le$” row their $f$ is $1-f_0=\\lceil b\\rceil-b$ (for $b=2.3$: $f_0=0.3$, slides' $f=0.7$). This derivation drops the continuous terms with $g_j\\ge0$. The course (20E Ex. 8) complements such a variable when it has an upper bound: $u=1-y$ keeps it in the cut, $3x_1+3x_2+5y\\le14$, whereas dropping $y$ gives only $x_1+x_2\\le4$.",
   "source": {
    "label": "MIT OCW 15.083J / 6.859J (Fall 2009) — Final Exam and Final Exam Solutions",
    "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/8516510b21065391c45b723f82bb2394_MIT15_083JF09_final_sol.pdf",
@@ -301,7 +301,7 @@
    "(b) sums the MTZ constraints around that cycle to obtain $n|C|\\le(n-1)|C|$"
   ],
   "difficulty": 2,
-  "explain": "MTZ needs only $O(n^2)$ constraints and $n-1$ extra variables, but its LP relaxation is weaker than that of the cutset/subtour formulation.",
+  "explain": "MTZ needs only $O(n^2)$ constraints and $n-1$ extra variables, but its LP relaxation is weaker than that of the cutset/subtour formulation. Slides 201: any $M\\ge n-1$ is valid and the slides take the smallest value, $M=n-1$; this source uses $M=n$, which is valid but never gives a stronger LP relaxation.",
   "source": {
    "label": "MIT OCW 15.083J / 6.859J (Fall 2009) — Problem Set 1 Solutions",
    "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/9254df85c806f8bf0ad9b0482e4fdd60_MIT15_083JF09_assn01_sol.pdf",
@@ -321,7 +321,7 @@
   ],
   "answer": 0,
   "difficulty": 3,
-  "explain": "Around the cycle the $u$ terms cancel: $n\\,y(C)\\le(n-1)\\,|C|$, i.e. $y(C)\\le|C|-|C|/n$. A cycle avoiding node 1 has $|C|\\le n-1$, so the right-hand side is larger than $|C|-1$ and the MTZ relaxation tolerates &quot;almost subtours&quot; (for $n=5$ a 2-cycle may carry $y_{23}+y_{32}=1.6$). The source shows by LP duality that these cycle inequalities describe exactly the projection of the MTZ relaxation onto the $y$ variables, so the cutset relaxation is strictly contained in it: MTZ is the weaker formulation.",
+  "explain": "Around the cycle the $u$ terms cancel: $n\\,y(C)\\le(n-1)\\,|C|$, i.e. $y(C)\\le|C|-|C|/n$. A cycle avoiding node 1 has $|C|\\le n-1$, so the right-hand side is larger than $|C|-1$ and the MTZ relaxation tolerates &quot;almost subtours&quot; (for $n=5$ a 2-cycle may carry $y_{23}+y_{32}=1.6$). The source shows by LP duality that these cycle inequalities describe exactly the projection of the MTZ relaxation onto the $y$ variables, so the cutset relaxation is strictly contained in it: MTZ is the weaker formulation. Slides 201: any $M\\ge n-1$ is valid and the slides take the smallest value, $M=n-1$; this source uses $M=n$, which is valid but never gives a stronger LP relaxation. In the course, EXTRA-202 proves $z_{LP}^{MCF}\\ge z_{LP}^{MTZ}$ and slides 201 show that MCF and the cutset formulation give the same region after projection.",
   "source": {
    "label": "MIT OCW 15.083J / 6.859J (Fall 2009) — Problem Set 1 Solutions",
    "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/9254df85c806f8bf0ad9b0482e4fdd60_MIT15_083JF09_assn01_sol.pdf",
@@ -341,7 +341,7 @@
    "Explains why this is exact (the minimum cut minimises the left-hand side over all $S$) and polynomial"
   ],
   "difficulty": 2,
-  "explain": "The same routine separates the Steiner-tree cut constraints ($r_{ij}=1$ when $i$ and $j$ are both terminals) and fractional TSP subtour constraints (right-hand side 2). By the equivalence of separation and optimisation the LP is then solvable in polynomial time.",
+  "explain": "The same routine separates the Steiner-tree cut constraints ($r_{ij}=1$ when $i$ and $j$ are both terminals) and fractional TSP subtour constraints (right-hand side 2). By the equivalence of separation and optimisation the LP is then solvable in polynomial time. Course version (slides 203): the TSP there is directed, the row is $x(\\delta^+(S))\\ge1$ and counts only arcs leaving $S$, and a set is violated when its cut capacity is below $1-\\varepsilon$. The symmetric TSP mentioned above has degree 2 at every vertex, hence the threshold 2.",
   "source": {
    "label": "MIT OCW 15.083J / 6.859J (Fall 2009) — Problem Set 4 Solutions",
    "url": "https://ocw.mit.edu/courses/15-083j-integer-programming-and-combinatorial-optimization-fall-2009/ca2d48a402d086cee864c4764d0a104a_MIT15_083JF09_assn04_sol.pdf",
@@ -614,7 +614,7 @@
   "q": "Single-node flow set: $x_1+x_2+x_3+x_4=66$, $0\\le x_1\\le30y_1$, $0\\le x_2\\le50y_2$, $0\\le x_3\\le20y_3$, $0\\le x_4\\le45y_4$, $y\\in\\{0,1\\}^4$. For a flow cover $C$ (that is, $\\sum_{j\\in C}u_j \\gt b$) with excess $\\lambda=\\sum_{j\\in C}u_j-b$, the flow-cover inequality is $$\\sum_{j\\in C}x_j+\\sum_{j\\in C}(u_j-\\lambda)^+(1-y_j)\\le b .$$ For $C=\\{2,3\\}$, what is the coefficient of $(1-y_2)$?",
   "answer": 46,
   "difficulty": 2,
-  "explain": "$\\lambda=50+20-66=4$, so the coefficients are $(50-4)^+=46$ and $(20-4)^+=16$: $$x_2+x_3+46(1-y_2)+16(1-y_3)\\le66 .$$ Check: if arc 2 is closed ($y_2=0$) the inequality says $x_2+x_3\\le20=66-46$, which is exactly what arc 3 alone can carry.",
+  "explain": "<i>Notation of the source:</i> here $x$ is the flow and $y$ the on/off variable, the reverse of slides 206 (which write $y_j$ for the flow, $x_j\\in\\{0,1\\}$ for activation and $a_j$ for the capacity). $\\lambda=50+20-66=4$, so the coefficients are $(50-4)^+=46$ and $(20-4)^+=16$: $$x_2+x_3+46(1-y_2)+16(1-y_3)\\le66 .$$ Check: if arc 2 is closed ($y_2=0$) the inequality says $x_2+x_3\\le20=66-46$, which is exactly what arc 3 alone can carry. Notation: this source writes $x_j$ for the flow, $y_j$ for the on/off binary and $u_j$ for the capacity, with the equation $\\sum_jx_j=b$. Slides 206 use the reverse letters: $y_j$ is the flow, $x_j$ the binary, $a_j$ the capacity, and the row is $\\sum_jy_j\\le b$.",
   "source": {
    "label": "TU Delft WI4410 Advanced Discrete Optimization — Exam of August 15th, 2018, with solutions",
    "url": "https://ch.tudelft.nl/choice2/api/v1/document/exam/4175",
@@ -635,7 +635,7 @@
    "Distinguishes $u_k\\ge\\lambda$ for some closed arc from $u_j \\lt\\lambda$ for all closed arcs, and concludes"
   ],
   "difficulty": 3,
-  "explain": "Intuition: closing an arc $k\\in C$ with $u_k \\gt\\lambda$ lowers the largest possible flow through $C$ from $b$ to $b-(u_k-\\lambda)$. The 2018 paper only gives a hint; the 2017 paper of the same course treats one closed arc, $\\sum_{C}x_j\\le\\min(b,\\,b+\\lambda-u_k)=b-(u_k-\\lambda)^+$. The complete case analysis above was worked for this bank.",
+  "explain": "<i>Notation of the source:</i> here $x$ is the flow and $y$ the on/off variable, the reverse of slides 206 (which write $y_j$ for the flow, $x_j\\in\\{0,1\\}$ for activation and $a_j$ for the capacity). Intuition: closing an arc $k\\in C$ with $u_k \\gt\\lambda$ lowers the largest possible flow through $C$ from $b$ to $b-(u_k-\\lambda)$. The 2018 paper only gives a hint; the 2017 paper of the same course treats one closed arc, $\\sum_{C}x_j\\le\\min(b,\\,b+\\lambda-u_k)=b-(u_k-\\lambda)^+$. The complete case analysis above was worked for this bank. Notation: this source writes $x_j$ for the flow, $y_j$ for the on/off binary and $u_j$ for the capacity, with the equation $\\sum_jx_j=b$. Slides 206 use the reverse letters: $y_j$ is the flow, $x_j$ the binary, $a_j$ the capacity, and the row is $\\sum_jy_j\\le b$.",
   "source": {
    "label": "TU Delft WI4410 Advanced Discrete Optimization — Exam of August 15th, 2018, with solutions",
    "url": "https://ch.tudelft.nl/choice2/api/v1/document/exam/4175",
@@ -841,7 +841,7 @@
   ],
   "answer": 2,
   "difficulty": 3,
-  "explain": "$C$ is a cover iff $|C|\\,u \\gt b$, i.e. $|C|\\ge k=\\lceil b/u\\rceil$. For $|C|=k$: $\\lambda=ku-b \\lt u$, so every coefficient $(u-\\lambda)^+=b-(k-1)u$ is positive and the inequality carries information. For $|C|\\ge k+1$: $\\lambda\\ge(k+1)u-b \\gt u$, all coefficients $(u-\\lambda)^+$ are 0 and the inequality collapses to $\\sum_{j\\in C}x_j\\le b$, which the flow equation already implies. A set of size $\\lfloor b/u\\rfloor$ is not a cover.",
+  "explain": "<i>Notation of the source:</i> here $x$ is the flow and $y$ the on/off variable, the reverse of slides 206 (which write $y_j$ for the flow, $x_j\\in\\{0,1\\}$ for activation and $a_j$ for the capacity). $C$ is a cover iff $|C|\\,u \\gt b$, i.e. $|C|\\ge k=\\lceil b/u\\rceil$. For $|C|=k$: $\\lambda=ku-b \\lt u$, so every coefficient $(u-\\lambda)^+=b-(k-1)u$ is positive and the inequality carries information. For $|C|\\ge k+1$: $\\lambda\\ge(k+1)u-b \\gt u$, all coefficients $(u-\\lambda)^+$ are 0 and the inequality collapses to $\\sum_{j\\in C}x_j\\le b$, which the flow equation already implies. A set of size $\\lfloor b/u\\rfloor$ is not a cover. Notation: this source writes $x_j$ for the flow, $y_j$ for the on/off binary and $u$ for the common capacity, with the equation $\\sum_jx_j=b$. Slides 206 use the reverse letters: $y_j$ is the flow, $x_j$ the binary, $a_j$ the capacity, and the row is $\\sum_jy_j\\le b$.",
   "source": {
    "label": "TU Delft WI4410 Advanced Discrete Optimization — Exam of July 1, 2020 (open book), with solutions",
    "url": "https://ch.tudelft.nl/choice2/api/v1/document/exam/4169",
@@ -1286,7 +1286,7 @@
   "q": "MTZ formulation on the complete digraph with 4 vertices: binary $x_{ij}$ for all 12 arcs, $\\sum_jx_{ij}=1$ and $\\sum_ix_{ij}=1$ for every vertex, and $u_i-u_j+4x_{ij}\\le3$ for all $i\\ne j$ in $\\{2,3,4\\}$, where $u_2,u_3,u_4$ are integers in $\\{2,3,4\\}$. How many feasible integer points $(x,u)$ are there?",
   "answer": 6,
   "difficulty": 2,
-  "explain": "The feasible $x$ are the $(4-1)!=6$ directed Hamiltonian cycles. For each tour, every tour arc $(i,j)$ not touching vertex 1 forces $u_j\\ge u_i+1$, so the vertices 2, 3, 4 must receive three strictly increasing values of $\\{2,3,4\\}$ along the tour: $u$ is forced to be the visiting position. For example $1\\to3\\to4\\to2\\to1$ has $(u_2,u_3,u_4)=(4,2,3)$. So there is exactly one $u$ per tour and 6 points in total (confirmed by complete enumeration; the source has no solutions).",
+  "explain": "The feasible $x$ are the $(4-1)!=6$ directed Hamiltonian cycles. For each tour, every tour arc $(i,j)$ not touching vertex 1 forces $u_j\\ge u_i+1$, so the vertices 2, 3, 4 must receive three strictly increasing values of $\\{2,3,4\\}$ along the tour: $u$ is forced to be the visiting position. For example $1\\to3\\to4\\to2\\to1$ has $(u_2,u_3,u_4)=(4,2,3)$. So there is exactly one $u$ per tour and 6 points in total (confirmed by complete enumeration; the source has no solutions). Here $M=n=4$. Slides 201: any $M\\ge n-1$ is valid and the slides take the smallest value, $M=n-1$ (here $u_i-u_j+3x_{ij}\\le2$); the count of 6 points does not change.",
   "source": {
    "label": "Simon Fraser University MATH 408/708 (T. Stephen) — Assignment 5 (Fall 2020 offering)",
    "url": "https://www.sfu.ca/~tstephen/Teaching/1207_Math408/hw5.pdf",
@@ -1590,7 +1590,7 @@
    "url": "https://ocw.mit.edu/courses/15-053-optimization-methods-in-management-science-spring-2013/72350db759d0557c9d44df4fe7263397_MIT15_053S13_tut10.pdf",
    "solution": "source"
   },
-  "explain": "In the tutorial's knapsack example the search starts with the incumbent $(0,0,0,0)$ of value 0 and ends when no active node is left."
+  "explain": "In the tutorial's knapsack example the search starts with the incumbent $(0,0,0,0)$ of value 0 and ends when no active node is left. Notation: this source writes $z^*$ for the incumbent value; slides 102 call it $z_P$ and keep $z^*$ for the optimal value. The slides name three reasons to close a node: infeasibility, integrality (the LP optimum is integer; update the incumbent if it improves) and bound."
  },
  {
   "id": "x1-lec1-facility",

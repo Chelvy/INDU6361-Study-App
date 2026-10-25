@@ -53,7 +53,7 @@ function build(inst) {
         cls: inS && inS.has(a.u) && !inS.has(a.v) ? 'hl' : onPath.has(k) ? 'hl' : flow[k].sign() > 0 ? 'sel' : '',
       })),
       nodeCls: inS ? Object.fromEntries(nodes.map((v) => [v, inS.has(v) ? 'settled' : ''])) : null,
-      caption: cutSet ? 'Arc labels: flow / capacity. Filled vertices: source side S. Orange: cut arcs.' : 'Arc labels: flow / capacity. Blue: positive flow.',
+      caption: cutSet ? 'Arc labels: flow / capacity. Filled vertices: source side S. Orange: cut arcs.' : `Arc labels: flow / capacity. Blue: positive flow.${hlPath ? ' Orange: current path.' : ''}`,
     });
   };
   const zero = arcs.map(() => ZERO);
@@ -80,16 +80,24 @@ function build(inst) {
       if (toks.length === aug.path.length) return { ok: false, score: 0.5, msg: 'That is an augmenting path with the fewest arcs, but BFS with alphabetical neighbour order discovers a different one first.' };
       return { ok: false, score: 0.25, msg: 'That path has positive residual capacity, but Edmonds–Karp uses a path with the fewest arcs (BFS).' };
     };
+    // Exercise 3 asks: "For each BFS path, give residual capacities and its bottleneck." Compare numerically (2 = 2.0).
+    const along = aug.steps.map((st) => st.residual);
+    const residCheck = (toks) => {
+      const vals = toks.map((x) => Frac.tryParse(x));
+      if (vals.length === along.length && vals.every((v, i) => v && v.eq(along[i]))) return { ok: true, score: 1 };
+      return null;
+    };
     steps.push({
       title: `Augmenting path ${k + 1}`,
       text: () => frag(
         k === 0 ? 'Every flow is zero, so each residual capacity equals the arc capacity. Run BFS from the source.'
           : frag(`Current flow value: ${valueBefore.pretty()}. Residual capacities (forward $c_{uv}-f_{uv}$, reverse $f_{uv}$):`, residualTable(before)),
-        'Give the path BFS finds, its bottleneck, and the flow value after augmenting.',
+        'Give the path BFS finds, the residual capacities along it, its bottleneck, and the flow value after augmenting.',
       ),
       figure: k === 0 ? null : flowFigure(before),
       fields: [
         { type: 'seq', label: 'BFS augmenting path', answer: aug.path, chars: true, check, placeholder: `e.g. ${s}-a-c-${t}` },
+        { type: 'seq', label: 'Residual capacities along that path, in order', answer: along.map((v) => v.pretty()), check: residCheck, joiner: ', ', placeholder: 'e.g. 3, 4, 3' },
         { type: 'num', label: 'Bottleneck $\\delta$', answer: aug.delta },
         { type: 'num', label: 'Flow value after the augmentation', answer: aug.value },
       ],
@@ -139,7 +147,7 @@ function build(inst) {
   return {
     id: 'maxflow', topic: 't105c', title: inst.title || 'Edmonds–Karp maximum flow',
     statement: () => frag(
-      `Find a <b>maximum flow</b> from ${s} to ${t} with the Edmonds–Karp algorithm, starting from zero flow. For each BFS path give the bottleneck; finish with the final flows and a minimum cut.`,
+      `Find a <b>maximum flow</b> from ${s} to ${t} with the Edmonds–Karp algorithm, starting from zero flow. For each BFS path give the residual capacities along it and its bottleneck; finish with the final flows and a minimum cut.`,
       dataTable(['Arc'].concat(arcs.map((a) => `${a.u}→${a.v}`)), [['Capacity'].concat(arcs.map((a) => a.cap))], 'compact'),
     ),
     figure: flowFigure(zero),

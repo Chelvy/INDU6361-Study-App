@@ -185,6 +185,15 @@ label.inline { display: inline-flex; align-items: center; gap: .45rem; font-size
 .callout.trap { border-color: var(--bad); background: var(--bad-soft); }
 .callout.move { border-color: var(--ok); background: var(--ok-soft); }
 .callout.warn { border-color: var(--amber); background: var(--amber-soft); }
+.callout.hint { border-color: var(--amber); background: var(--amber-soft); margin: .5rem 0; }
+.ex-part h2 { margin-top: 0; }
+.ex-q { margin-bottom: .6rem; }
+.ex-hints, .ex-check, .ex-solution, .ex-mark { margin: .6rem 0; }
+.ex-check { padding: .6rem .7rem; border: 1px dashed var(--line-strong); border-radius: 10px; }
+.ex-steps { margin: .4rem 0 .6rem; padding-left: 1.4rem; }
+.ex-steps li { margin: .45rem 0; }
+.ex-mark { border-top: 1px solid var(--line); padding-top: .6rem; }
+.ex-mark .row { margin-bottom: .3rem; }
 .callout > :last-child { margin-bottom: 0; }
 .callout .callout-title { font-weight: 700; font-size: .8rem; letter-spacing: .05em; text-transform: uppercase; margin-bottom: .25rem; }
 .toc { display: flex; flex-wrap: wrap; gap: .4rem; margin: .6rem 0 1rem; }
@@ -365,6 +374,8 @@ marker.arrow-dim path { fill: var(--line-strong); }
 .axis-name { font-weight: 700; fill: var(--ink); font-size: 13px; }
 .con-line { stroke: var(--primary); stroke-width: 1.6; }
 .cut-line { stroke: var(--bad); stroke-width: 2; stroke-dasharray: 6 4; }
+.cut-line.second { stroke: var(--ok); }
+.seg { stroke: var(--ink); stroke-width: 4; stroke-linecap: round; }
 .lattice.in { fill: var(--ink); }
 .lattice.out { fill: var(--line-strong); }
 .mark { fill: var(--amber); stroke: var(--surface); stroke-width: 2; }

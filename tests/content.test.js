@@ -10,35 +10,9 @@ import { CORE } from '../js/data/bank-core.js';
 import { SHEET } from '../js/data/sheet.js';
 import { SOURCES } from '../js/data/sources.js';
 import { gradeField } from '../js/grade.js';
+import { checkHtml } from './helpers.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const TAGS = new Set(['b', 'i', 'em', 'strong', 'br', 'ul', 'ol', 'li', 'code', 'sub', 'sup', 'p', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'span', 'div', 'pre', 'u', 'h3', 'h4', 'a', 'small']);
-
-function checkHtml(s, where) {
-  assert.equal(typeof s, 'string', `${where}: not a string`);
-  assert.ok(s.trim().length > 0, `${where}: empty`);
-  assert.ok(!/\[object |\bNaN\b/.test(s), `${where}: suspicious text`);
-  assert.ok(!/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(s), `${where}: control character (bad escape?)`);
-  // strip code blocks: they may contain $ and comparison signs legitimately
-  const t = s.replace(/<pre>[\s\S]*?<\/pre>/g, '').replace(/<code>[\s\S]*?<\/code>/g, '').replace(/\\\$/g, '');
-  const dd = (t.match(/\$\$/g) || []).length;
-  const d = (t.replace(/\$\$/g, '').match(/\$/g) || []).length;
-  assert.ok(dd % 2 === 0 && d % 2 === 0, `${where}: unbalanced $ near "${t.slice(0, 80)}"`);
-  for (const m of t.matchAll(/<\/?([A-Za-z!?][A-Za-z0-9]*)/g)) assert.ok(TAGS.has(m[1].toLowerCase()), `${where}: "<${m[1]}" is read as an HTML tag (use \\lt or spaces inside math)`);
-  // every opened block tag is closed
-  for (const tag of ['table', 'ul', 'ol', 'div', 'pre', 'tbody', 'thead']) {
-    const open = (s.match(new RegExp(`<${tag}[\\s>]`, 'g')) || []).length;
-    const close = (s.match(new RegExp(`</${tag}>`, 'g')) || []).length;
-    assert.equal(open, close, `${where}: <${tag}> opened ${open} times, closed ${close}`);
-  }
-  // braces balanced inside math
-  for (const m of t.matchAll(/\$\$([\s\S]*?)\$\$|\$([^$]*?)\$/g)) {
-    const body = (m[1] !== undefined ? m[1] : m[2]).replace(/\\[{}]/g, '');
-    const o = (body.match(/\{/g) || []).length, c = (body.match(/\}/g) || []).length;
-    assert.equal(o, c, `${where}: unbalanced braces in math "${body.slice(0, 70)}"`);
-    assert.ok(!/\\(begin|end)\{(align\*?|equation|eqnarray|tabular)\}/.test(body), `${where}: environment not supported by KaTeX`);
-  }
-}
 
 test('every topic has a lesson and every lesson belongs to a topic', () => {
   TOPICS.forEach((t) => assert.ok(hasLesson(t.id), `no lesson for ${t.id}`));

@@ -446,7 +446,7 @@
    "None: the node 47/47 already proves optimality"
   ],
   "answer": 1,
-  "explain": "The incumbent is 47. The leaf 50.1 may contain a better solution ($50.1\\gt 47$). The leaf 43.7 is pruned by bound ($43.7\\lt 47$), the node $-\\infty$ by infeasibility, and the nodes 47/47 and 44/44 are solved (pruned by optimality). Optimality is not proved yet because the global upper bound is still 50.1.",
+  "explain": "The incumbent is 47. The leaf 50.1 may contain a better solution ($50.1\\gt 47$). The leaf 43.7 is pruned by bound ($43.7\\lt 47$), the node $-\\infty$ by infeasibility, and the nodes 47/47 and 44/44 are solved (pruned by optimality). Optimality is not proved yet because the global upper bound is still 50.1. (Slides 102 call “pruned by optimality” fathoming by <b>integrality</b>: the LP optimum is integer.)",
   "source": {
    "label": "Discrete Optimisation Exercises Book, ex. 3.1.4 (pp. 26-27)",
    "url": null,
@@ -466,7 +466,7 @@
    "Node 47/47 must be re-opened: other solutions of that subproblem can be second best",
    "Leaf 43.7 stays pruned because $43.7\\lt 44$; the infeasible node stays pruned"
   ],
-  "explain": "For the $k$ best solutions the pruning threshold is the $k$-th best known value, and a node 'pruned by optimality' only tells us its best solution, not its second best.",
+  "explain": "For the $k$ best solutions the pruning threshold is the $k$-th best known value, and a node 'pruned by optimality' only tells us its best solution, not its second best. (Slides 102 call this reason <b>integrality</b>, and note that closing a node whose bound only equals the incumbent is enough when one optimal solution is wanted, not several.)",
   "source": {
    "label": "Discrete Optimisation Exercises Book, ex. 3.1.4 (pp. 26-27)",
    "url": null,
@@ -910,7 +910,7 @@
    "$-\\tfrac{11}{3}y_1+y_2+\\tfrac52y_3-2x\\le 10$"
   ],
   "answer": 3,
-  "explain": "$f_0=\\tfrac12$. For $y_1$: $\\lfloor-\\tfrac{10}{3}\\rfloor=-4$, $f_1=\\tfrac23$, coefficient $-4+\\tfrac{2/3-1/2}{1/2}=-\\tfrac{11}{3}$. For $y_2$: 1. For $y_3$: $\\lfloor\\tfrac{11}{4}\\rfloor=2$, $f_3=\\tfrac34$, coefficient $2+\\tfrac{1/4}{1/2}=\\tfrac52$. For $x$: $-\\tfrac{1}{1/2}=-2$. Right-hand side $\\lfloor\\tfrac{21}{2}\\rfloor=10$. Plain rounding with coefficient $-1$ for $x$ is invalid (e.g. $y_2=11$, $x=\\tfrac12$), and $\\lfloor-\\tfrac{10}{3}\\rfloor$ is $-4$, not $-3$. Not printed in the book; validity was checked by enumeration.",
+  "explain": "$f_0=\\tfrac12$. For $y_1$: $\\lfloor-\\tfrac{10}{3}\\rfloor=-4$, $f_1=\\tfrac23$, coefficient $-4+\\tfrac{2/3-1/2}{1/2}=-\\tfrac{11}{3}$. For $y_2$: 1. For $y_3$: $\\lfloor\\tfrac{11}{4}\\rfloor=2$, $f_3=\\tfrac34$, coefficient $2+\\tfrac{1/4}{1/2}=\\tfrac52$. For $x$: $-\\tfrac{1}{1/2}=-2$. Right-hand side $\\lfloor\\tfrac{21}{2}\\rfloor=10$. Plain rounding with coefficient $-1$ for $x$ is invalid (e.g. $y_2=11$, $x=\\tfrac12$), and $\\lfloor-\\tfrac{10}{3}\\rfloor$ is $-4$, not $-3$. Not printed in the book; validity was checked by enumeration. Notation: this source writes $f_0=b-\\lfloor b\\rfloor$ for the “$\\le$” row and divides by $1-f_0$. Slides 205 write the row as $z+u\\ge k+f$; for a “$\\le$” row their $f$ is $1-f_0=\\lceil b\\rceil-b$ (for $b=2.3$: $f_0=0.3$, slides' $f=0.7$).",
   "source": {
    "label": "Discrete Optimisation Exercises Book, ex. 5.1.1 (p. 40)",
    "url": null,

@@ -135,8 +135,9 @@ export function branchAndBound(model, opts = {}) {
       makeNode(sel, { var: j, op: '>=', val: v.ceil() }),
     ];
     sel.children = kids.map((k) => k.id);
-    const incKid = kids.find((k) => k.newIncumbent);
-    const closedKids = kids.filter((k) => k.fate !== 'open' && !k.newIncumbent).map((k) => k.id);
+    // If both children improve the incumbent in turn, the one created last holds it at the end.
+    const incKid = kids.filter((k) => k.newIncumbent).pop() || null;
+    const closedKids = kids.filter((k) => k.fate !== 'open' && k !== incKid).map((k) => k.id);
 
     // Parent row uses the incumbent and bound as they were when the node was selected.
     log.push({
